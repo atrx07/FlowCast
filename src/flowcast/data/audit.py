@@ -11,8 +11,13 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import pandas as pd
-import yaml
 
+from flowcast.data.contracts import (
+    load_contracts,
+    parse_traffic_timestamp,
+    parse_weather_timestamp,
+    portable_path,
+)
 from flowcast.settings import Settings
 
 
@@ -43,22 +48,6 @@ def sha256_file(path: Path, chunk_size: int = 1_048_576) -> str:
         for chunk in iter(lambda: handle.read(chunk_size), b""):
             digest.update(chunk)
     return digest.hexdigest()
-
-
-def load_contracts(settings: Settings) -> dict[str, Any]:
-    """Load raw source contracts from the versioned YAML file."""
-
-    with settings.data_contracts_path.open("r", encoding="utf-8") as handle:
-        contracts: dict[str, Any] = yaml.safe_load(handle)
-    return contracts
-
-
-def _relative(path: Path, root: Path) -> str:
-    resolved = path.resolve()
-    try:
-        return resolved.relative_to(root.resolve()).as_posix()
-    except ValueError:
-        return resolved.as_posix()
 
 
 def _previous_manifest(path: Path) -> dict[str, dict[str, Any]]:
@@ -122,8 +111,8 @@ def preserve_raw_inputs(settings: Settings) -> tuple[Path, list[dict[str, Any]]]
                 "bytes": destination.stat().st_size,
                 "sha256": copied_hash,
                 "source_sha256": source_hash,
-                "source_path": _relative(source, settings.root),
-                "copied_path": _relative(destination, settings.root),
+                "source_path": portable_path(source, settings.root),
+                "copied_path": portable_path(destination, settings.root),
                 "copied_at_utc": prior_timestamp if existed and prior_timestamp else _utc_now(),
             }
         )
@@ -135,26 +124,6 @@ def preserve_raw_inputs(settings: Settings) -> tuple[Path, list[dict[str, Any]]]
     }
     _write_utf8(manifest_path, json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     return manifest_path, entries
-
-
-def parse_traffic_timestamp(date: pd.Series, time: pd.Series) -> pd.Series:
-    """Parse traffic date/time columns with the mandated source format."""
-
-    return pd.to_datetime(
-        date.astype("string") + " " + time.astype("string"),
-        format="%Y-%m-%d %H:%M",
-        errors="coerce",
-    )
-
-
-def parse_weather_timestamp(date: pd.Series, time: pd.Series) -> pd.Series:
-    """Parse day-first weather date/time columns with the mandated format."""
-
-    return pd.to_datetime(
-        date.astype("string") + " " + time.astype("string"),
-        format="%d/%m/%Y %H:%M",
-        errors="coerce",
-    )
 
 
 def _null_counts(frame: pd.DataFrame) -> dict[str, int]:
@@ -379,7 +348,7 @@ def run_raw_audit(settings: Settings, version: str | None = None) -> AuditResult
         "audit_version": audit_version,
         "generated_at_utc": _utc_now(),
         "raw_manifest": {
-            "path": _relative(manifest_path, settings.root),
+            "path": portable_path(manifest_path, settings.root),
             "files": manifest_entries,
         },
         "datasets": {

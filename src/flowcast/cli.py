@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from flowcast.data.audit import run_raw_audit
+from flowcast.data.quarantine import run_validation_pipeline
 from flowcast.logging_config import configure_logging
 from flowcast.settings import load_settings
 
@@ -34,6 +35,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Versioned audit output directory (default: configured raw_v1).",
     )
+    validate = subparsers.add_parser(
+        "validate",
+        help="Validate immutable raw sources and persist quarantine evidence.",
+    )
+    validate.add_argument(
+        "--version",
+        default=None,
+        help="Versioned validation output directory (default: validated_v1).",
+    )
     return parser
 
 
@@ -48,6 +58,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         logger.info("Raw audit complete: %s", result.json_path)
         logger.info("Markdown report: %s", result.markdown_path)
         return 0
+    if args.command == "validate":
+        result = run_validation_pipeline(settings, version=args.version)
+        logger.info("Raw validation complete: %s", result.summary_path)
+        logger.info("Issue ledger: %s", result.issues_path)
+        for dataset, summary in result.summary["datasets"].items():
+            logger.info(
+                "%s: input=%s valid=%s rejected=%s issues=%s",
+                dataset,
+                summary["input_rows"],
+                summary["valid_rows"],
+                summary["rejected_rows"],
+                summary["issue_count"],
+            )
+        return 2 if result.has_dataset_failure else 0
     raise RuntimeError(f"Unhandled command: {args.command}")
 
 

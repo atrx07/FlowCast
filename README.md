@@ -1,38 +1,44 @@
 # FlowCast
 
-FlowCast is a reproducible Python 3.11 traffic forecasting and congestion
-intelligence project. The repository is being built milestone by milestone from
-the immutable source material in `FlowCast-project_file/`.
+FlowCast is an end-to-end traffic forecasting and congestion-intelligence
+project for the 25-segment Northline Corridor. It is being built as a
+reproducible Python 3.11 pipeline with a Streamlit dashboard.
 
-The current milestone provides the installable `flowcast` package, versioned
-configuration, immutable raw-data preservation, SHA-256 verification, and an
-automated baseline audit. It does not yet clean data, train models, or serve the
-Streamlit dashboard.
+For each road segment, FlowCast will forecast the next 30, 60, 90, and 120
+minutes of traffic volume, average speed, congestion class, travel time, and
+accident risk, together with prediction confidence. The finished system will
+combine validated traffic, weather, and calendar data with classical machine
+learning and a from-scratch recurrent neural network.
 
-## Bootstrap on Windows PowerShell
+## Current status
+
+Milestone M1 is complete. The repository can preserve and verify the delivered
+raw files, audit their quality, enforce executable data contracts, resolve
+duplicate keys deterministically, and persist validated and quarantined rows
+with source-level lineage. Cleaning, feature engineering, modelling, and the
+dashboard are later milestones; the current outputs are not model-ready.
+
+## Quick start
+
+Python 3.11 is required.
 
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -e ".[test]"
-```
-
-On macOS or Linux, replace the last two interpreter paths with
-`.venv/bin/python`.
-
-## Verify Milestone M1
-
-```powershell
-.\.venv\Scripts\python.exe -m flowcast.cli --help
 .\.venv\Scripts\python.exe -m flowcast.cli audit
+.\.venv\Scripts\python.exe -m flowcast.cli validate
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-The audit copies the three delivered CSV files byte-for-byte into `data/raw/`,
-verifies source and destination hashes, and writes machine-readable and Markdown
-reports beneath `artifacts/audits/raw_v1/`. Re-running it never overwrites a raw
-copy whose hash differs from its reference source.
+On macOS or Linux, use `.venv/bin/python` in place of the Windows interpreter
+path.
 
-See `TECH_STACK.md` for the authoritative runtime, dependency, artifact, and
-deployment contract. See `STATUS.md` and `NEXT_STEP.md` for verified progress and
-the single next action.
+The source documents and delivered CSV files remain read-only in
+`FlowCast-project_file/`. Byte-identical working copies belong in `data/raw/`;
+versioned validated data and issue records are written beneath `data/interim/`
+and `data/quarantine/`.
+
+See `PROJECT.md` for the product contract, `ARCHITECTURE.md` for the system
+design, `TECH_STACK.md` for approved technologies, and `STATUS.md` /
+`NEXT_STEP.md` for verified progress and the immediate build step.

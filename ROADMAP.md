@@ -67,7 +67,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Milestone | Target week | Exit artifact | Current state |
 |---|---:|---|---|
 | M0 - Governance and plan | Before Week 1 | Reference Markdown pack and approved architecture | Complete |
-| M1 - Ingestion and validation | Week 1 | Validated raw loads, quarantine logs, schema tests | In progress - bootstrap and raw audit accepted; executable validation pending |
+| M1 - Ingestion and validation | Week 1 | Validated raw loads, quarantine logs, schema tests | Complete - Step 03 gate passed with deterministic artifacts and 26 tests |
 | M2 - Cleaning and merge | Week 1 | Cleaned source tables and merged interim table | Not started |
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Not started |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Not started |

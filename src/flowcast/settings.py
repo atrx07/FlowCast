@@ -32,6 +32,7 @@ class Settings:
     artifacts_dir: Path
     logs_dir: Path
     audit_version: str
+    validation_version: str
     hash_chunk_size: int
 
 
@@ -59,6 +60,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     runtime = config["runtime"]
     paths = config["paths"]
     audit = config["audit"]
+    validation = config["validation"]
     return Settings(
         root=root,
         config_path=selected,
@@ -76,5 +78,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         artifacts_dir=_resolve(root, paths["artifacts"]),
         logs_dir=_resolve(root, paths["logs"]),
         audit_version=str(audit["version"]),
+        validation_version=str(validation["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

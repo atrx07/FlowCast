@@ -26,7 +26,7 @@ def audit_result(tmp_path_factory):
 def test_raw_copy_hashes_match_contract_and_sources(audit_result) -> None:
     _, settings = audit_result
     with settings.data_contracts_path.open("r", encoding="utf-8") as handle:
-        contracts = yaml.safe_load(handle)
+        contracts = yaml.safe_load(handle)["datasets"]
     for contract in contracts.values():
         filename = contract["file"]
         expected = contract["sha256"]
@@ -38,7 +38,7 @@ def test_raw_copy_hashes_match_contract_and_sources(audit_result) -> None:
 def test_required_source_columns(audit_result) -> None:
     _, settings = audit_result
     with settings.data_contracts_path.open("r", encoding="utf-8") as handle:
-        contracts = yaml.safe_load(handle)
+        contracts = yaml.safe_load(handle)["datasets"]
     for contract in contracts.values():
         observed = list(pd.read_csv(settings.raw_dir / contract["file"], nrows=0).columns)
         assert observed == contract["required_columns"]

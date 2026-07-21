@@ -21,3 +21,6 @@ paths:
 audit:
   version: raw_v1
   chunk_size_bytes: 1048576
+
+validation:
+  version: validated_v1

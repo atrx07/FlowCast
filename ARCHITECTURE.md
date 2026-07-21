@@ -44,6 +44,7 @@ Proposed commands:
 
 ```bash
 python -m flowcast.cli audit
+python -m flowcast.cli validate
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli train-classical
@@ -127,6 +128,8 @@ flowcast-repository/
 │       ├── data/
 │       │   ├── contracts.py
 │       │   ├── ingest.py
+│       │   ├── validation.py
+│       │   ├── validation_state.py
 │       │   ├── audit.py
 │       │   ├── clean_traffic.py
 │       │   ├── clean_weather.py
@@ -231,8 +234,10 @@ Required source fields are the 17 delivered columns. Original values are preserv
 - Parsed timestamp.
 - One preferred row per road/timestamp after deterministic duplicate resolution.
 - Physically invalid cells set to missing with flags, not silently accepted.
-- Missing full windows represented after segment-wise reindexing.
-- JSON vehicle shares expanded into numeric columns.
+- Source filename and physical CSV row retained on every output row.
+- Missing full windows are represented later during segment-wise reindexing.
+- Validated JSON remains serialized until vehicle shares are expanded during
+  traffic cleaning.
 
 ### 6.3 Weather contract
 Key: `station_id + weather_hour`.
@@ -248,7 +253,20 @@ Key: normalized date.
 - Boolean flags validated as 0/1.
 - Empty names allowed only when the corresponding flag is zero.
 
-### 6.5 Merged contract
+### 6.5 Validation artifact boundary
+
+The `validate` command writes one versioned Parquet file per retained source to
+`data/interim/<validation_version>/`. It writes rejected source rows, a unified
+cell/row issue ledger, and `summary.json` to
+`data/quarantine/<validation_version>/`.
+
+The summary records source hashes, row accounting, reason/disposition counts,
+artifact hashes, and dataset-level schema failure. Recoverable invalid cells are
+set to missing and labelled `valid_with_issues`; invalid structural rows and
+non-retained duplicate keys are quarantined. A schema failure still serializes
+the affected rows and causes the CLI to return a non-zero exit status.
+
+### 6.6 Merged contract
 Key: `road_id + timestamp`.
 
 - Many-to-one joins only.
@@ -257,7 +275,7 @@ Key: `road_id + timestamp`.
 - Join indicators and missing join counts recorded during pipeline execution.
 - `weather_station_id` may remain for lineage but is excluded where redundant for modelling.
 
-### 6.6 Processed feature contract
+### 6.7 Processed feature contract
 - Sorted by `road_id, timestamp`.
 - Stable feature names and dtypes.
 - Explicit target columns per horizon.

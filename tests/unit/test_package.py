@@ -17,3 +17,4 @@ def test_settings_resolve_from_repository_root() -> None:
     assert settings.raw_dir == settings.root / "data" / "raw"
     assert settings.seed == 42
     assert settings.timezone == "Asia/Kolkata"
+    assert settings.validation_version == "validated_v1"

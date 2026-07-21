@@ -1,55 +1,261 @@
-traffic:
-  file: traffic_sensor_log.csv
-  bytes: 31231835
-  sha256: 8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a
-  required_columns:
-    - road_id
-    - road_name
-    - latitude
-    - longitude
-    - weather_station_id
-    - date
-    - time
-    - traffic_volume
-    - vehicle_count
-    - vehicle_type_dist
-    - avg_speed
-    - occupancy
-    - congestion_level
-    - travel_time
-    - accident_count
-    - signal_timing
-    - road_capacity
-  date_format: "%Y-%m-%d"
-  time_format: "%H:%M"
-  key: [road_id, date, time]
+contract_version: raw_contract_v1
+load_order: [calendar, weather, traffic]
 
-weather:
-  file: weather_observations.csv
-  bytes: 540212
-  sha256: 63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31
-  required_columns:
-    - station_id
-    - date
-    - time
-    - weather_condition
-    - temperature
-    - rainfall
-    - visibility
-  date_format: "%d/%m/%Y"
-  time_format: "%H:%M"
-  key: [station_id, date, time]
+datasets:
+  traffic:
+    file: traffic_sensor_log.csv
+    bytes: 31231835
+    sha256: 8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a
+    required_columns:
+      - road_id
+      - road_name
+      - latitude
+      - longitude
+      - weather_station_id
+      - date
+      - time
+      - traffic_volume
+      - vehicle_count
+      - vehicle_type_dist
+      - avg_speed
+      - occupancy
+      - congestion_level
+      - travel_time
+      - accident_count
+      - signal_timing
+      - road_capacity
+    timestamp:
+      date_column: date
+      date_format: "%Y-%m-%d"
+      date_regex: '^\d{4}-\d{2}-\d{2}$'
+      time_column: time
+      time_format: "%H:%M"
+      time_regex: '^\d{2}:\d{2}$'
+      frequency_minutes: 30
+      output_column: timestamp
+      timezone_aware: true
+    key: [road_id, timestamp]
+    strings:
+      road_name:
+        nullable: false
+        disposition: row_rejected
+    categorical:
+      road_id:
+        allowed:
+          - NL-001
+          - NL-002
+          - NL-003
+          - NL-004
+          - NL-005
+          - NL-006
+          - NL-007
+          - NL-008
+          - NL-009
+          - NL-010
+          - NL-011
+          - NL-012
+          - NL-013
+          - NL-014
+          - NL-015
+          - NL-016
+          - NL-017
+          - NL-018
+          - NL-019
+          - NL-020
+          - NL-021
+          - NL-022
+          - NL-023
+          - NL-024
+          - NL-025
+        nullable: false
+        disposition: row_rejected
+      weather_station_id:
+        allowed: [WS-NORTH, WS-CENTRAL, WS-SOUTH]
+        nullable: false
+        disposition: row_rejected
+      congestion_level:
+        allowed: [Free-flow, Moderate, Heavy, Severe]
+        nullable: true
+        report_missing: true
+        disposition: cell_invalidated
+    numeric:
+      latitude:
+        dtype: float
+        nullable: false
+        minimum: -90
+        maximum: 90
+        disposition: cell_invalidated
+      longitude:
+        dtype: float
+        nullable: false
+        minimum: -180
+        maximum: 180
+        disposition: cell_invalidated
+      traffic_volume:
+        dtype: integer
+        nullable: true
+        report_missing: true
+        minimum: 0
+        minimum_reason: negative_traffic_volume
+        disposition: cell_invalidated
+      vehicle_count:
+        dtype: integer
+        nullable: false
+        minimum: 0
+        disposition: cell_invalidated
+      avg_speed:
+        dtype: float
+        nullable: true
+        report_missing: true
+        minimum: 0
+        maximum: 200
+        maximum_reason: excessive_speed
+        disposition: cell_invalidated
+      occupancy:
+        dtype: float
+        nullable: true
+        report_missing: true
+        minimum: 0
+        maximum: 100
+        minimum_reason: invalid_occupancy
+        maximum_reason: invalid_occupancy
+        disposition: cell_invalidated
+      travel_time:
+        dtype: float
+        nullable: false
+        minimum: 0
+        exclusive_minimum: true
+        disposition: cell_invalidated
+      accident_count:
+        dtype: integer
+        nullable: false
+        minimum: 0
+        disposition: cell_invalidated
+      signal_timing:
+        dtype: integer
+        nullable: false
+        minimum: 0
+        exclusive_minimum: true
+        disposition: cell_invalidated
+      road_capacity:
+        dtype: integer
+        nullable: false
+        minimum: 0
+        exclusive_minimum: true
+        disposition: cell_invalidated
+    json_fields:
+      vehicle_type_dist:
+        required_keys: [2W, Car, LCV, HCV]
+        value_minimum: 0
+        value_maximum: 1
+        expected_sum: 1
+        sum_tolerance: 0.02
+        nullable: false
+        disposition: cell_invalidated
 
-calendar:
-  file: calendar_events.csv
-  bytes: 3114
-  sha256: 60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c
-  required_columns:
-    - date
-    - public_holiday
-    - holiday_name
-    - event_flag
-    - event_name
-    - roadwork_flag
-  date_format: "%Y-%m-%d"
-  key: [date]
+  weather:
+    file: weather_observations.csv
+    bytes: 540212
+    sha256: 63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31
+    required_columns:
+      - station_id
+      - date
+      - time
+      - weather_condition
+      - temperature
+      - rainfall
+      - visibility
+    timestamp:
+      date_column: date
+      date_format: "%d/%m/%Y"
+      date_regex: '^\d{2}/\d{2}/\d{4}$'
+      time_column: time
+      time_format: "%H:%M"
+      time_regex: '^\d{2}:00$'
+      frequency_minutes: 60
+      output_column: weather_hour
+      timezone_aware: true
+    key: [station_id, weather_hour]
+    categorical:
+      station_id:
+        allowed: [WS-NORTH, WS-CENTRAL, WS-SOUTH]
+        nullable: false
+        disposition: row_rejected
+      weather_condition:
+        normalization_map:
+          clear: Clear
+          cloudy: Cloudy
+          overcast: Overcast
+          rain: Rain
+          rainy: Rain
+          fog: Fog
+          foggy: Fog
+        nullable: false
+        disposition: cell_invalidated
+    numeric:
+      temperature:
+        dtype: float
+        nullable: true
+        report_missing: true
+        disposition: cell_invalidated
+      rainfall:
+        dtype: float
+        nullable: false
+        minimum: 0
+        disposition: cell_invalidated
+      visibility:
+        dtype: float
+        nullable: true
+        report_missing: true
+        minimum: 0
+        disposition: cell_invalidated
+
+  calendar:
+    file: calendar_events.csv
+    bytes: 3114
+    sha256: 60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c
+    required_columns:
+      - date
+      - public_holiday
+      - holiday_name
+      - event_flag
+      - event_name
+      - roadwork_flag
+    timestamp:
+      date_column: date
+      date_format: "%Y-%m-%d"
+      date_regex: '^\d{4}-\d{2}-\d{2}$'
+      output_column: date
+      timezone_aware: false
+    key: [date]
+    strings:
+      holiday_name:
+        nullable: true
+        disposition: cell_invalidated
+      event_name:
+        nullable: true
+        disposition: cell_invalidated
+    numeric:
+      public_holiday:
+        dtype: integer
+        nullable: false
+        allowed: [0, 1]
+        invalid_reason: invalid_flag
+        disposition: row_rejected
+      event_flag:
+        dtype: integer
+        nullable: false
+        allowed: [0, 1]
+        invalid_reason: invalid_flag
+        disposition: row_rejected
+      roadwork_flag:
+        dtype: integer
+        nullable: false
+        allowed: [0, 1]
+        invalid_reason: invalid_flag
+        disposition: row_rejected
+    flag_name_pairs:
+      - flag: public_holiday
+        name: holiday_name
+      - flag: event_flag
+        name: event_name

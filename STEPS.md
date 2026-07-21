@@ -102,8 +102,15 @@ Convert the dictionary into executable validation rules.
 
 ### Outputs
 - Executable contracts.
-- Quarantine writer.
-- Validation summary schema.
+- Versioned validated Parquet under `data/interim/<version>/`.
+- Rejected-row Parquet, unified issue ledger, and summary JSON under
+  `data/quarantine/<version>/`.
+
+### Checks
+```bash
+python -m flowcast.cli validate
+pytest -q
+```
 
 ### Exit gate
 - No invalid input can disappear without a reason record.
