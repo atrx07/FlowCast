@@ -1,0 +1,23 @@
+project:
+  name: FlowCast
+  version: 0.1.0
+
+runtime:
+  python: "3.11"
+  seed: 42
+  timezone: Asia/Kolkata
+  log_level: INFO
+
+paths:
+  data_contracts: config/data_contracts.yaml
+  reference: FlowCast-project_file
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  quarantine: data/quarantine
+  artifacts: artifacts
+  logs: logs
+
+audit:
+  version: raw_v1
+  chunk_size_bytes: 1048576

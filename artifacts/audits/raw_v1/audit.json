@@ -1,0 +1,308 @@
+{
+  "audit_version": "raw_v1",
+  "datasets": {
+    "calendar": {
+      "columns": [
+        "date",
+        "public_holiday",
+        "holiday_name",
+        "event_flag",
+        "event_name",
+        "roadwork_flag"
+      ],
+      "date_coverage": {
+        "invalid_count": 0,
+        "maximum": "2025-05-31",
+        "minimum": "2025-01-01"
+      },
+      "dtypes": {
+        "date": "str",
+        "event_flag": "int64",
+        "event_name": "str",
+        "holiday_name": "str",
+        "public_holiday": "int64",
+        "roadwork_flag": "int64"
+      },
+      "exact_duplicate_count": 0,
+      "flag_positive_counts": {
+        "event_flag": 6,
+        "public_holiday": 6,
+        "roadwork_flag": 11
+      },
+      "key_duplicate_count": 0,
+      "null_counts": {
+        "date": 0,
+        "event_flag": 0,
+        "event_name": 145,
+        "holiday_name": 145,
+        "public_holiday": 0,
+        "roadwork_flag": 0
+      },
+      "shape": {
+        "columns": 6,
+        "rows": 151
+      },
+      "unique_date_count": 151
+    },
+    "traffic": {
+      "accident_positive_count": 1669,
+      "accident_positive_rate": 0.009351816572158594,
+      "blank_congestion_label_count": 26883,
+      "columns": [
+        "road_id",
+        "road_name",
+        "latitude",
+        "longitude",
+        "weather_station_id",
+        "date",
+        "time",
+        "traffic_volume",
+        "vehicle_count",
+        "vehicle_type_dist",
+        "avg_speed",
+        "occupancy",
+        "congestion_level",
+        "travel_time",
+        "accident_count",
+        "signal_timing",
+        "road_capacity"
+      ],
+      "congestion_label_frequencies": {
+        "<BLANK>": 26883,
+        "Free-flow": 93029,
+        "Heavy": 14008,
+        "Moderate": 36191,
+        "Severe": 8357
+      },
+      "dtypes": {
+        "accident_count": "int64",
+        "avg_speed": "float64",
+        "congestion_level": "str",
+        "date": "str",
+        "latitude": "float64",
+        "longitude": "float64",
+        "occupancy": "float64",
+        "road_capacity": "int64",
+        "road_id": "str",
+        "road_name": "str",
+        "signal_timing": "int64",
+        "time": "str",
+        "traffic_volume": "float64",
+        "travel_time": "float64",
+        "vehicle_count": "int64",
+        "vehicle_type_dist": "str",
+        "weather_station_id": "str"
+      },
+      "exact_duplicate_count": 1767,
+      "expected_grid_size": 181200,
+      "key_duplicate_count": 1767,
+      "missing_window_count": 4499,
+      "null_counts": {
+        "accident_count": 0,
+        "avg_speed": 4382,
+        "congestion_level": 26883,
+        "date": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "occupancy": 4383,
+        "road_capacity": 0,
+        "road_id": 0,
+        "road_name": 0,
+        "signal_timing": 0,
+        "time": 0,
+        "traffic_volume": 4387,
+        "travel_time": 0,
+        "vehicle_count": 0,
+        "vehicle_type_dist": 0,
+        "weather_station_id": 0
+      },
+      "numeric_ranges": {
+        "accident_count": {
+          "max": 2.0,
+          "min": 0.0,
+          "null_count": 0
+        },
+        "avg_speed": {
+          "max": 319.6,
+          "min": 6.7,
+          "null_count": 4382
+        },
+        "latitude": {
+          "max": 28.682634,
+          "min": 28.564352,
+          "null_count": 0
+        },
+        "longitude": {
+          "max": 77.312287,
+          "min": 77.106648,
+          "null_count": 0
+        },
+        "occupancy": {
+          "max": 259.9,
+          "min": 3.0,
+          "null_count": 4383
+        },
+        "road_capacity": {
+          "max": 2327.0,
+          "min": 1259.0,
+          "null_count": 0
+        },
+        "signal_timing": {
+          "max": 74.0,
+          "min": 21.0,
+          "null_count": 0
+        },
+        "traffic_volume": {
+          "max": 2090.0,
+          "min": -59.0,
+          "null_count": 4387
+        },
+        "travel_time": {
+          "max": 29.91,
+          "min": 0.8,
+          "null_count": 0
+        },
+        "vehicle_count": {
+          "max": 2090.0,
+          "min": 41.0,
+          "null_count": 0
+        }
+      },
+      "physical_invalid_counts": {
+        "negative_traffic_volume": 241,
+        "occupancy_above_100_percent": 234,
+        "speed_above_200_kmh": 237
+      },
+      "shape": {
+        "columns": 17,
+        "rows": 178468
+      },
+      "timestamp_coverage": {
+        "invalid_count": 0,
+        "maximum": "2025-05-31T23:30:00",
+        "minimum": "2025-01-01T00:00:00"
+      },
+      "unique_counts": {
+        "date": 151,
+        "road_id": 25,
+        "time": 48,
+        "weather_station_id": 3
+      },
+      "unique_key_count": 176701
+    },
+    "weather": {
+      "columns": [
+        "station_id",
+        "date",
+        "time",
+        "weather_condition",
+        "temperature",
+        "rainfall",
+        "visibility"
+      ],
+      "dtypes": {
+        "date": "str",
+        "rainfall": "float64",
+        "station_id": "str",
+        "temperature": "float64",
+        "time": "str",
+        "visibility": "float64",
+        "weather_condition": "str"
+      },
+      "exact_duplicate_count": 0,
+      "expected_grid_size": 10872,
+      "key_duplicate_count": 0,
+      "missing_window_count": 0,
+      "null_counts": {
+        "date": 0,
+        "rainfall": 0,
+        "station_id": 0,
+        "temperature": 167,
+        "time": 0,
+        "visibility": 111,
+        "weather_condition": 0
+      },
+      "numeric_ranges": {
+        "rainfall": {
+          "max": 8.9,
+          "min": 0.0,
+          "null_count": 0
+        },
+        "temperature": {
+          "max": 29.8,
+          "min": 5.8,
+          "null_count": 167
+        },
+        "visibility": {
+          "max": 10000.0,
+          "min": 301.0,
+          "null_count": 111
+        }
+      },
+      "shape": {
+        "columns": 7,
+        "rows": 10872
+      },
+      "timestamp_coverage": {
+        "invalid_count": 0,
+        "maximum": "2025-05-31T23:00:00",
+        "minimum": "2025-01-01T00:00:00"
+      },
+      "unique_counts": {
+        "date": 151,
+        "station_id": 3,
+        "time": 24
+      },
+      "unique_key_count": 10872,
+      "weather_label_frequencies": {
+        "CLEAR": 1237,
+        "Clear": 5647,
+        "Cloudy": 1504,
+        "FOG": 7,
+        "Fog": 59,
+        "Overcast": 358,
+        "RAIN": 34,
+        "Rain": 307,
+        "clear": 1284,
+        "cloudy": 340,
+        "foggy": 10,
+        "rain ": 48,
+        "rainy": 37
+      }
+    }
+  },
+  "generated_at_utc": "2026-07-21T17:04:26.763788+00:00",
+  "raw_manifest": {
+    "files": [
+      {
+        "bytes": 31231835,
+        "copied_at_utc": "2026-07-21T16:45:33.480284+00:00",
+        "copied_path": "data/raw/traffic_sensor_log.csv",
+        "filename": "traffic_sensor_log.csv",
+        "sha256": "8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a",
+        "source_path": "FlowCast-project_file/traffic_sensor_log.csv",
+        "source_sha256": "8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a"
+      },
+      {
+        "bytes": 540212,
+        "copied_at_utc": "2026-07-21T16:45:33.486725+00:00",
+        "copied_path": "data/raw/weather_observations.csv",
+        "filename": "weather_observations.csv",
+        "sha256": "63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31",
+        "source_path": "FlowCast-project_file/weather_observations.csv",
+        "source_sha256": "63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31"
+      },
+      {
+        "bytes": 3114,
+        "copied_at_utc": "2026-07-21T16:45:33.488613+00:00",
+        "copied_path": "data/raw/calendar_events.csv",
+        "filename": "calendar_events.csv",
+        "sha256": "60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c",
+        "source_path": "FlowCast-project_file/calendar_events.csv",
+        "source_sha256": "60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c"
+      }
+    ],
+    "path": "data/raw/raw_manifest.json"
+  },
+  "schema_version": "1.0"
+}

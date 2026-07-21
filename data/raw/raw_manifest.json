@@ -1,0 +1,33 @@
+{
+  "files": [
+    {
+      "bytes": 31231835,
+      "copied_at_utc": "2026-07-21T16:45:33.480284+00:00",
+      "copied_path": "data/raw/traffic_sensor_log.csv",
+      "filename": "traffic_sensor_log.csv",
+      "sha256": "8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a",
+      "source_path": "FlowCast-project_file/traffic_sensor_log.csv",
+      "source_sha256": "8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a"
+    },
+    {
+      "bytes": 540212,
+      "copied_at_utc": "2026-07-21T16:45:33.486725+00:00",
+      "copied_path": "data/raw/weather_observations.csv",
+      "filename": "weather_observations.csv",
+      "sha256": "63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31",
+      "source_path": "FlowCast-project_file/weather_observations.csv",
+      "source_sha256": "63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31"
+    },
+    {
+      "bytes": 3114,
+      "copied_at_utc": "2026-07-21T16:45:33.488613+00:00",
+      "copied_path": "data/raw/calendar_events.csv",
+      "filename": "calendar_events.csv",
+      "sha256": "60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c",
+      "source_path": "FlowCast-project_file/calendar_events.csv",
+      "source_sha256": "60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c"
+    }
+  ],
+  "generated_at_utc": "2026-07-21T17:04:26.451363+00:00",
+  "schema_version": "1.0"
+}

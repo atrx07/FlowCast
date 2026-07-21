@@ -1,0 +1,55 @@
+traffic:
+  file: traffic_sensor_log.csv
+  bytes: 31231835
+  sha256: 8f793f3643c891d4fdda7b66c5c4792d24f4db3f26a07cccb8f1d613e254062a
+  required_columns:
+    - road_id
+    - road_name
+    - latitude
+    - longitude
+    - weather_station_id
+    - date
+    - time
+    - traffic_volume
+    - vehicle_count
+    - vehicle_type_dist
+    - avg_speed
+    - occupancy
+    - congestion_level
+    - travel_time
+    - accident_count
+    - signal_timing
+    - road_capacity
+  date_format: "%Y-%m-%d"
+  time_format: "%H:%M"
+  key: [road_id, date, time]
+
+weather:
+  file: weather_observations.csv
+  bytes: 540212
+  sha256: 63f3dc54a491dfd5d4663d8bf0602779084c30a1396f0c7b4fd177e132bc8a31
+  required_columns:
+    - station_id
+    - date
+    - time
+    - weather_condition
+    - temperature
+    - rainfall
+    - visibility
+  date_format: "%d/%m/%Y"
+  time_format: "%H:%M"
+  key: [station_id, date, time]
+
+calendar:
+  file: calendar_events.csv
+  bytes: 3114
+  sha256: 60d3de6b731486e02f6edaa3515af87c2472231a211b48d94d7a3cad38799b9c
+  required_columns:
+    - date
+    - public_holiday
+    - holiday_name
+    - event_flag
+    - event_name
+    - roadwork_flag
+  date_format: "%Y-%m-%d"
+  key: [date]

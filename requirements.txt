@@ -1,0 +1,7 @@
+# Bootstrap/data dependencies installed for Milestone M1.
+numpy==2.3.3
+pandas==3.0.3
+pyarrow==25.0.0
+PyYAML==6.0.3
+tzdata==2026.2
+pytest==9.0.2

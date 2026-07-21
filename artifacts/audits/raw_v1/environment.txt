@@ -1,0 +1,22 @@
+FlowCast Milestone M1 bootstrap environment
+Recorded: 2026-07-21
+Platform: Windows (win_amd64)
+Python: CPython 3.11.9
+pip: 26.1.2
+Project: flowcast 0.1.0 (editable local source)
+
+colorama==0.4.6
+iniconfig==2.3.0
+numpy==2.3.3
+packaging==26.2
+pandas==3.0.3
+pip==26.1.2
+pluggy==1.6.0
+pyarrow==25.0.0
+Pygments==2.20.0
+pytest==9.0.2
+python-dateutil==2.9.0.post0
+PyYAML==6.0.3
+setuptools==65.5.0
+six==1.17.0
+tzdata==2026.2

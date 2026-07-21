@@ -1,0 +1,15 @@
+# Preserve checksum-controlled and packaged reference artifacts byte-for-byte.
+*.csv -text
+*.docx binary
+*.pdf binary
+
+# Keep project-authored text deterministic across operating systems.
+*.md text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.txt text eol=lf
+*.gitignore text eol=lf
+*.gitattributes text eol=lf

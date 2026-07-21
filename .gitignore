@@ -1,0 +1,32 @@
+.venv/
+.runtime/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Runtime logs and generated large artifacts
+logs/*.log
+artifacts/models/
+artifacts/predictions/
+artifacts/reports/
+artifacts/figures/
+
+# Reproducible/generated data. Raw sources remain in the reference directory.
+data/raw/*.csv
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/quarantine/*
+!data/quarantine/.gitkeep
+
+# Local editor and OS metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
