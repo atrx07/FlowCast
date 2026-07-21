@@ -19,6 +19,10 @@ No cleaning, quarantine logic, feature engineering, EDA, model training, inferen
 reporting pipeline, or Streamlit dashboard has been implemented. This turn stopped
 at the approved Steps 01-02 acceptance gate.
 
+The verified baseline is published on `origin/main`. Initial implementation commit
+`07f30ea5390eb48a9ea30f7f9a4c0fdb2ea7390e` was confirmed byte-for-byte equal to
+the remote branch head after push.
+
 ## 2. Completed Work
 
 ### Technology and governance
@@ -92,6 +96,8 @@ git init
 .venv/Scripts/python.exe -m compileall -q src
 git remote add origin https://github.com/atrx07/FlowCast.git
 git ls-remote --heads origin
+git commit -m "feat: bootstrap FlowCast data audit"
+git push -u origin main
 soffice.com --version
 soffice.com --headless --convert-to pdf FlowCast_PRD.docx
 ```
@@ -106,6 +112,8 @@ Results:
 - Dependency integrity: `No broken requirements found.`
 - Package byte-compilation: succeeded.
 - GitHub remote inspection: succeeded; no existing branch heads were returned.
+- Initial Git commit and push: succeeded; local `HEAD` and `origin/main` both
+  resolved to `07f30ea5390eb48a9ea30f7f9a4c0fdb2ea7390e` immediately after push.
 - LibreOffice: version and real DOCX-to-PDF conversion succeeded.
 - GitHub file-size assurance: no candidate file is 100 MB or larger.
 - Largest source module: `src/flowcast/data/audit.py`, 392 lines; all source files
