@@ -2,57 +2,62 @@
 
 ## Immediate Objective
 
-Execute **Step 06 - Align and Merge Sources**. Join the three hash-verified
-`cleaned_sources_v1` tables into one versioned interim table while preserving
-exactly one row per traffic road/half-hour key.
+Execute **Step 07 - Engineer Features**. Consume the hash-verified
+`merged_sources_v1` table and produce a deterministic, leakage-safe explanatory
+feature table plus a machine-readable feature manifest.
 
-Do not engineer modelling features or targets, run EDA, train models, or begin
+Do not construct future targets or split data, run EDA, train models, or begin
 dashboard work.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 06.
-3. Join, timestamp, lineage, artifact, and cardinality sections of `PROJECT.md`,
+2. `STEPS.md` - Step 07.
+3. Feature, leakage, timestamp, artifact, and lineage sections of `PROJECT.md`,
    `ROADMAP.md`, and `ARCHITECTURE.md`.
-4. Join definitions in both original DOCX references.
-5. All three cleaned Parquet tables and their quality summaries, current Git
-   diff, and relevant tests.
+4. Feature requirements in the original PRD and traffic definitions in the
+   original data dictionary.
+5. The merged Parquet/summary, actual field distributions, current Git diff,
+   and relevant tests.
 
 ## Single Best Next Action
 
-Build one configuration-backed, cardinality-safe source-merging slice:
+Build one configuration-backed explanatory-feature slice:
 
-1. Verify hashes for cleaned traffic, weather, and calendar artifacts against
-   their current quality summaries before reading them.
-2. Add `weather_hour = timestamp.floor("h")` to traffic and normalize a calendar
-   join date without changing the traffic key.
-3. Assert uniqueness of `station_id + weather_hour` and calendar `date` before
-   either merge.
-4. Join weather through `weather_station_id -> station_id` plus aligned hour
-   using explicit many-to-one validation.
-5. Join calendar on normalized date using explicit many-to-one validation.
-6. Persist join indicators, matched/missing counts, source versions/hashes, and
-   retained lineage in canonical JSON plus generated Markdown.
-7. Write one versioned merged Parquet artifact and expose a precise CLI command.
-8. Add boundary/alignment, cardinality, no-row-multiplication, contract, and
-   deterministic-rerun tests.
+1. Add `config/features.yaml` with a versioned feature contract, lags 1/2/48,
+   shifted rolling windows 4/8, forecast horizons reserved for Step 08, peak
+   periods, visibility/rain thresholds, and temperature bands.
+2. Verify the merged input hash and its 181,200 unique keys before reading it.
+3. Add hour/day cyclical encodings, weekday/weekend, and configured peak flags.
+4. Compute volume and speed lags within road in strict timestamp order.
+5. Shift first, then compute four/eight-window rolling mean and standard
+   deviation so the current and future values cannot leak.
+6. Add half-hour capacity, V/C ratio, capacity headroom, rain/low-visibility,
+   temperature-band, holiday x peak, event, event-proximity, roadwork, and
+   existing vehicle-share features.
+7. Preserve source/imputation lineage and explicitly mark history-unavailable
+   feature rows instead of silently dropping them.
+8. Persist versioned feature Parquet, a JSON feature manifest, canonical quality
+   JSON, generated Markdown, and a precise CLI command.
+9. Add formula, boundary, segment-isolation, shift-before-roll, future-mutation,
+   contract, and deterministic-rerun tests.
 
 ## Acceptance Gate
 
-Step 06 is complete only when:
+Step 07 is complete only when:
 
-- Input hashes match the tracked Step 04/05 summaries.
-- Output has exactly 181,200 rows and 181,200 unique `road_id + timestamp` keys.
-- Both right-side keys are unique before merging and Pandas validates each join
-  as many-to-one.
-- Every traffic row has exactly one weather match and one calendar match, or an
-  unexpected miss fails closed with persisted diagnostics.
-- Weather alignment broadcasts each hourly observation only to its two
-  corresponding half-hour windows.
-- Traffic repair/source lineage and `_accident_observed` survive unchanged.
-- Input/output hashes, join counts, null counts, and remaining failures are
-  persisted and reproducible.
+- Output retains exactly 181,200 unique `road_id + timestamp` keys.
+- Every configured feature has a stable name, dtype, source, transform, version,
+  and leakage classification in the manifest.
+- Lag values never cross road boundaries and rolling windows exclude the current
+  row.
+- Mutating any future measurement cannot change an earlier feature row.
+- Expected leading history nulls are flagged and exactly accounted for; no row
+  is silently discarded.
+- Capacity, weather, calendar, and vehicle-share feature formulas pass exact
+  boundary tests.
+- Input/output/manifest hashes and feature null/range counts are persisted and
+  reproducible.
 - Focused tests, full tests, CLI smoke, dependency check, compilation, and
   whitespace assurance pass.
 - Project-state documents are current and every source file remains below 400

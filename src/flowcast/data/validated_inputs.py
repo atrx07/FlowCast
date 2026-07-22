@@ -8,7 +8,7 @@ from typing import Any
 
 import pandas as pd
 
-from flowcast.data.audit import sha256_file
+from flowcast.data.artifacts import verify_artifact_record
 from flowcast.data.quarantine import run_validation_pipeline
 from flowcast.settings import Settings
 
@@ -29,22 +29,6 @@ def validated_summary(settings: Settings) -> tuple[Path, dict[str, Any]]:
     return summary_path, payload
 
 
-def verified_artifact(
-    settings: Settings,
-    path: Path,
-    record: dict[str, Any],
-) -> Path:
-    """Verify one recorded artifact's size and SHA-256 before it is consumed."""
-
-    if not path.is_file():
-        raise FileNotFoundError(f"Validated input artifact is missing: {path}")
-    if path.stat().st_size != int(record["bytes"]):
-        raise RuntimeError(f"Validated input byte count changed: {path}")
-    if sha256_file(path, settings.hash_chunk_size) != str(record["sha256"]):
-        raise RuntimeError(f"Validated input SHA-256 changed: {path}")
-    return path
-
-
 def verified_validated_table(
     settings: Settings,
     summary: dict[str, Any],
@@ -54,7 +38,7 @@ def verified_validated_table(
 
     path = settings.interim_dir / settings.validation_version / f"{dataset}.parquet"
     record = summary["datasets"][dataset]["validated_artifact"]
-    verified_artifact(settings, path, record)
+    verify_artifact_record(path, record, settings)
     return path, pd.read_parquet(path)
 
 
@@ -65,5 +49,5 @@ def verified_issue_ledger(
     """Read the hash-verified validation issue ledger."""
 
     path = settings.quarantine_dir / settings.validation_version / "issues.parquet"
-    verified_artifact(settings, path, summary["issues_artifact"])
+    verify_artifact_record(path, summary["issues_artifact"], settings)
     return path, pd.read_parquet(path)

@@ -1,0 +1,88 @@
+{
+  "configuration": {
+    "base": {
+      "bytes": 548,
+      "path": "config/base.yaml",
+      "sha256": "8ab3590468f969449c481d6bfa63e00321998a5f15a543896edfc69faca89fe2"
+    },
+    "cleaning": {
+      "bytes": 2162,
+      "path": "config/cleaning.yaml",
+      "sha256": "e51e5a8eea52bb6ac3cc54040a601172a449a4410dbdf8da9b1fa71a1dc65a5e"
+    }
+  },
+  "contract_version": "source_merge_v1",
+  "dataset": {
+    "duplicate_output_keys": 0,
+    "inputs": {
+      "calendar_rows": 151,
+      "calendar_unique_keys": 151,
+      "traffic_rows": 181200,
+      "traffic_unique_keys": 181200,
+      "weather_rows": 10872,
+      "weather_unique_keys": 10872
+    },
+    "joined_context_nulls": {
+      "event_flag": 0,
+      "public_holiday": 0,
+      "rainfall": 0,
+      "roadwork_flag": 0,
+      "temperature": 0,
+      "visibility": 0,
+      "weather_condition": 0
+    },
+    "joins": {
+      "calendar": {
+        "cardinality": "many_to_one",
+        "matched": 181200,
+        "missing": 0
+      },
+      "weather": {
+        "cardinality": "many_to_one",
+        "matched": 181200,
+        "missing": 0
+      }
+    },
+    "merged_artifact": {
+      "bytes": 6618670,
+      "path": "data/interim/merged_sources_v1/merged.parquet",
+      "sha256": "5e562e7fb87bba15e2bedc917d54febf79faab53dd38653b8c568620a84f8113"
+    },
+    "output_rows": 181200,
+    "output_unique_keys": 181200,
+    "row_count_change": 0,
+    "timestamp_end": "2025-05-31T23:30:00+05:30",
+    "timestamp_start": "2025-01-01T00:00:00+05:30"
+  },
+  "input_artifacts": {
+    "calendar": {
+      "bytes": 8207,
+      "path": "data/interim/cleaned_sources_v1/calendar.parquet",
+      "sha256": "4cf9cbed5857f51cc342ef88e7524422deb11dab189bce58f429fa5aae817e2e"
+    },
+    "traffic": {
+      "bytes": 5690677,
+      "path": "data/interim/cleaned_sources_v1/traffic.parquet",
+      "sha256": "0e51c2b9dbc5fabd4c317f9d63c1fe51945a387b2a06f034e861b83b2a5b45f7"
+    },
+    "weather": {
+      "bytes": 133256,
+      "path": "data/interim/cleaned_sources_v1/weather.parquet",
+      "sha256": "8a41a633837eaf8582d34b599e0186395f7e58625f5dc1095c0f841c3c7fe88d"
+    }
+  },
+  "input_cleaning_version": "cleaned_sources_v1",
+  "input_summaries": {
+    "context": {
+      "bytes": 5155,
+      "path": "artifacts/quality/cleaned_sources_v1/summary.json",
+      "sha256": "3e5e89dd1c94b6cb89f16d2e962f089ab332757767ac80fed7ae1f7892e7aafe"
+    },
+    "traffic": {
+      "bytes": 6060,
+      "path": "artifacts/quality/cleaned_sources_v1/traffic_summary.json",
+      "sha256": "253c5a2ac8ab37bbc0bfbb2ba11fdb189ce6772252398be7f1fa2a223cae52f4"
+    }
+  },
+  "merge_version": "merged_sources_v1"
+}

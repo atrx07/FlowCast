@@ -53,3 +53,19 @@ def artifact_record(path: Path, settings: Settings) -> dict[str, Any]:
         "bytes": path.stat().st_size,
         "sha256": sha256_file(path, settings.hash_chunk_size),
     }
+
+
+def verify_artifact_record(
+    path: Path,
+    record: dict[str, Any],
+    settings: Settings,
+) -> Path:
+    """Verify one recorded artifact's size and SHA-256 before consumption."""
+
+    if not path.is_file():
+        raise FileNotFoundError(f"Recorded artifact is missing: {path}")
+    if path.stat().st_size != int(record["bytes"]):
+        raise RuntimeError(f"Recorded artifact byte count changed: {path}")
+    if sha256_file(path, settings.hash_chunk_size) != str(record["sha256"]):
+        raise RuntimeError(f"Recorded artifact SHA-256 changed: {path}")
+    return path

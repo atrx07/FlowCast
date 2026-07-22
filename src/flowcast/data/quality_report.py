@@ -134,7 +134,10 @@ def render_traffic_cleaning_markdown(summary: dict[str, Any]) -> str:
                 "| Vehicle-share rows normalized | "
                 f"{traffic['vehicle_distribution']['normalized_rows']} |"
             ),
-            f"| Congestion labels derived | {traffic['congestion']['derived_labels']} |",
+            (
+                "| Congestion labels derived | "
+                f"{traffic['congestion']['derived_labels']} |"
+            ),
             (
                 "| Existing-label disagreements | "
                 f"{traffic['congestion']['source_disagreements']} |"
@@ -152,4 +155,65 @@ def render_traffic_cleaning_markdown(summary: dict[str, Any]) -> str:
             "",
         ]
     )
+    return "\n".join(lines)
+
+
+def render_source_merge_markdown(summary: dict[str, Any]) -> str:
+    """Render the Step 06 JSON summary as concise generated Markdown."""
+
+    dataset = summary["dataset"]
+    inputs = dataset["inputs"]
+    weather = dataset["joins"]["weather"]
+    calendar = dataset["joins"]["calendar"]
+    lines = [
+        "# FlowCast Source Merge Report",
+        "",
+        f"- Merge contract: `{summary['contract_version']}`",
+        f"- Output version: `{summary['merge_version']}`",
+        f"- Input cleaning version: `{summary['input_cleaning_version']}`",
+        "",
+        "## Cardinality",
+        "",
+        "| Check | Result |",
+        "|---|---:|",
+        (
+            "| Traffic input rows / keys | "
+            f"{inputs['traffic_rows']} / {inputs['traffic_unique_keys']} |"
+        ),
+        (
+            "| Weather input rows / keys | "
+            f"{inputs['weather_rows']} / {inputs['weather_unique_keys']} |"
+        ),
+        (
+            "| Calendar input rows / keys | "
+            f"{inputs['calendar_rows']} / {inputs['calendar_unique_keys']} |"
+        ),
+        (
+            "| Output rows / keys | "
+            f"{dataset['output_rows']} / {dataset['output_unique_keys']} |"
+        ),
+        f"| Row-count change | {dataset['row_count_change']} |",
+        f"| Duplicate output keys | {dataset['duplicate_output_keys']} |",
+        "",
+        "## Join coverage",
+        "",
+        "| Context | Cardinality | Matched | Missing |",
+        "|---|---|---:|---:|",
+        (
+            f"| Weather | {weather['cardinality']} | {weather['matched']} | "
+            f"{weather['missing']} |"
+        ),
+        (
+            f"| Calendar | {calendar['cardinality']} | {calendar['matched']} | "
+            f"{calendar['missing']} |"
+        ),
+        "",
+        "Weather is aligned by station and floored local clock hour. Calendar is "
+        "aligned by the normalized local date. Both joins use explicit Pandas "
+        "`many_to_one` validation and fail closed on an unexpected miss.",
+        "",
+        "This file is generated from `summary.json`; edit the pipeline, not "
+        "this report.",
+        "",
+    ]
     return "\n".join(lines)

@@ -22,3 +22,4 @@ def test_settings_resolve_from_repository_root() -> None:
     assert settings.timezone == "Asia/Kolkata"
     assert settings.validation_version == "validated_v1"
     assert settings.cleaning_version == "cleaned_sources_v1"
+    assert settings.merge_version == "merged_sources_v1"

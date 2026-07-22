@@ -35,6 +35,7 @@ class Settings:
     audit_version: str
     validation_version: str
     cleaning_version: str
+    merge_version: str
     hash_chunk_size: int
 
 
@@ -64,6 +65,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     audit = config["audit"]
     validation = config["validation"]
     cleaning = config["cleaning"]
+    merge = config["merge"]
     return Settings(
         root=root,
         config_path=selected,
@@ -84,5 +86,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         audit_version=str(audit["version"]),
         validation_version=str(validation["version"]),
         cleaning_version=str(cleaning["version"]),
+        merge_version=str(merge["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

@@ -28,3 +28,6 @@ validation:
 
 cleaning:
   version: cleaned_sources_v1
+
+merge:
+  version: merged_sources_v1

@@ -2,9 +2,9 @@
   "cleaning_version": "cleaned_sources_v1",
   "configuration": {
     "cleaning": {
-      "bytes": 1848,
+      "bytes": 2162,
       "path": "config/cleaning.yaml",
-      "sha256": "51d9d6762a711427ce41fad91b4601e10340db97f7eb60c4a315d2a8fb4cd494"
+      "sha256": "e51e5a8eea52bb6ac3cc54040a601172a449a4410dbdf8da9b1fa71a1dc65a5e"
     },
     "data_contracts": {
       "bytes": 6484,

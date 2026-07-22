@@ -16,8 +16,9 @@ Milestone M1 is complete and M2 is in progress. The repository preserves and
 verifies raw files, enforces executable data contracts, resolves duplicate
 keys, and persists validation lineage. Calendar, weather, and traffic cleaning
 are complete. Traffic now has a traceable 181,200-row half-hour grid with
-causal repairs and parsed vehicle shares. Source merging, feature engineering,
-modelling, and the dashboard remain; current outputs are not model-ready.
+causal repairs and parsed vehicle shares, and all three sources are merged with
+validated many-to-one joins. Feature engineering, modelling, and the dashboard
+remain; current outputs are not model-ready.
 
 ## Quick start
 
@@ -31,6 +32,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli validate
 .\.venv\Scripts\python.exe -m flowcast.cli clean-context
 .\.venv\Scripts\python.exe -m flowcast.cli clean-traffic
+.\.venv\Scripts\python.exe -m flowcast.cli merge-sources
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 

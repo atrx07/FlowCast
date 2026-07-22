@@ -9,6 +9,7 @@ from typing import Sequence
 from flowcast.data.audit import run_raw_audit
 from flowcast.data.clean_context import run_context_cleaning
 from flowcast.data.quarantine import run_validation_pipeline
+from flowcast.data.merge_pipeline import run_source_merge
 from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.logging_config import configure_logging
 from flowcast.settings import load_settings
@@ -63,6 +64,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--version",
         default=None,
         help="Versioned traffic output directory (default: cleaned_sources_v1).",
+    )
+    merge_sources = subparsers.add_parser(
+        "merge-sources",
+        help="Align and merge the three verified cleaned source tables.",
+    )
+    merge_sources.add_argument(
+        "--version",
+        default=None,
+        help="Versioned merged output directory (default: merged_sources_v1).",
     )
     return parser
 
@@ -119,6 +129,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             traffic["output_rows"],
             traffic["grid"]["inserted_windows"],
             traffic["congestion"]["derived_labels"],
+        )
+        return 0
+    if args.command == "merge-sources":
+        result = run_source_merge(settings, version=args.version)
+        dataset = result.summary["dataset"]
+        logger.info("Source merge complete: %s", result.summary_path)
+        logger.info("Generated merge report: %s", result.markdown_path)
+        logger.info(
+            "rows=%s keys=%s weather_missing=%s calendar_missing=%s",
+            dataset["output_rows"],
+            dataset["output_unique_keys"],
+            dataset["joins"]["weather"]["missing"],
+            dataset["joins"]["calendar"]["missing"],
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")

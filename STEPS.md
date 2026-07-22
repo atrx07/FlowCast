@@ -206,14 +206,15 @@ Produce one trusted row per road and 30-minute timestamp, including explicit mis
 Create one segment-window table without cardinality errors.
 
 ### Tasks
-1. Add `weather_hour = timestamp.floor("h")` to traffic.
-2. Join traffic to weather on station mapping and weather hour with many-to-one validation.
-3. Join calendar on normalized date with many-to-one validation.
-4. Record join indicators and missing matches.
-5. Assert row count remains equal to the trusted traffic grid.
-6. Verify no duplicate key was introduced.
-7. Preserve key lineage fields.
-8. Write versioned merged interim Parquet.
+1. Hash-verify all cleaned tables and their current quality summaries.
+2. Add `weather_hour = timestamp.floor("h")` to traffic.
+3. Join traffic to weather on station mapping and weather hour with many-to-one validation.
+4. Join calendar on normalized date with many-to-one validation.
+5. Record join indicators and missing matches.
+6. Assert row count remains equal to the trusted traffic grid.
+7. Verify no duplicate key was introduced.
+8. Preserve traffic lineage and prefix weather/calendar source lineage.
+9. Write versioned merged Parquet plus canonical JSON and generated Markdown.
 
 ### Exit gate
 - Zero unexpected join misses.

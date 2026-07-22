@@ -47,6 +47,7 @@ python -m flowcast.cli audit
 python -m flowcast.cli validate
 python -m flowcast.cli clean-context
 python -m flowcast.cli clean-traffic
+python -m flowcast.cli merge-sources
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli train-classical
@@ -144,8 +145,9 @@ flowcast-repository/
 │       │   ├── clean_calendar.py
 │       │   ├── clean_context.py
 │       │   ├── validated_inputs.py
-│       │   ├── align.py
+│       │   ├── cleaned_inputs.py
 │       │   ├── merge.py
+│       │   ├── merge_pipeline.py
 │       │   ├── quarantine.py
 │       │   └── quality_report.py
 │       ├── features/
@@ -203,7 +205,7 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Global seed.
 - timezone policy.
 - logging level.
-- artifact version/tag.
+- validation, cleaning, and merge artifact versions.
 
 ### `config/data_contracts.yaml`
 - Required columns and types.
@@ -316,11 +318,18 @@ negative targets.
 ### 6.8 Merged contract
 Key: `road_id + timestamp`.
 
-- Many-to-one joins only.
-- Weather joined by station and floored hour.
-- Calendar joined by date.
-- Join indicators and missing join counts recorded during pipeline execution.
-- `weather_station_id` may remain for lineage but is excluded where redundant for modelling.
+- `merge-sources` hash-verifies all three cleaned Parquet files and both cleaning
+  summaries before reading them.
+- Weather joins by station and floored local hour with explicit many-to-one
+  validation; calendar joins by normalized local date with the same validation.
+- `weather_join_status` and `calendar_join_status`, matched/missing counts,
+  source hashes, and prefixed weather/calendar source-row lineage are persisted.
+- The output is `data/interim/<merge_version>/merged.parquet`; canonical JSON
+  and generated Markdown live under `artifacts/quality/<merge_version>/`.
+- Any duplicate right key, unexpected miss, row-count change, or duplicate
+  traffic output key fails closed.
+- `weather_station_id` may remain for lineage but is excluded where redundant
+  for modelling.
 
 ### 6.9 Processed feature contract
 - Sorted by `road_id, timestamp`.
