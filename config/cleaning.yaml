@@ -1,4 +1,58 @@
 contract_version: context_cleaning_v1
+traffic_contract_version: traffic_cleaning_v1
+
+traffic:
+  grid:
+    start: "2025-01-01 00:00"
+    end: "2025-05-31 23:30"
+    frequency: 30min
+    expected_road_count: 25
+  static_metadata:
+    - road_name
+    - latitude
+    - longitude
+    - weather_station_id
+    - road_capacity
+  causal_imputation:
+    traffic_volume:
+      same_row_source: vehicle_count
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+    vehicle_count:
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+    avg_speed:
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+      leading_fallback: same_timestamp_station_median
+    occupancy:
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+      leading_fallback: same_timestamp_station_median
+    travel_time:
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+    signal_timing:
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+    vehicle_type_dist:
+      previous_day_lag_windows: 48
+      forward_fill_limit_windows: 4
+  vehicle_distribution:
+    required_keys: [2W, Car, LCV, HCV]
+    share_columns:
+      2W: share_2w
+      Car: share_car
+      LCV: share_lcv
+      HCV: share_hcv
+    expected_sum: 1.0
+    sum_tolerance: 0.02
+    normalize_to_unit_sum: true
+  physical_ranges:
+    traffic_volume: {minimum: 0}
+    avg_speed: {exclusive_minimum: 0, maximum: 200}
+    occupancy: {minimum: 0, maximum: 100}
+    travel_time: {exclusive_minimum: 0}
 
 weather:
   numeric_imputation:

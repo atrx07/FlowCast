@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -16,12 +15,14 @@ from flowcast.data.artifacts import (
     write_json,
     write_parquet,
 )
-from flowcast.data.audit import sha256_file
 from flowcast.data.clean_calendar import clean_calendar
 from flowcast.data.clean_weather import clean_weather
 from flowcast.data.contracts import load_contract_bundle
 from flowcast.data.quality_report import render_context_cleaning_markdown
-from flowcast.data.quarantine import run_validation_pipeline
+from flowcast.data.validated_inputs import (
+    validated_summary,
+    verified_validated_table,
+)
 from flowcast.settings import Settings
 
 
@@ -51,36 +52,6 @@ def load_cleaning_config(settings: Settings) -> dict[str, Any]:
     return config
 
 
-def _validated_summary(settings: Settings) -> tuple[Path, dict[str, Any]]:
-    summary_path = (
-        settings.quarantine_dir / settings.validation_version / "summary.json"
-    )
-    if not summary_path.is_file():
-        run_validation_pipeline(settings)
-    payload: dict[str, Any] = json.loads(summary_path.read_text(encoding="utf-8"))
-    if payload.get("validation_version") != settings.validation_version:
-        raise RuntimeError("Validated input version does not match configuration")
-    if payload.get("dataset_failure"):
-        raise RuntimeError("Validated input contains a dataset-level failure")
-    return summary_path, payload
-
-
-def _verified_validated_table(
-    settings: Settings,
-    summary: dict[str, Any],
-    dataset: str,
-) -> tuple[Path, pd.DataFrame]:
-    path = settings.interim_dir / settings.validation_version / f"{dataset}.parquet"
-    record = summary["datasets"][dataset]["validated_artifact"]
-    if not path.is_file():
-        raise FileNotFoundError(f"Validated input artifact is missing: {path}")
-    if path.stat().st_size != int(record["bytes"]):
-        raise RuntimeError(f"Validated input byte count changed: {path}")
-    if sha256_file(path, settings.hash_chunk_size) != str(record["sha256"]):
-        raise RuntimeError(f"Validated input SHA-256 changed: {path}")
-    return path, pd.read_parquet(path)
-
-
 def run_context_cleaning(
     settings: Settings,
     version: str | None = None,
@@ -91,11 +62,11 @@ def run_context_cleaning(
         version or settings.cleaning_version
     )
     cleaning_config = load_cleaning_config(settings)
-    validation_summary_path, validation_summary = _validated_summary(settings)
-    calendar_input_path, calendar_input = _verified_validated_table(
+    validation_summary_path, validation_summary = validated_summary(settings)
+    calendar_input_path, calendar_input = verified_validated_table(
         settings, validation_summary, "calendar"
     )
-    weather_input_path, weather_input = _verified_validated_table(
+    weather_input_path, weather_input = verified_validated_table(
         settings, validation_summary, "weather"
     )
 

@@ -5,8 +5,8 @@
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-22
 - **Current milestone:** M2 - Cleaning and merge (in progress)
-- **Current step:** Steps 01-04 complete; Step 05 not started
-- **Overall state:** Trusted calendar and hourly weather gate passed
+- **Current step:** Steps 01-05 complete; Step 06 not started
+- **Overall state:** All three trusted source tables are ready to merge
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
@@ -15,32 +15,33 @@ FlowCast has a reproducible Python 3.11 package with immutable raw preservation,
 SHA-256 audit, executable source contracts, reason-preserving quarantine, and
 versioned validation artifacts. Milestone M1 is complete.
 
-Step 04 now adds trusted calendar and hourly weather tables. The pipeline
-verifies validated-input hashes, normalizes weather labels, applies causal
-station-local imputation, preserves donor-row lineage, and emits canonical JSON
-plus generated Markdown quality evidence.
+Steps 04 and 05 now provide trusted calendar, hourly weather, and complete-grid
+traffic tables. Every cleaning command verifies its validated-input hashes and
+emits canonical JSON plus generated Markdown quality evidence. Source merging,
+features, EDA, models, inference, reporting services, and the Streamlit
+dashboard have not begun.
 
-Traffic cleaning, grid reconstruction, source merging, features, EDA, models,
-inference, reporting services, and the Streamlit dashboard have not begun.
+## 2. Step 05 Implementation
 
-## 2. Step 04 Implementation
-
-- Added `config/cleaning.yaml` as `context_cleaning_v1` and configured the
-  versioned output `cleaned_sources_v1`.
-- Added shared deterministic Parquet/JSON artifact helpers.
-- Added independent calendar and weather cleaners plus a bounded context
-  pipeline and generated quality-report renderer.
-- Added `flowcast clean-context [--version VERSION]`.
-- Calendar cleaning normalizes dates, enforces unique keys and 0/1 flags,
-  validates flag/name relationships, and preserves source lineage.
-- Weather cleaning enforces a complete unique hourly grid, maps all delivered
-  label variants to `Clear`, `Cloudy`, `Overcast`, `Rain`, or `Fog`, and
-  validates trusted numeric fields.
-- Temperature and visibility use station-local forward fill for at most two
-  consecutive hours. Each output row records original missingness, method, and
-  donor source row. Leading/longer gaps fail closed.
-- Added unit tests for boundaries, invalid inputs, donor lineage, and future
-  mutation; added full-source and byte-deterministic artifact tests.
+- Added `traffic_cleaning_v1` policy to `config/cleaning.yaml`, including the
+  fixed date grid, expected road count, field-specific causal hierarchy,
+  vehicle-share contract, and physical ranges.
+- Added shared hash-verified access to validated tables and the issue ledger.
+- Added separate traffic grid/contract, causal recovery, artifact pipeline, and
+  generated-report responsibilities; every source module remains under 400
+  physical lines.
+- Added `flowcast clean-traffic [--version VERSION]`.
+- Verified static road metadata is constant per `road_id`, then reconstructed
+  exactly 25 roads x 7,248 half-hour windows.
+- Preserved source JSON and expanded it to `share_2w`, `share_car`, `share_lcv`,
+  and `share_hcv`, normalizing only source sums within the documented 0.02
+  tolerance.
+- Added inserted-window, original-null, physical-invalid, method, donor
+  timestamp, single-donor, and complete donor-row lineage fields.
+- Derived only missing congestion labels using exact V/C boundaries and audited
+  all existing labels without overwriting them.
+- Preserved accident count as unknown on inserted windows and added
+  `_accident_observed`; no synthetic zero-incident targets were created.
 
 ## 3. Produced Artifacts
 
@@ -48,41 +49,65 @@ inference, reporting services, and the Streamlit dashboard have not begun.
 data/interim/cleaned_sources_v1/
   calendar.parquet
   weather.parquet
+  traffic.parquet
 
 artifacts/quality/cleaned_sources_v1/
   summary.json
   summary.md
+  traffic_summary.json
+  traffic_summary.md
 ```
 
 The Parquet files are reproducible generated data and remain ignored by Git.
-The compact quality report and canonical JSON evidence are tracked.
+The compact quality reports and canonical JSON evidence are tracked.
 
-## 4. Step 04 Data Evidence
+## 4. Step 05 Data Evidence
 
 | Check | Verified result |
 |---|---:|
-| Calendar rows / unique dates | 151 / 151 |
-| Calendar range | 2025-01-01 to 2025-05-31 |
-| Holiday / event / roadwork days | 6 / 6 / 11 |
-| Weather rows / unique station-hours | 10,872 / 10,872 |
-| Stations / rows per station | 3 / 3,624 |
-| Controlled weather labels | 5 |
-| Temperature values imputed | 167 |
-| Visibility values imputed | 111 |
-| Maximum observed missing run | 2 hours |
-| Remaining trusted weather nulls | 0 |
-| Negative rainfall / visibility | 0 / 0 |
+| Validated traffic rows | 176,701 |
+| Output rows / unique keys | 181,200 / 181,200 |
+| Roads / windows per road | 25 / 7,248 |
+| Duplicate rows already accounted | 1,767 |
+| Explicitly inserted windows | 4,499 |
+| Road metadata discrepancies | 0 |
+| Maximum trusted-measurement gap | 4 windows |
+| Existing / derived congestion labels | 150,077 / 31,123 |
+| Existing congestion disagreements | 0 |
+| Vehicle-share rows normalized | 60,347 |
+| Unknown accident targets on inserted windows | 4,499 |
+| Remaining trusted-field nulls | 0 |
 
-Controlled label counts are Clear 8,168; Cloudy 1,844; Fog 76; Overcast 358;
-and Rain 426. All 278 fills use an earlier value from the same station and store
-the donor `_source_row`.
+Retained validation lineage contains 4,348 original missing and 239 physically
+invalid volume values, 4,343 missing and 236 invalid speeds, and 4,344 missing
+and 229 invalid occupancies.
 
-## 5. Validation and Assurance Evidence
+## 5. Causal Recovery Evidence
+
+| Field | Total repaired | Same row | Prior day | Causal forward | Station median |
+|---|---:|---:|---:|---:|---:|
+| Traffic volume | 9,086 | 4,587 | 4,337 | 162 | 0 |
+| Vehicle count | 4,499 | 0 | 4,337 | 162 | 0 |
+| Average speed | 9,078 | 0 | 8,539 | 536 | 3 |
+| Occupancy | 9,072 | 0 | 8,540 | 529 | 3 |
+| Travel time | 4,499 | 0 | 4,337 | 162 | 0 |
+| Signal timing | 4,499 | 0 | 4,337 | 162 | 0 |
+| Vehicle distribution | 4,499 | 0 | 4,337 | 162 | 0 |
+
+All 172,114 retained rows with both observed volume and count agree exactly.
+Every retained invalid/missing volume therefore uses its valid same-row count.
+Remaining gaps use the prior-day same window, then a same-road forward fill
+bounded at four windows. Only three leading speed and three leading occupancy
+values require a concurrent same-station median; their contributing source-row
+lists are persisted. Future-value mutation tests leave earlier repairs unchanged.
+
+## 6. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
 ```text
 .venv/Scripts/python.exe -m flowcast.cli clean-context
+.venv/Scripts/python.exe -m flowcast.cli clean-traffic
 .venv/Scripts/python.exe -m pytest -q
 .venv/Scripts/python.exe -m pip check
 .venv/Scripts/python.exe -m compileall -q src
@@ -91,47 +116,40 @@ git diff --check
 
 Verified results:
 
-- Context CLI: exit code 0; calendar 151 rows, weather 10,872 rows.
-- Tests: 42 passed, including deterministic full-source reruns.
-- Dependency integrity: no broken requirements.
-- Package byte-compilation and patch whitespace checks succeeded.
-- Repeated runs produced byte-identical cleaned Parquet, JSON, and Markdown.
+- Context and traffic CLI commands exited 0 and regenerated internally
+  consistent artifacts after the shared cleaning configuration changed.
+- Tests: 50 passed, including exact congestion boundaries, future mutation,
+  full-grid contracts, donor lineage, and byte-deterministic reruns.
+- Dependency integrity, byte-compilation, and patch whitespace checks passed.
+- Repeated traffic runs produced byte-identical Parquet, JSON, and Markdown.
 - Largest source module remains `src/flowcast/data/audit.py` at 366 physical
   lines; every source file is below 400 lines.
-- Raw and validated input hashes remain unchanged.
-
-## 6. Source Validation Baseline
-
-| Dataset | Input | Retained after validation | Quarantined rows | Issues |
-|---|---:|---:|---:|---:|
-| Calendar | 151 | 151 | 0 | 0 |
-| Weather | 10,872 | 10,872 | 0 | 278 |
-| Traffic | 178,468 | 176,701 | 1,767 | 42,514 |
-| **Total** | **189,491** | **187,724** | **1,767** | **42,792** |
+- Raw and validated source artifacts remain unchanged.
 
 ## 7. Decisions and Constraints
 
-- The source documents permit forward/interpolated weather fill. FlowCast uses
-  forward-only fill because weather at time `t` must not depend on `t+1`.
-- The actual 167 temperature and 111 visibility gaps are all internal runs of
-  one or two hours with an earlier same-station observation, so no fallback or
-  learned global statistic is needed.
-- Known normalization variants pass raw validation but are changed only in the
-  versioned cleaned weather artifact; raw and validated artifacts remain intact.
-- The cleaning report is generated from `summary.json` and is not edited by
-  hand.
+- The original PRD permits interpolation for short gaps, but FlowCast uses only
+  past or concurrent observations so a value at `t` cannot depend on `t+1`.
+- The observed maximum measurement gap is four windows; the bounded fallback is
+  encoded in configuration and fails closed beyond it.
+- A same-timestamp station median is permitted only for leading speed and
+  occupancy, where no earlier road observation exists. It uses no future data.
+- Vehicle share sums range from 0.99 to 1.01 and all pass the dictionary's 0.02
+  tolerance before unit-sum normalization.
+- Reconstructed accident labels remain unavailable; later target construction
+  must exclude them instead of treating missing sensor windows as non-events.
 - No dependency or technology change was required.
 
 ## 8. Risks and Unresolved Work
 
-- Traffic still contains missing/invalid measurements, blank congestion labels,
-  and 4,499 absent road/time windows. Step 05 must choose field-specific,
-  leakage-safe recovery rules from observed gap structure.
-- M2 remains open until traffic is cleaned and all three trusted sources are
-  merged without row multiplication.
+- Imputed sensor values must remain identifiable in EDA and modelling; model
+  evaluation should include sensitivity/error analysis by imputation state.
+- Step 06 must prove both joins are many-to-one and preserve all 181,200 traffic
+  keys without multiplication or unexpected misses.
+- M2 remains open until the three trusted sources are merged.
 - Modelling, deep-learning, and dashboard dependency groups remain deferred.
 
 ## 9. Next Gate
 
-Proceed only to **Step 05 - Clean Traffic and Reconstruct the Grid**. The bounded
-action and acceptance gate are maintained in `NEXT_STEP.md`.
+Proceed only to **Step 06 - Align and Merge Sources**. The bounded action and
+acceptance gate are maintained in `NEXT_STEP.md`.

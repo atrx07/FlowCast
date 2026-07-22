@@ -178,11 +178,17 @@ Produce one trusted row per road and 30-minute timestamp, including explicit mis
    - occupancy outside 0-100
 7. Reindex each road to the complete 30-minute grid.
 8. Add flags for original missing windows, null cells, physical invalids, and imputation method.
-9. Recover short gaps through segment-local interpolation.
-10. Use a documented fallback hierarchy for longer gaps, avoiding future leakage in evaluation artifacts.
+9. Recover missing/invalid volume from the same-row `vehicle_count` after
+   proving release-wide equality; then use previous-day same-window values and
+   same-road causal forward fill limited to four windows.
+10. For unresolved leading speed/occupancy values only, use a concurrent
+    same-station median and record every contributing source row. Fail closed
+    outside this hierarchy.
 11. Derive blank congestion labels from V/C after valid/imputed volume is available.
 12. Preserve original congestion where present, but audit disagreement with the derivation.
 13. Write cleaned traffic Parquet and quarantine/quality outputs.
+14. Keep accident count unknown on inserted windows and mark target
+    availability explicitly; do not fabricate zero-incident labels.
 
 ### Checks
 - Exactly 25 roads.

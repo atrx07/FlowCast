@@ -1,0 +1,202 @@
+{
+  "cleaning_version": "cleaned_sources_v1",
+  "configuration": {
+    "cleaning": {
+      "bytes": 1848,
+      "path": "config/cleaning.yaml",
+      "sha256": "51d9d6762a711427ce41fad91b4601e10340db97f7eb60c4a315d2a8fb4cd494"
+    }
+  },
+  "contract_version": "traffic_cleaning_v1",
+  "dataset": {
+    "cleaned_artifact": {
+      "bytes": 5690677,
+      "path": "data/interim/cleaned_sources_v1/traffic.parquet",
+      "sha256": "0e51c2b9dbc5fabd4c317f9d63c1fe51945a387b2a06f034e861b83b2a5b45f7"
+    },
+    "congestion": {
+      "class_counts": {
+        "Free-flow": 111307,
+        "Heavy": 16721,
+        "Moderate": 43168,
+        "Severe": 10004
+      },
+      "derived_labels": 31123,
+      "source_disagreements": 0,
+      "source_labels_preserved": 150077
+    },
+    "duplicate_rows_accounted": 1767,
+    "grid": {
+      "end": "2025-05-31T23:30:00+05:30",
+      "expected_rows": 181200,
+      "frequency": "30min",
+      "inserted_windows": 4499,
+      "metadata_inconsistencies": {},
+      "start": "2025-01-01T00:00:00+05:30",
+      "timestamp_count_per_road": 7248
+    },
+    "imputation": {
+      "avg_speed": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 9078,
+        "input_missing_after_grid": 9078,
+        "maximum_missing_run_windows": 4,
+        "method_counts": {
+          "previous_day_same_window": 8539,
+          "same_road_causal_forward_fill": 536,
+          "same_timestamp_station_median": 3
+        },
+        "original_missing": 4343,
+        "physical_invalid": 236,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      },
+      "occupancy": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 9072,
+        "input_missing_after_grid": 9072,
+        "maximum_missing_run_windows": 4,
+        "method_counts": {
+          "previous_day_same_window": 8540,
+          "same_road_causal_forward_fill": 529,
+          "same_timestamp_station_median": 3
+        },
+        "original_missing": 4344,
+        "physical_invalid": 229,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      },
+      "signal_timing": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 4499,
+        "input_missing_after_grid": 4499,
+        "maximum_missing_run_windows": 2,
+        "method_counts": {
+          "previous_day_same_window": 4337,
+          "same_road_causal_forward_fill": 162
+        },
+        "original_missing": 0,
+        "physical_invalid": 0,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      },
+      "traffic_volume": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 9086,
+        "input_missing_after_grid": 9086,
+        "maximum_missing_run_windows": 4,
+        "method_counts": {
+          "previous_day_same_window": 4337,
+          "same_road_causal_forward_fill": 162,
+          "same_row_vehicle_count": 4587
+        },
+        "original_missing": 4348,
+        "physical_invalid": 239,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      },
+      "travel_time": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 4499,
+        "input_missing_after_grid": 4499,
+        "maximum_missing_run_windows": 2,
+        "method_counts": {
+          "previous_day_same_window": 4337,
+          "same_road_causal_forward_fill": 162
+        },
+        "original_missing": 0,
+        "physical_invalid": 0,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      },
+      "vehicle_count": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 4499,
+        "input_missing_after_grid": 4499,
+        "maximum_missing_run_windows": 2,
+        "method_counts": {
+          "previous_day_same_window": 4337,
+          "same_road_causal_forward_fill": 162
+        },
+        "original_missing": 0,
+        "physical_invalid": 0,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      },
+      "vehicle_type_dist": {
+        "forward_fill_limit_windows": 4,
+        "imputed": 4499,
+        "input_missing_after_grid": 4499,
+        "maximum_missing_run_windows": 2,
+        "method_counts": {
+          "previous_day_same_window": 4337,
+          "same_road_causal_forward_fill": 162
+        },
+        "original_missing": 0,
+        "physical_invalid": 0,
+        "previous_day_lag_windows": 48,
+        "remaining_missing": 0
+      }
+    },
+    "input_artifact": {
+      "bytes": 4101403,
+      "path": "data/interim/validated_v1/traffic.parquet",
+      "sha256": "183ef851437a6bb5ecdc0164f242ec5b50d183259a29c85bf01a59d3f5ead3a4"
+    },
+    "input_rows": 176701,
+    "numeric_ranges": {
+      "avg_speed": {
+        "maximum": 64.8,
+        "minimum": 6.7
+      },
+      "occupancy": {
+        "maximum": 100.0,
+        "minimum": 3.0
+      },
+      "traffic_volume": {
+        "maximum": 2090.0,
+        "minimum": 41.0
+      },
+      "travel_time": {
+        "maximum": 29.91,
+        "minimum": 0.8
+      }
+    },
+    "output_rows": 181200,
+    "remaining_trusted_nulls": {
+      "avg_speed": 0,
+      "congestion_level": 0,
+      "occupancy": 0,
+      "traffic_volume": 0,
+      "travel_time": 0
+    },
+    "road_count": 25,
+    "unique_road_timestamps": 181200,
+    "unobserved_accident_windows": 4499,
+    "vehicle_distribution": {
+      "input_sum_maximum": 1.0100000000000002,
+      "input_sum_minimum": 0.9899999999999999,
+      "normalized_rows": 60347,
+      "output_sum_maximum": 1.0000000000000002,
+      "output_sum_minimum": 0.9999999999999998,
+      "required_keys": [
+        "2W",
+        "Car",
+        "LCV",
+        "HCV"
+      ],
+      "sum_tolerance": 0.02
+    }
+  },
+  "input_issue_ledger": {
+    "bytes": 271794,
+    "path": "data/quarantine/validated_v1/issues.parquet",
+    "sha256": "d5ec74ebdf49023b6cc249b79240424455f8f2d7a8fbf3f93bab18bfc3d055a0"
+  },
+  "input_validation_summary": {
+    "bytes": 3721,
+    "path": "data/quarantine/validated_v1/summary.json",
+    "sha256": "08123b6b3a82935773bc3e6a69e72d5241ac4c579233abdfb3580ce3a99cc402"
+  },
+  "input_validation_version": "validated_v1"
+}

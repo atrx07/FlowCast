@@ -9,6 +9,7 @@ from typing import Sequence
 from flowcast.data.audit import run_raw_audit
 from flowcast.data.clean_context import run_context_cleaning
 from flowcast.data.quarantine import run_validation_pipeline
+from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.logging_config import configure_logging
 from flowcast.settings import load_settings
 
@@ -54,6 +55,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Versioned context output directory (default: cleaned_sources_v1).",
     )
+    clean_traffic = subparsers.add_parser(
+        "clean-traffic",
+        help="Clean validated traffic and reconstruct the half-hour road grid.",
+    )
+    clean_traffic.add_argument(
+        "--version",
+        default=None,
+        help="Versioned traffic output directory (default: cleaned_sources_v1).",
+    )
     return parser
 
 
@@ -96,6 +106,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             result.summary["datasets"]["weather"]["imputation"]["visibility"][
                 "imputed"
             ],
+        )
+        return 0
+    if args.command == "clean-traffic":
+        result = run_traffic_cleaning(settings, version=args.version)
+        traffic = result.summary["dataset"]
+        logger.info("Traffic cleaning complete: %s", result.summary_path)
+        logger.info("Generated quality report: %s", result.markdown_path)
+        logger.info(
+            "roads=%s rows=%s inserted=%s congestion_derived=%s",
+            traffic["road_count"],
+            traffic["output_rows"],
+            traffic["grid"]["inserted_windows"],
+            traffic["congestion"]["derived_labels"],
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")

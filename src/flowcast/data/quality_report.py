@@ -79,3 +79,77 @@ def render_context_cleaning_markdown(summary: dict[str, Any]) -> str:
         ]
     )
     return "\n".join(lines)
+
+
+def render_traffic_cleaning_markdown(summary: dict[str, Any]) -> str:
+    """Render the Step 05 JSON summary as concise generated Markdown."""
+
+    traffic = summary["dataset"]
+    grid = traffic["grid"]
+    lines = [
+        "# FlowCast Traffic Cleaning Report",
+        "",
+        f"- Cleaning contract: `{summary['contract_version']}`",
+        f"- Output version: `{summary['cleaning_version']}`",
+        f"- Input validation version: `{summary['input_validation_version']}`",
+        "",
+        "## Grid and lineage",
+        "",
+        "| Check | Result |",
+        "|---|---:|",
+        f"| Validated input rows | {traffic['input_rows']} |",
+        f"| Complete output rows | {traffic['output_rows']} |",
+        f"| Roads | {traffic['road_count']} |",
+        f"| Inserted missing windows | {grid['inserted_windows']} |",
+        f"| Duplicate rows accounted | {traffic['duplicate_rows_accounted']} |",
+        (
+            "| Metadata inconsistencies | "
+            f"{len(grid['metadata_inconsistencies'])} |"
+        ),
+        "",
+        "## Causal recovery",
+        "",
+        "| Field | Missing after grid | Maximum run | Imputed | Remaining |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for field, record in traffic["imputation"].items():
+        lines.append(
+            f"| {field} | {record['input_missing_after_grid']} | "
+            f"{record['maximum_missing_run_windows']} | {record['imputed']} | "
+            f"{record['remaining_missing']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "Recovery uses same-row semantic equivalence where configured, then "
+            "the previous-day same window, bounded same-road causal forward fill, "
+            "and only the configured concurrent station median for unresolved "
+            "leading values. Donor rows and timestamps are stored beside repairs.",
+            "",
+            "## Vehicle distribution and congestion",
+            "",
+            "| Check | Result |",
+            "|---|---:|",
+            (
+                "| Vehicle-share rows normalized | "
+                f"{traffic['vehicle_distribution']['normalized_rows']} |"
+            ),
+            f"| Congestion labels derived | {traffic['congestion']['derived_labels']} |",
+            (
+                "| Existing-label disagreements | "
+                f"{traffic['congestion']['source_disagreements']} |"
+            ),
+            (
+                "| Unobserved accident windows retained as unknown | "
+                f"{traffic['unobserved_accident_windows']} |"
+            ),
+            "",
+            "Inserted windows retain a false `_accident_observed` flag and an "
+            "unknown accident count; they are not silently relabelled as no incident.",
+            "",
+            "This file is generated from `traffic_summary.json`; edit the pipeline, "
+            "not this report.",
+            "",
+        ]
+    )
+    return "\n".join(lines)

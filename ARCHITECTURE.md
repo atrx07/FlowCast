@@ -46,6 +46,7 @@ Proposed commands:
 python -m flowcast.cli audit
 python -m flowcast.cli validate
 python -m flowcast.cli clean-context
+python -m flowcast.cli clean-traffic
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli train-classical
@@ -137,9 +138,12 @@ flowcast-repository/
 │       │   ├── artifacts.py
 │       │   ├── cleaning_types.py
 │       │   ├── clean_traffic.py
+│       │   ├── traffic_recovery.py
+│       │   ├── traffic_pipeline.py
 │       │   ├── clean_weather.py
 │       │   ├── clean_calendar.py
 │       │   ├── clean_context.py
+│       │   ├── validated_inputs.py
 │       │   ├── align.py
 │       │   ├── merge.py
 │       │   ├── quarantine.py
@@ -210,8 +214,10 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - weather normalization map.
 
 ### `config/cleaning.yaml`
-- Context-cleaning contract version.
-- Causal numeric imputation methods and maximum supported gap lengths.
+- Context- and traffic-cleaning contract versions.
+- Complete traffic-grid bounds and expected road count.
+- Field-specific causal imputation hierarchy and maximum supported gap lengths.
+- Vehicle-share key, tolerance, naming, and normalization policy.
 - Calendar flag/name relationship checks.
 
 ### `config/features.yaml`
@@ -291,7 +297,23 @@ The cleaned calendar preserves one row per normalized date. The cleaned weather
 table preserves one row per station/hour and retains validation/source lineage
 alongside normalization and imputation metadata.
 
-### 6.7 Merged contract
+### 6.7 Cleaned traffic artifact boundary
+
+The `clean-traffic` command verifies the validated traffic Parquet and unified
+issue-ledger hashes. It reconstructs the complete 25-road by 7,248-window grid,
+writes `traffic.parquet` beneath `data/interim/<cleaning_version>/`, and writes
+canonical JSON plus generated Markdown evidence beneath
+`artifacts/quality/<cleaning_version>/`.
+
+Every repaired measurement stores original-missing/physical-invalid state,
+method, donor timestamp, and donor source-row lineage. Inserted windows are
+explicit. Vehicle JSON is preserved and expanded to four normalized shares.
+Blank congestion is derived from exact half-hour V/C bands while existing
+labels are preserved and audited. Accident count remains unknown on inserted
+windows and `_accident_observed` prevents those rows from becoming fabricated
+negative targets.
+
+### 6.8 Merged contract
 Key: `road_id + timestamp`.
 
 - Many-to-one joins only.
@@ -300,7 +322,7 @@ Key: `road_id + timestamp`.
 - Join indicators and missing join counts recorded during pipeline execution.
 - `weather_station_id` may remain for lineage but is excluded where redundant for modelling.
 
-### 6.8 Processed feature contract
+### 6.9 Processed feature contract
 - Sorted by `road_id, timestamp`.
 - Stable feature names and dtypes.
 - Explicit target columns per horizon.
@@ -322,11 +344,17 @@ Key: `road_id + timestamp`.
 
 ### 7.3 Missing-value policy
 - Reindex each segment to the complete 30-minute grid.
-- Add missing-window and imputation flags.
-- Short internal gaps: segment-wise time interpolation when both sides are available and policy allows.
-- Longer gaps: training-derived segment x time-of-day medians or fallback hierarchy.
-- Do not impute future targets using future data during model evaluation.
-- Preserve all imputation decisions in the quality report.
+- Add missing-window, source-null, physical-invalid, method, and donor flags.
+- Recover missing/invalid volume from valid same-row `vehicle_count`, whose
+  release-wide equality was verified before the rule was enabled.
+- Then use the same road/window from the previous day, followed by same-road
+  causal forward fill limited to four windows.
+- Only leading speed/occupancy values may use the same-timestamp station median;
+  all contributing source rows are recorded.
+- Preserve unknown accident targets for inserted windows rather than imputing a
+  no-incident label.
+- Fail closed outside the configured hierarchy and preserve every decision in
+  the quality report.
 
 ## 8. Feature and Target Architecture
 ### 8.1 Feature timestamp rule
