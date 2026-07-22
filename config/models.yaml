@@ -1,0 +1,67 @@
+model_contract_version: split_preprocessing_v1
+version: split_preprocessing_v1
+
+split:
+  cadence_minutes: 30
+  allocation_method: largest_remainder
+  ratios:
+    train: 0.70
+    validation: 0.15
+    test: 0.15
+  partitions:
+    train:
+      timestamp_count: 5074
+      start: "2025-01-01T00:00:00+05:30"
+      end: "2025-04-16T16:30:00+05:30"
+    validation:
+      timestamp_count: 1087
+      start: "2025-04-16T17:00:00+05:30"
+      end: "2025-05-09T08:00:00+05:30"
+    test:
+      timestamp_count: 1087
+      start: "2025-05-09T08:30:00+05:30"
+      end: "2025-05-31T23:30:00+05:30"
+  target_boundary_policy: target_timestamp_within_origin_partition
+
+cross_validation:
+  strategy: expanding_window
+  fold_count: 5
+  validation_windows: 336
+  gap_windows: 4
+
+access:
+  default_purpose: tuning
+  final_evaluation_purpose: final_evaluation
+
+preprocessing:
+  categorical_encoding: one_hot_ignore_unknown
+  numeric_imputation: median
+  categorical_imputation: most_frequent
+  binary_imputation: most_frequent
+  explicit_binary_features:
+    - public_holiday
+    - event_flag
+    - roadwork_flag
+  bounded_numeric_features:
+    - occupancy
+    - visibility
+    - share_2w
+    - share_car
+    - share_lcv
+    - share_hcv
+    - hour_of_day
+    - day_of_week
+    - days_to_nearest_event
+  families:
+    linear:
+      numeric_scaling: standard
+      bounded_scaling: standard
+    tree:
+      numeric_scaling: none
+      bounded_scaling: none
+    svm:
+      numeric_scaling: standard
+      bounded_scaling: standard
+    recurrent:
+      numeric_scaling: standard
+      bounded_scaling: minmax

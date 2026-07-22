@@ -1,0 +1,71 @@
+{
+  "contract_version": "split_preprocessing_v1",
+  "fold_count": 5,
+  "folds": [
+    {
+      "fold": 1,
+      "gap_end": "2025-03-12T16:30:00+05:30",
+      "gap_start": "2025-03-12T15:00:00+05:30",
+      "gap_timestamp_count": 4,
+      "train_end": "2025-03-12T14:30:00+05:30",
+      "train_start": "2025-01-01T00:00:00+05:30",
+      "train_timestamp_count": 3390,
+      "validation_end": "2025-03-19T16:30:00+05:30",
+      "validation_start": "2025-03-12T17:00:00+05:30",
+      "validation_timestamp_count": 336
+    },
+    {
+      "fold": 2,
+      "gap_end": "2025-03-19T16:30:00+05:30",
+      "gap_start": "2025-03-19T15:00:00+05:30",
+      "gap_timestamp_count": 4,
+      "train_end": "2025-03-19T14:30:00+05:30",
+      "train_start": "2025-01-01T00:00:00+05:30",
+      "train_timestamp_count": 3726,
+      "validation_end": "2025-03-26T16:30:00+05:30",
+      "validation_start": "2025-03-19T17:00:00+05:30",
+      "validation_timestamp_count": 336
+    },
+    {
+      "fold": 3,
+      "gap_end": "2025-03-26T16:30:00+05:30",
+      "gap_start": "2025-03-26T15:00:00+05:30",
+      "gap_timestamp_count": 4,
+      "train_end": "2025-03-26T14:30:00+05:30",
+      "train_start": "2025-01-01T00:00:00+05:30",
+      "train_timestamp_count": 4062,
+      "validation_end": "2025-04-02T16:30:00+05:30",
+      "validation_start": "2025-03-26T17:00:00+05:30",
+      "validation_timestamp_count": 336
+    },
+    {
+      "fold": 4,
+      "gap_end": "2025-04-02T16:30:00+05:30",
+      "gap_start": "2025-04-02T15:00:00+05:30",
+      "gap_timestamp_count": 4,
+      "train_end": "2025-04-02T14:30:00+05:30",
+      "train_start": "2025-01-01T00:00:00+05:30",
+      "train_timestamp_count": 4398,
+      "validation_end": "2025-04-09T16:30:00+05:30",
+      "validation_start": "2025-04-02T17:00:00+05:30",
+      "validation_timestamp_count": 336
+    },
+    {
+      "fold": 5,
+      "gap_end": "2025-04-09T16:30:00+05:30",
+      "gap_start": "2025-04-09T15:00:00+05:30",
+      "gap_timestamp_count": 4,
+      "train_end": "2025-04-09T14:30:00+05:30",
+      "train_start": "2025-01-01T00:00:00+05:30",
+      "train_timestamp_count": 4734,
+      "validation_end": "2025-04-16T16:30:00+05:30",
+      "validation_start": "2025-04-09T17:00:00+05:30",
+      "validation_timestamp_count": 336
+    }
+  ],
+  "gap_windows": 4,
+  "maximum_horizon_windows": 4,
+  "strategy": "expanding_window",
+  "validation_windows": 336,
+  "version": "split_preprocessing_v1"
+}

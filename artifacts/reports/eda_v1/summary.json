@@ -1,9 +1,9 @@
 {
   "configuration": {
     "base": {
-      "bytes": 717,
+      "bytes": 792,
       "path": "config/base.yaml",
-      "sha256": "4f1a8766fdec4c44d0c224a422ea0809a502c418c82cdab713c40d40f8fff5b6"
+      "sha256": "c2740c43017fa7fa802d08cb84967490c81d64968fece669ca42af0f62fa08ad"
     },
     "eda": {
       "bytes": 1035,
@@ -377,9 +377,9 @@
   },
   "eda_version": "eda_v1",
   "environment_artifact": {
-    "bytes": 1994,
+    "bytes": 2108,
     "path": "artifacts/reports/eda_v1/environment.txt",
-    "sha256": "1e4507b1a24dd60ed32851ee9af58f178c772e6f3e97c69054090d6f7ede861c"
+    "sha256": "44054577ab8642a79bf73479195832190483b1b5ef0bb77945cf0a0afb11565c"
   },
   "figures": {
     "class_balance": {
@@ -448,12 +448,12 @@
     "manifest": {
       "bytes": 31747,
       "path": "artifacts/features/processed_targets_v1/manifest.json",
-      "sha256": "7060d0c6ec8271c2d05e9bacecca821db37b83138a1088cc0610c244edf55500"
+      "sha256": "5dd66dd78d95c842bf7c56a18634a067b33c65b2923914dbb66eb68f626c02ec"
     },
     "summary": {
       "bytes": 6140,
       "path": "artifacts/quality/processed_targets_v1/summary.json",
-      "sha256": "67d71a05a289019ecb6b2e5d3058f8b2d5d85a44a5e883aad5e5deca47f4e756"
+      "sha256": "4c9be6b64e73c1a56daa8b8f47f8662cd260c07c70a11fdd0c114dcd27986c3c"
     }
   },
   "input_processed_version": "processed_targets_v1",
@@ -466,17 +466,17 @@
     "features": {
       "bytes": 13069,
       "path": "artifacts/quality/engineered_features_v1/summary.json",
-      "sha256": "45bebcbdd27f5d51a5b2a67c078537b5e09364989e9b6b9c3ca103504d61d31f"
+      "sha256": "f27fd79aace69f6db032e2c4c1e91e736c867b1380472cb29a0d94219eb8b425"
     },
     "merge": {
       "bytes": 2642,
       "path": "artifacts/quality/merged_sources_v1/summary.json",
-      "sha256": "312320c7b16aa0e1b51696143837de02c62d202639cd7043a05afa3c4603cc7b"
+      "sha256": "aceaaf88ca6455227493a28cd16a71310e7c6fde51e23794e236a7246e39ec07"
     },
     "processed": {
       "bytes": 6140,
       "path": "artifacts/quality/processed_targets_v1/summary.json",
-      "sha256": "67d71a05a289019ecb6b2e5d3058f8b2d5d85a44a5e883aad5e5deca47f4e756"
+      "sha256": "4c9be6b64e73c1a56daa8b8f47f8662cd260c07c70a11fdd0c114dcd27986c3c"
     },
     "raw_audit": {
       "bytes": 8056,

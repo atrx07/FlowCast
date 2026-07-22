@@ -1,9 +1,9 @@
 {
   "configuration": {
     "base": {
-      "bytes": 717,
+      "bytes": 792,
       "path": "config/base.yaml",
-      "sha256": "4f1a8766fdec4c44d0c224a422ea0809a502c418c82cdab713c40d40f8fff5b6"
+      "sha256": "c2740c43017fa7fa802d08cb84967490c81d64968fece669ca42af0f62fa08ad"
     },
     "cleaning": {
       "bytes": 2162,

@@ -18,6 +18,7 @@ def test_settings_resolve_from_repository_root() -> None:
     assert settings.cleaning_config_path == settings.root / "config" / "cleaning.yaml"
     assert settings.features_config_path == settings.root / "config" / "features.yaml"
     assert settings.eda_config_path == settings.root / "config" / "eda.yaml"
+    assert settings.models_config_path == settings.root / "config" / "models.yaml"
     assert settings.reference_dir == settings.root / "FlowCast-project_file"
     assert settings.raw_dir == settings.root / "data" / "raw"
     assert settings.seed == 42
@@ -28,3 +29,4 @@ def test_settings_resolve_from_repository_root() -> None:
     assert settings.feature_version == "engineered_features_v1"
     assert settings.processed_version == "processed_targets_v1"
     assert settings.eda_version == "eda_v1"
+    assert settings.modelling_version == "split_preprocessing_v1"

@@ -351,6 +351,31 @@ Create one defensible evaluation protocol shared across models.
 - Train < validation < test chronologically.
 - Every horizon uses compatible target availability.
 - Test period remains untouched by hyperparameter selection.
+
+### Proven Step 10 procedure
+
+- `flowcast prepare-modeling` verifies the Step 09 summary, processed dataset,
+  target/schema manifest, explanatory-feature manifest, and current config
+  hashes before assigning any row.
+- The 7,248 unique origin timestamps use largest-remainder 70/15/15 allocation:
+  5,074 train, 1,087 validation, and 1,087 test timestamps, with all 25 roads
+  present at every timestamp.
+- Every origin remains assigned, while `target_within_split_h1` through `h4`
+  prevent use of a future label that crosses the origin partition boundary.
+- Five expanding-window CV folds stay inside training. Each has a four-window
+  gap covering the maximum 120-minute horizon and a 336-window validation
+  period.
+- Linear, tree, SVM, and recurrent preprocessors consume the exact 62-feature
+  Step 07 manifest. Imputers, one-hot categories, scalers, and class weights use
+  training rows only; validation is transform-only and test is sealed by
+  default.
+- Split assignments, CV folds, feature order, learned statistics, library
+  versions, class weights, hashes, and generated Markdown are persisted under
+  `split_preprocessing_v1`; Joblib preprocessors are reproducibly generated in
+  the ignored model-artifact directory.
+- Contract tests prove chronological order, road coverage, horizon isolation,
+  training-only statistics, unknown-category handling, sealed-test access,
+  deterministic bytes, reloadability, and tamper rejection.
 ---
 ## Step 11 - Implement NumPy Linear Regression
 ### Goal

@@ -27,6 +27,7 @@ class Settings:
     cleaning_config_path: Path
     features_config_path: Path
     eda_config_path: Path
+    models_config_path: Path
     reference_dir: Path
     raw_dir: Path
     interim_dir: Path
@@ -41,6 +42,7 @@ class Settings:
     feature_version: str
     processed_version: str
     eda_version: str
+    modelling_version: str
     hash_chunk_size: int
 
 
@@ -74,6 +76,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     features = config["features"]
     processed = config["processed"]
     eda = config["eda"]
+    modelling = config["modelling"]
     return Settings(
         root=root,
         config_path=selected,
@@ -86,6 +89,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         cleaning_config_path=_resolve(root, paths["cleaning"]),
         features_config_path=_resolve(root, paths["features"]),
         eda_config_path=_resolve(root, paths["eda"]),
+        models_config_path=_resolve(root, paths["models"]),
         reference_dir=_resolve(root, paths["reference"]),
         raw_dir=_resolve(root, paths["raw"]),
         interim_dir=_resolve(root, paths["interim"]),
@@ -100,5 +104,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         feature_version=str(features["version"]),
         processed_version=str(processed["version"]),
         eda_version=str(eda["version"]),
+        modelling_version=str(modelling["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

@@ -13,6 +13,7 @@ paths:
   cleaning: config/cleaning.yaml
   features: config/features.yaml
   eda: config/eda.yaml
+  models: config/models.yaml
   reference: FlowCast-project_file
   raw: data/raw
   interim: data/interim
@@ -42,3 +43,6 @@ processed:
 
 eda:
   version: eda_v1
+
+modelling:
+  version: split_preprocessing_v1

@@ -4,188 +4,211 @@
 
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-22
-- **Current milestone:** M4 - EDA and quality report (complete)
-- **Current step:** Steps 00-09 complete; Step 10 next
-- **Overall state:** Week 1 data-engineering and EDA gate passed
+- **Current milestone:** M5 - Classical machine learning (in progress)
+- **Current step:** Steps 00-10 complete; Step 11 next
+- **Overall state:** Frozen evaluation and preprocessing gate passed
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
 
 FlowCast now has a reproducible Python 3.11 pipeline from immutable raw inputs
 through validation, cleaning, cardinality-safe merging, leakage-safe features,
-multi-horizon targets, and a versioned EDA/data-quality layer. Milestones M0
-through M4 are complete.
+multi-horizon targets, EDA/reporting, and a frozen modelling-data protocol.
+Milestones M0 through M4 are complete; M5 has begun.
 
-The analysis covers all 181,200 road/half-hour prediction origins, all 25 road
-segments, the 62 model-candidate explanatory features, and the 20 masked target
-definitions. The EDA notebook delegates to tested package functions and runs
-top-to-bottom. Classical/deep model training, inference, confidence, report
-export services, and the Streamlit dashboard have not begun.
+All 181,200 origins have one deterministic chronological partition. Every
+target/horizon combines its original availability mask with a persisted
+same-partition target flag, preventing labels from crossing train, validation,
+or test boundaries. Five expanding CV folds remain entirely inside training.
+Four model-family preprocessors are fit from training rows only, while test
+access is sealed by default. No forecast model has been trained or selected and
+no test metric has been inspected.
 
-## 2. Step 09 Implementation
+## 2. Step 10 Implementation
 
-- Added `config/eda.yaml` and `eda_v1` settings for descriptive fields,
-  contextual slices, correlation candidates, target association, redundancy
-  threshold, class order, and figure settings.
-- Added a fail-closed processed-input loader that verifies current config
-  hashes, Step 08 summary/manifest lineage, Parquet bytes/SHA-256, row/key
-  cardinality, exact column order, and dtypes before analysis.
-- Added package-backed descriptive statistics, target distributions,
-  road/time/weather/calendar aggregates, correlation/covariance, redundancy
-  checks, findings, modelling decisions, and limitations.
-- Added a consolidated quality reconciliation that verifies every persisted
-  upstream summary and immutable raw-copy hash, then checks source, validation,
-  reconstruction, merge, feature, and target counters without handwritten
-  estimates.
-- Added `flowcast eda [--version VERSION]`, a generated Markdown report,
-  machine-readable JSON/CSV outputs, an environment snapshot, and six
-  deterministic PNG figures.
-- Added `notebooks/01_eda.ipynb`; all calculations remain in the package and
-  the notebook executes in a clean temporary Jupyter environment.
-- Added unit, full-data contract, determinism, tamper-rejection, figure, and
-  notebook smoke tests.
+- Added `config/models.yaml` and `split_preprocessing_v1` settings containing
+  exact time boundaries, ratio/count evidence, horizon-boundary policy, CV
+  geometry, sealed-test purposes, feature grouping, and scaling policies.
+- Added verified Step 09/processed/feature-manifest loading. Configs, EDA
+  outputs, processed Parquet, target/schema manifest, quality summary, and
+  explanatory-feature manifest are hash-checked before use.
+- Added largest-remainder chronological allocation across the 7,248 unique
+  corridor timestamps while retaining all 25 roads at every timestamp.
+- Added `target_within_split_h1` through `target_within_split_h4`; a target is
+  usable only when this boundary flag and its target-specific availability mask
+  are both true.
+- Added five expanding-window CV folds inside training, each with a four-window
+  gap covering the maximum 120-minute horizon and a 336-window/seven-day
+  validation period.
+- Added default-sealed test access. Tuning loaders expose train/validation;
+  test requires the explicit `final_evaluation` purpose.
+- Added linear, tree, SVM, and recurrent `ColumnTransformer` pipelines. All use
+  training-fitted imputation and one-hot encoding; linear/SVM standardize
+  numeric inputs, trees keep numeric inputs unscaled, and recurrent processing
+  uses Min-Max scaling for documented bounded fields plus standardization for
+  the remainder.
+- Persisted exact feature order, output order, imputer/scaler/category
+  statistics, library versions, training-only class weights, and Joblib hashes.
+- Added `flowcast prepare-modeling [--version VERSION]` and a generated split/
+  preprocessing report.
 
 ## 3. Produced Artifacts
 
 ```text
-artifacts/reports/eda_v1/
+data/processed/split_preprocessing_v1/
+  assignments.parquet
+
+artifacts/features/split_preprocessing_v1/
+  cv_folds.json
+  feature_schema.json
   summary.json
-  data_quality.md
-  context_aggregates.csv
-  correlation.csv
-  covariance.csv
-  environment.txt
+  summary.md
 
-artifacts/figures/eda_v1/
-  traffic_distributions.png
-  hourly_profiles.png
-  road_comparison.png
-  class_balance.png
-  weather_traffic.png
-  correlation_heatmap.png
-
-notebooks/
-  01_eda.ipynb
+artifacts/models/split_preprocessing_v1/
+  linear.joblib
+  tree.joblib
+  svm.joblib
+  recurrent.joblib
 ```
 
-## 4. Step 09 Data Evidence
+The assignment Parquet and fitted Joblib files are reproducibly generated and
+remain ignored by Git. Their byte counts and SHA-256 hashes are recorded in the
+tracked canonical JSON artifacts.
 
-| Check | Verified result |
-|---|---:|
-| Dataset rows / unique keys | 181,200 / 181,200 |
-| Columns / roads | 188 / 25 |
-| Time coverage | 2025-01-01 00:00 to 2025-05-31 23:30 IST |
-| Model-candidate features / targets | 62 / 20 |
-| Context slices | 67 |
-| Reconciliation checks | 9 of 9 passed |
-| Exported figures | 6 |
+## 4. Frozen Split and Target Evidence
 
-The quality chain reconciles 189,491 delivered source rows (178,468 traffic,
-10,872 weather, and 151 calendar), 187,724 validation-retained rows, 1,767
-rejected rows, 42,792 issue records, and the reconstructed 181,200-row traffic
-grid with 4,499 explicitly inserted windows. Merge coverage remains complete:
-zero weather/calendar misses, row loss, row multiplication, or duplicate keys.
+| Partition | Exact coverage (Asia/Kolkata) | Timestamps | Rows | Share |
+|---|---|---:|---:|---:|
+| Train | 2025-01-01 00:00 to 2025-04-16 16:30 | 5,074 | 126,850 | 70.0055% |
+| Validation | 2025-04-16 17:00 to 2025-05-09 08:00 | 1,087 | 27,175 | 14.9972% |
+| Test | 2025-05-09 08:30 to 2025-05-31 23:30 | 1,087 | 27,175 | 14.9972% |
 
-Key descriptive evidence:
+Every road has exactly the same timestamp boundaries and one assignment per
+origin. For a standard complete target, boundary-safe eligible rows decrease by
+25 rows per horizon in each partition:
 
-- Traffic volume: mean 431.52, median 362, range 41-2,090, skew 1.005.
-- Average speed: mean 42.10 km/h, median 44.9, range 6.7-64.8.
-- Travel time: mean 3.57 minutes, median 3.12, range 0.80-29.91.
-- Congestion: Free-flow 61.43%, Moderate 23.82%, Heavy 9.23%, Severe 5.52%.
-- Accident risk: 1,652 positives among 176,701 observed labels, a 0.935%
-  positive rate and approximately 106 negatives per positive; 4,499 inserted
-  windows remain unknown rather than fabricated negatives.
-- `NL-006` has the highest mean volume at 565.69; local hour 08 has the
-  highest mean volume at 886.01; Rain has the lowest mean speed at 40.27 km/h.
-- Current traffic volume has the strongest inspected linear association with
-  next-window volume (`r = 0.929527`).
-- At the configured absolute-correlation threshold of 0.95, the three flagged
-  redundancy pairs are occupancy/V-C ratio, volume lag-2/rolling-mean-4, and
-  speed lag-2/rolling-mean-4. These are review signals, not full-data feature
-  elimination decisions.
+| Horizon | Train eligible | Validation eligible | Test eligible |
+|---:|---:|---:|---:|
+| h1 / 30 min | 126,825 | 27,150 | 27,150 |
+| h2 / 60 min | 126,800 | 27,125 | 27,125 |
+| h3 / 90 min | 126,775 | 27,100 | 27,100 |
+| h4 / 120 min | 126,750 | 27,075 | 27,075 |
 
-## 5. Artifact Evidence
+Accident labels additionally exclude reconstructed unknown windows. Eligible
+accident rows range from 123,716 (train h1) to 123,644 (train h4), 26,455 to
+26,383 on validation, and 26,456 to 26,384 on test. Training h1 contains 1,156
+positives and 122,560 negatives; its persisted `scale_pos_weight` is 106.0208.
+No validation/test label contributed to that weight.
+
+## 5. Preprocessing and CV Evidence
+
+| Family | Input features | Output features | Ordinary numeric | Bounded numeric |
+|---|---:|---:|---|---|
+| Linear | 62 | 64 | StandardScaler | StandardScaler |
+| Tree | 62 | 64 | Unscaled | Unscaled |
+| SVM | 62 | 64 | StandardScaler | StandardScaler |
+| Recurrent | 62 | 64 | StandardScaler | MinMaxScaler |
+
+The 62 inputs come directly from the Step 07 `known_at_origin` manifest: 27
+ordinary numeric, 9 bounded numeric, 25 binary, and 1 categorical feature.
+Keys, identifiers, timestamps, raw lineage strings, targets, and availability
+masks are excluded. All families produce 64 dense numeric columns after
+training-fitted temperature-band one-hot encoding.
+
+CV fold training endpoints expand from 2025-03-12 14:30 through 2025-04-09
+14:30. Each four-window gap ends immediately before a seven-day validation
+window; fold 5 validation ends exactly at the frozen training boundary on
+2025-04-16 16:30.
+
+## 6. Artifact Evidence
 
 | Artifact | Bytes | SHA-256 |
 |---|---:|---|
-| EDA summary JSON | 30,917 | `986ef2fbacce048cb866e5beac106d63979133f992e1af44fc8686c9ba4f4bf7` |
-| Data-quality Markdown | 6,273 | `a5c82377be4831a38532a46f4e4be1cf0d80fb01da96cf78a2e3d7b23b3affcf` |
-| Context aggregates CSV | 9,068 | `f6a7ad7ac6c58ca7435e00b88be374358e626f356754479d5f0a627616123348` |
-| Correlation CSV | 9,175 | `49b848b62b0cfa58ea247006e6504d88617cc236f7f6ce4528f6ef4cd58bd183` |
-| Covariance CSV | 10,116 | `7aef5bb1cd5f9ef5c28220d2e9d0f78a5f0404703eed3fcd2c9fcb1326e66b6f` |
-| Environment snapshot | 1,994 | `1e4507b1a24dd60ed32851ee9af58f178c772e6f3e97c69054090d6f7ede861c` |
+| Split assignments Parquet | 354,856 | `dd30fe7a475c049f9f981374ee3c97533a7b2270b7ef8336ea5be37cf2f55892` |
+| CV folds JSON | 2,436 | `ce36264dbe3824c4d119ea7e801471b94bdeeee6b4bcff250cf8f9f1c06488bb` |
+| Feature schema JSON | 73,319 | `204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453` |
+| Canonical summary JSON | 76,872 | `14c373c3627243e6718660e18feead722447210ec44c51b8e60665969569ad46` |
+| Generated Markdown | 3,865 | `e03a2dd4b91f607ee8d4f12b4b2cf9e94460ad0855dd7e215a14da85ada5fea0` |
+| Linear/SVM Joblib (each) | 3,418 | `8550eba7e08b44b14e6df1d48afac22494da94746a3ff352c389ff76a23ccd92` |
+| Tree Joblib | 2,307 | `75a791fbd4aac2be00b9dece31a554ac768f0e2a1310bcb13cd116ede4a9be36` |
+| Recurrent Joblib | 3,519 | `88f77f64081940bf787bc92702362033f37507f03ced1f95bc14b82ccf27e7d3` |
 
-All six figure bytes/hashes are recorded inside the canonical EDA summary.
-Repeated runs produced byte-identical CSV, JSON, Markdown, environment, and PNG
-artifacts. The six figures were also inspected at original resolution and had
-legible labels with no clipping or overlap.
+Linear and SVM preprocessors are byte-identical because their Step 10 policies
+are intentionally identical. Repeated full-data runs reproduced every listed
+artifact byte-for-byte.
 
-## 6. Validation and Assurance Evidence
+## 7. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
 ```text
+.venv/Scripts/python.exe -m pip install -e ".[classical,eda,test]"
+.venv/Scripts/python.exe -c "import joblib, sklearn, xgboost"
 .venv/Scripts/python.exe -m flowcast.cli merge-sources
 .venv/Scripts/python.exe -m flowcast.cli engineer-features
 .venv/Scripts/python.exe -m flowcast.cli prepare-data
 .venv/Scripts/python.exe -m flowcast.cli eda
-.venv/Scripts/python.exe -m pytest -q tests/unit/test_eda_statistics.py tests/data_contracts/test_eda_contract.py tests/smoke/test_eda_notebook.py
+.venv/Scripts/python.exe -m flowcast.cli prepare-modeling
+.venv/Scripts/python.exe -m pytest -q tests/unit/test_modelling_split.py tests/unit/test_preprocessing.py tests/data_contracts/test_modelling_contract.py
 .venv/Scripts/python.exe -m pytest -q
 .venv/Scripts/python.exe -m pip check
 .venv/Scripts/python.exe -m compileall -q src tests
-.venv/Scripts/python.exe -m flowcast.cli eda --help
+.venv/Scripts/python.exe -m flowcast.cli prepare-modeling --help
+.venv/Scripts/python.exe -c "from flowcast.modelling.inputs import load_modeling_partition, load_preprocessor"
 git diff --check
 ```
 
 Verified results:
 
-- All four pipeline commands exited 0; `eda` reported 181,200 rows, 67 context
-  slices, and six figures.
-- Focused calculation, artifact-contract, and notebook tests: 11 passed in
-  9.00 seconds.
-- Final full suite: 88 passed in 55.22 seconds.
-- Exact findings/counts, nine reconciliation checks, candidate-column safety,
-  deterministic reruns, PNG validity, and pre-read tamper rejection passed.
-- Notebook execution through a fresh kernel passed top-to-bottom.
-- Dependency consistency, byte compilation, CLI-help smoke, and whitespace
-  checks passed.
-- Largest source module is `src/flowcast/data/audit.py` at 366 physical lines;
-  all source files remain below 400 lines.
+- Approved classical dependencies installed; Joblib 1.5.2, scikit-learn 1.9.0,
+  and XGBoost 3.2.0 import successfully.
+- The refreshed merge, feature, processed, EDA, and modelling-preparation CLI
+  stages exited 0; upstream data hashes remain content-stable while base-config
+  lineage now includes the modelling contract.
+- Focused Step 10 unit/full-data contract tests: 10 passed in 9.27 seconds.
+- Final full suite: 98 passed in 66.39 seconds.
+- Tests cover exact boundaries/counts, road coverage, no target crossing, CV
+  gaps, training-only statistics/weights, unseen categories, test sealing,
+  preprocessor reload/transform, deterministic hashes, and tamper rejection.
+- Dependency consistency, byte compilation, CLI-help, whitespace, canonical
+  validation loading (27,175 rows), and fitted linear-preprocessor loading (64
+  outputs) passed.
+- Largest source module remains `src/flowcast/data/audit.py` at 366 physical
+  lines; every source file remains below 400 lines.
 
-## 7. Decisions and Constraints
+## 8. Decisions and Constraints
 
-- Evaluation must remain chronological. Step 10 will freeze exact 70/15/15
-  timestamp boundaries and time-series CV folds within training only.
-- Learned imputers, encoders, scalers, class weights, thresholds, and feature
-  selection decisions must use training/validation data only.
-- Linear/SVM/recurrent families require training-fitted scaling; tree families
-  retain unscaled numeric inputs unless evidence supports a change.
-- Congestion evaluation must lead with Macro-F1 and per-class metrics.
-- Accident modelling must use observed labels only, training-only class
-  weighting, ROC-AUC plus PR-AUC, and validation-based threshold selection.
-- Model-specific target/history masks will preserve the common prediction-origin
-  table without treating unavailable labels as negatives.
-- Full-data redundancy is descriptive only; removal decisions belong inside the
-  training protocol.
-- Matplotlib remains the preferred plotting library, but Windows Application
-  Control blocked its compiled `_path` extension in this environment. The
-  documented Pillow fallback generated deterministic PNGs without reducing the
-  required EDA/report contract.
+- Largest-remainder allocation is used so 70/15/15 ratios consume all 7,248
+  timestamps without dropping or duplicating an origin.
+- Partition assignment belongs to the origin; target eligibility is separate by
+  horizon and target family. This retains traceability without leakage.
+- A four-window CV gap is the smallest gap that covers the maximum target
+  horizon before each fold's validation window.
+- Training/validation/test boundaries are shared by classical and later deep
+  models. Deep sequences will inherit the same origin boundary contract.
+- Validation may tune hyperparameters, calibration, and thresholds. Test remains
+  inaccessible to tuning loaders unless `purpose="final_evaluation"` is passed
+  explicitly after selection is frozen.
+- Full-data EDA redundancy flags did not remove features. The frozen schema
+  keeps all 62 approved inputs; future selection must occur within training.
+- The classical dependency group is now active. No dependency version or
+  approved technology changed.
 
-## 8. Risks and Unresolved Work
+## 9. Risks and Unresolved Work
 
-- Severe accident imbalance can make accuracy misleading and may destabilize
-  minority recall; Step 10 must isolate all learned handling to training.
-- Congestion is dominated by Free-flow observations, so stratified reporting
-  and per-class evaluation remain mandatory even with chronological splits.
-- Correlations are observational, not causal, and reflect one corridor over 151
-  days; conclusions should not be generalized to other corridors without data.
-- Causal traffic recovery may smooth some extremes; inserted accident windows
-  are explicitly unknown; hourly weather is shared across two half-hour rows.
-- Exact split boundaries, preprocessing artifacts, and sealed-test controls are
-  not yet implemented.
+- No trained model exists yet, so formal accuracy targets remain unmeasured.
+- Accident training remains severely imbalanced despite explicit weights;
+  threshold selection and probability calibration still belong to later steps.
+- The scratch linear baseline must prove its gradients and convergence before
+  library regression training begins.
+- Final-test access is guarded by explicit software intent, not an external
+  authorization service; tests and operating rules enforce the v1 boundary.
+- Generated assignment/preprocessor binaries are ignored by Git and must be
+  rebuilt with `prepare-modeling` after a clean clone.
+- The documented Matplotlib/Pillow workstation fallback remains in effect for
+  static figures; it does not affect modelling dependencies.
 
-## 9. Next Gate
+## 10. Next Gate
 
-Proceed only to **Step 10 - Freeze Splits and Preprocessing**. The bounded action
-and acceptance gate are maintained in `NEXT_STEP.md`.
+Proceed only to **Step 11 - Implement NumPy Linear Regression**. The bounded
+action and acceptance gate are maintained in `NEXT_STEP.md`.

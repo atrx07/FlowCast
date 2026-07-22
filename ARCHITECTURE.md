@@ -51,6 +51,7 @@ python -m flowcast.cli merge-sources
 python -m flowcast.cli engineer-features
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
+python -m flowcast.cli prepare-modeling
 python -m flowcast.cli train-classical
 python -m flowcast.cli train-deep
 python -m flowcast.cli evaluate
@@ -206,7 +207,8 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Global seed.
 - timezone policy.
 - logging level.
-- validation, cleaning, merge, feature, target, and EDA artifact versions.
+- validation, cleaning, merge, feature, target, EDA, and modelling-preparation
+  artifact versions.
 
 ### `config/data_contracts.yaml`
 - Required columns and types.
@@ -239,12 +241,13 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Redundancy threshold, congestion order, and figure settings.
 
 ### `config/models.yaml`
-- split dates/ratios.
-- model grids and search budgets.
-- class weights.
-- calibration method.
-- recurrent architecture and training budget.
-- early-stopping settings.
+- Exact chronological split dates, ratios, timestamp counts, and target-boundary
+  policy.
+- Expanding-window CV fold count, validation length, and maximum-horizon gap.
+- Default-sealed test-access purpose.
+- Feature grouping, imputation, encoding, and per-family scaling policies.
+- Later steps add model grids, search budgets, calibration, recurrent training,
+  and early-stopping settings without weakening the frozen split contract.
 
 ## 6. Data Contracts
 ### 6.1 Raw traffic contract
@@ -382,6 +385,26 @@ Key: `road_id + timestamp`.
   flags are descriptive and cannot make feature-selection decisions outside a
   training fold.
 
+### 6.11 Frozen split and preprocessing artifact boundary
+
+- `prepare-modeling` verifies the full Step 09 and processed-feature lineage
+  before reading model inputs.
+- `data/processed/split_preprocessing_v1/assignments.parquet` assigns every
+  `road_id + timestamp` origin to train, validation, or test and records four
+  horizon-within-partition flags. Target-specific availability remains in the
+  processed dataset and combines with these flags at model-load time.
+- `artifacts/features/split_preprocessing_v1/` stores canonical split/CV
+  evidence, the exact 62-feature input schema, learned training statistics,
+  training-only class weights, artifact hashes, and generated Markdown.
+- Four fitted Joblib preprocessors live under
+  `artifacts/models/split_preprocessing_v1/`: linear and SVM standardize numeric
+  fields, trees retain unscaled numeric fields, and recurrent preprocessing
+  applies Min-Max scaling to documented bounded fields and standardization to
+  the remainder. All families use training-fitted imputation and one-hot
+  encoding.
+- Tuning access can load train and validation only. Loading test requires the
+  explicit `final_evaluation` purpose after model selection is frozen.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -449,15 +472,21 @@ common base retains trailing origins instead of globally dropping them.
 - Evaluation always reports each horizon and an aggregate.
 
 ## 9. Split and Preprocessing Architecture
-- Use one frozen chronological split shared by model families.
-- Recommended starting point: earliest 70% train, next 15% validation, latest 15% test, converted into exact timestamp boundaries and recorded.
-- Time-series cross-validation folds are restricted to the training period.
+- One frozen chronological split is shared by all model families: train is
+  2025-01-01 00:00 through 2025-04-16 16:30 (5,074 timestamps), validation is
+  2025-04-16 17:00 through 2025-05-09 08:00 (1,087), and test is 2025-05-09
+  08:30 through 2025-05-31 23:30 (1,087), all in Asia/Kolkata.
+- Every origin is retained. A target/horizon is usable only when its availability
+  mask is true and its target timestamp remains inside the origin partition.
+- Five expanding time-series CV folds are restricted to training. Each uses a
+  four-window maximum-horizon gap and a seven-day validation window.
 - Validation selects hyperparameters, calibration, and thresholds.
-- Test is opened only after model choices are frozen.
-- Preprocessors that learn statistics are fit on training data only and persisted with the model.
+- Test is sealed by default and opened only through explicit final-evaluation
+  access after model choices are frozen.
+- Preprocessors that learn imputation, category, scaling, or weighting
+  statistics are fit on training data only and persisted with their feature
+  schema.
 - Random seeds and library versions are recorded.
-
-Exact split boundaries must be finalized after the processed data coverage is verified and then stored in config/model cards.
 
 ## 10. Model Architecture
 ### 10.1 Classical registry key
@@ -599,6 +628,8 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 - target shifting.
 - descriptive statistics and imbalance denominators.
 - correlation-candidate safety and quality reconciliation.
+- largest-remainder split allocation and sealed-test access.
+- model-family preprocessing and training-only learned statistics.
 - scratch gradient calculation.
 - metric functions.
 
@@ -609,6 +640,8 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 - join cardinality.
 - no unexpected nulls in trusted modelling fields.
 - deterministic EDA artifacts, hashes, figure dimensions, and tamper rejection.
+- chronological split order, horizon boundary isolation, CV containment,
+  deterministic preprocessing artifacts, reloadability, and tamper rejection.
 
 ### Integration
 - raw -> interim.

@@ -15,6 +15,7 @@ from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.features.pipeline import run_feature_engineering
 from flowcast.features.processed_pipeline import run_processed_data
 from flowcast.logging_config import configure_logging
+from flowcast.modelling.pipeline import run_modeling_prep
 from flowcast.settings import load_settings
 
 
@@ -109,6 +110,18 @@ def build_parser() -> argparse.ArgumentParser:
         "--version",
         default=None,
         help="Versioned EDA artifact directory (default: eda_v1).",
+    )
+    prepare_modeling = subparsers.add_parser(
+        "prepare-modeling",
+        help="Freeze chronological splits and fit training-only preprocessors.",
+    )
+    prepare_modeling.add_argument(
+        "--version",
+        default=None,
+        help=(
+            "Versioned split/preprocessing artifact directory "
+            "(default: split_preprocessing_v1)."
+        ),
     )
     return parser
 
@@ -214,6 +227,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             result.summary["dataset"]["rows"],
             result.summary["context_aggregates"]["record_count"],
             len(result.figure_paths),
+        )
+        return 0
+    if args.command == "prepare-modeling":
+        result = run_modeling_prep(settings, version=args.version)
+        partitions = result.summary["split"]["partitions"]
+        logger.info("Modeling preparation complete: %s", result.summary_path)
+        logger.info("Feature schema: %s", result.schema_path)
+        logger.info(
+            "train=%s validation=%s test=%s features=%s preprocessors=%s",
+            partitions["train"]["row_count"],
+            partitions["validation"]["row_count"],
+            partitions["test"]["row_count"],
+            result.summary["preprocessing"]["feature_count"],
+            len(result.preprocessor_paths),
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")
