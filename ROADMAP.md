@@ -70,8 +70,8 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M1 - Ingestion and validation | Week 1 | Validated raw loads, quarantine logs, schema tests | Complete - Step 03 gate passed with deterministic artifacts and 26 tests |
 | M2 - Cleaning and merge | Week 1 | Cleaned source tables and merged interim table | Complete - Step 06 gate passed with zero misses or row multiplication |
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Complete - Step 08 gate passed with 181,200 origins and 20 masked targets |
-| M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Not started - Step 09 next |
-| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Not started |
+| M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
+| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Not started - Step 10 split/preprocessing next |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Not started |
 | M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Not started |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
@@ -232,9 +232,10 @@ A proposed change must be classified before implementation:
 
 ## 13. Current Roadmap Position
 
-Milestones M0 through M3 are complete. Step 08 preserved all 181,200 prediction
-origins and all 144 input columns while adding exact 30/60/90/120-minute future
-timestamps, 20 target columns, and 20 availability masks. The versioned
-processed artifact and target/schema manifest passed deterministic lineage and
-alignment checks. Step 09 data-quality reporting and EDA is next. See
-`STATUS.md` and `NEXT_STEP.md` for the live state.
+Milestones M0 through M4 are complete. Step 09 reconciled the full delivered-to-
+processed quality chain, analyzed all 181,200 prediction origins, exported 67
+context slices and six deterministic figures, and proved the package-backed EDA
+notebook runs top-to-bottom. Accident imbalance (0.935% observed positives),
+congestion imbalance, and feature-redundancy signals now have explicit modelling
+implications. Step 10 frozen chronological splits and training-only
+preprocessing is next. See `STATUS.md` and `NEXT_STEP.md` for the live state.

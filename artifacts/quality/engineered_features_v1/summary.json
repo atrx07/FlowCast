@@ -1,9 +1,9 @@
 {
   "configuration": {
     "base": {
-      "bytes": 670,
+      "bytes": 717,
       "path": "config/base.yaml",
-      "sha256": "bd7deb2688c5c6f21731c3251189d0bc9a03b27e50dbdae3a45f8e34f467e20c"
+      "sha256": "4f1a8766fdec4c44d0c224a422ea0809a502c418c82cdab713c40d40f8fff5b6"
     },
     "features": {
       "bytes": 1250,
@@ -511,6 +511,6 @@
   "input_summary": {
     "bytes": 2642,
     "path": "artifacts/quality/merged_sources_v1/summary.json",
-    "sha256": "ccd4b76b05979b0f90b27fc4275e711331dedf11b5e3116ab32a8b3b380c16af"
+    "sha256": "312320c7b16aa0e1b51696143837de02c62d202639cd7043a05afa3c4603cc7b"
   }
 }

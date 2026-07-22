@@ -1,0 +1,1063 @@
+{
+  "configuration": {
+    "base": {
+      "bytes": 717,
+      "path": "config/base.yaml",
+      "sha256": "4f1a8766fdec4c44d0c224a422ea0809a502c418c82cdab713c40d40f8fff5b6"
+    },
+    "eda": {
+      "bytes": 1035,
+      "path": "config/eda.yaml",
+      "sha256": "a827cb1407491a90d5686ab404d1d4fbafa9581761b86b95ff49196cbc61e21e"
+    },
+    "features": {
+      "bytes": 1250,
+      "path": "config/features.yaml",
+      "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
+    }
+  },
+  "context_aggregates": {
+    "artifact": {
+      "bytes": 9068,
+      "path": "artifacts/reports/eda_v1/context_aggregates.csv",
+      "sha256": "f6a7ad7ac6c58ca7435e00b88be374358e626f356754479d5f0a627616123348"
+    },
+    "dimensions": [
+      "road_id",
+      "local_hour",
+      "day_of_week",
+      "weather_condition",
+      "public_holiday",
+      "event_flag",
+      "roadwork_flag"
+    ],
+    "record_count": 67
+  },
+  "contract_version": "eda_report_v1",
+  "correlation": {
+    "availability": "target_volume_h1_available",
+    "correlation_artifact": {
+      "bytes": 9175,
+      "path": "artifacts/reports/eda_v1/correlation.csv",
+      "sha256": "49b848b62b0cfa58ea247006e6504d88617cc236f7f6ce4528f6ef4cd58bd183"
+    },
+    "covariance_artifact": {
+      "bytes": 10116,
+      "path": "artifacts/reports/eda_v1/covariance.csv",
+      "sha256": "7aef5bb1cd5f9ef5c28220d2e9d0f78a5f0404703eed3fcd2c9fcb1326e66b6f"
+    },
+    "feature_count": 25,
+    "features": [
+      "traffic_volume",
+      "avg_speed",
+      "occupancy",
+      "signal_timing",
+      "road_capacity",
+      "temperature",
+      "rainfall",
+      "visibility",
+      "hour_sin",
+      "hour_cos",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "volume_lag_1",
+      "volume_lag_2",
+      "volume_lag_48",
+      "volume_rolling_mean_4",
+      "volume_rolling_mean_8",
+      "speed_lag_1",
+      "speed_lag_2",
+      "speed_lag_48",
+      "speed_rolling_mean_4",
+      "speed_rolling_mean_8",
+      "volume_capacity_ratio",
+      "capacity_headroom",
+      "days_to_nearest_event"
+    ],
+    "redundancy_threshold": 0.95,
+    "redundant_pairs": [
+      {
+        "correlation": 0.98505286,
+        "feature_a": "occupancy",
+        "feature_b": "volume_capacity_ratio"
+      },
+      {
+        "correlation": 0.97636309,
+        "feature_a": "volume_lag_2",
+        "feature_b": "volume_rolling_mean_4"
+      },
+      {
+        "correlation": 0.9511216,
+        "feature_a": "speed_lag_2",
+        "feature_b": "speed_rolling_mean_4"
+      }
+    ],
+    "target": "target_volume_h1",
+    "target_correlations": [
+      {
+        "correlation": 0.92952661,
+        "feature": "traffic_volume",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.87691368,
+        "feature": "volume_capacity_ratio",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.86460798,
+        "feature": "occupancy",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.83742504,
+        "feature": "volume_lag_1",
+        "observations": 181150,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.83633213,
+        "feature": "volume_lag_48",
+        "observations": 179975,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.81729003,
+        "feature": "avg_speed",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.76679675,
+        "feature": "capacity_headroom",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.73025579,
+        "feature": "signal_timing",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.72568556,
+        "feature": "speed_lag_48",
+        "observations": 179975,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.71861751,
+        "feature": "speed_lag_1",
+        "observations": 181150,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.70312054,
+        "feature": "volume_lag_2",
+        "observations": 181125,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.65586758,
+        "feature": "volume_rolling_mean_4",
+        "observations": 181075,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.5764256,
+        "feature": "speed_lag_2",
+        "observations": 181125,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.54005036,
+        "feature": "speed_rolling_mean_4",
+        "observations": 181075,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.53851947,
+        "feature": "hour_cos",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.43094965,
+        "feature": "volume_rolling_mean_8",
+        "observations": 180975,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.35378717,
+        "feature": "temperature",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.30541071,
+        "feature": "speed_rolling_mean_8",
+        "observations": 180975,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.26612046,
+        "feature": "road_capacity",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.15810658,
+        "feature": "day_of_week_sin",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.12063303,
+        "feature": "hour_sin",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.05739318,
+        "feature": "days_to_nearest_event",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": 0.05162916,
+        "feature": "visibility",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.03660126,
+        "feature": "day_of_week_cos",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      },
+      {
+        "correlation": -0.0294622,
+        "feature": "rainfall",
+        "observations": 181175,
+        "target": "target_volume_h1"
+      }
+    ]
+  },
+  "dataset": {
+    "columns": 188,
+    "road_count": 25,
+    "rows": 181200,
+    "timestamp_end": "2025-05-31T23:30:00+05:30",
+    "timestamp_start": "2025-01-01T00:00:00+05:30"
+  },
+  "descriptive_statistics": {
+    "avg_speed": {
+      "count": 181200,
+      "maximum": 64.8,
+      "mean": 42.099296,
+      "median": 44.9,
+      "minimum": 6.7,
+      "null_count": 0,
+      "q25": 36.2,
+      "q75": 50.9,
+      "skewness": -1.011782,
+      "standard_deviation": 11.397979,
+      "variance": 129.913933
+    },
+    "occupancy": {
+      "count": 181200,
+      "maximum": 100.0,
+      "mean": 31.177318,
+      "median": 27.0,
+      "minimum": 3.0,
+      "null_count": 0,
+      "q25": 14.2,
+      "q75": 43.8,
+      "skewness": 0.837655,
+      "standard_deviation": 19.627182,
+      "variance": 385.226276
+    },
+    "rainfall": {
+      "count": 181200,
+      "maximum": 8.9,
+      "mean": 0.190909,
+      "median": 0.0,
+      "minimum": 0.0,
+      "null_count": 0,
+      "q25": 0.0,
+      "q75": 0.0,
+      "skewness": 6.029473,
+      "standard_deviation": 1.056573,
+      "variance": 1.116346
+    },
+    "temperature": {
+      "count": 181200,
+      "maximum": 29.8,
+      "mean": 17.973194,
+      "median": 18.0,
+      "minimum": 5.8,
+      "null_count": 0,
+      "q25": 14.6,
+      "q75": 21.3,
+      "skewness": -0.002229,
+      "standard_deviation": 4.370945,
+      "variance": 19.105159
+    },
+    "traffic_volume": {
+      "count": 181200,
+      "maximum": 2090,
+      "mean": 431.517081,
+      "median": 362.0,
+      "minimum": 41,
+      "null_count": 0,
+      "q25": 195.0,
+      "q75": 601.0,
+      "skewness": 1.005116,
+      "standard_deviation": 283.664622,
+      "variance": 80465.617797
+    },
+    "travel_time": {
+      "count": 181200,
+      "maximum": 29.91,
+      "mean": 3.566215,
+      "median": 3.12,
+      "minimum": 0.8,
+      "null_count": 0,
+      "q25": 2.2,
+      "q75": 4.09,
+      "skewness": 3.648431,
+      "standard_deviation": 2.530003,
+      "variance": 6.400915
+    },
+    "visibility": {
+      "count": 181200,
+      "maximum": 10000.0,
+      "mean": 9675.871578,
+      "median": 10000.0,
+      "minimum": 301.0,
+      "null_count": 0,
+      "q25": 10000.0,
+      "q75": 10000.0,
+      "skewness": -4.568803,
+      "standard_deviation": 1495.792477,
+      "variance": 2237395.133757
+    }
+  },
+  "distributions": {
+    "accident": {
+      "negative_rows": 175049,
+      "negative_to_positive_ratio": 105.9619,
+      "observed_rows": 176701,
+      "positive_rate_observed": 0.00934913,
+      "positive_rows": 1652,
+      "total_rows": 181200,
+      "unobserved_rows": 4499
+    },
+    "congestion": {
+      "Free-flow": {
+        "rate": 0.61427704,
+        "rows": 111307
+      },
+      "Heavy": {
+        "rate": 0.09227925,
+        "rows": 16721
+      },
+      "Moderate": {
+        "rate": 0.238234,
+        "rows": 43168
+      },
+      "Severe": {
+        "rate": 0.05520971,
+        "rows": 10004
+      }
+    }
+  },
+  "eda_version": "eda_v1",
+  "environment_artifact": {
+    "bytes": 1994,
+    "path": "artifacts/reports/eda_v1/environment.txt",
+    "sha256": "1e4507b1a24dd60ed32851ee9af58f178c772e6f3e97c69054090d6f7ede861c"
+  },
+  "figures": {
+    "class_balance": {
+      "bytes": 15605,
+      "path": "artifacts/figures/eda_v1/class_balance.png",
+      "sha256": "a786d16b3f85c070f77aa75be53993b6b5d27f7d6c5124009944fad5071fbd30"
+    },
+    "correlation_heatmap": {
+      "bytes": 43680,
+      "path": "artifacts/figures/eda_v1/correlation_heatmap.png",
+      "sha256": "e415a6caf2db2edfddd97fda4fe574f6433c95419925b3abec821b2e2bc7f53e"
+    },
+    "hourly_profiles": {
+      "bytes": 16737,
+      "path": "artifacts/figures/eda_v1/hourly_profiles.png",
+      "sha256": "84bd5c75da4bbe4a74cd7c6837600e0040ec0e5579da49eb6eaa0424ebe9f751"
+    },
+    "road_comparison": {
+      "bytes": 27141,
+      "path": "artifacts/figures/eda_v1/road_comparison.png",
+      "sha256": "bcda5d5741f7bc00a907874288aaa73b5ca1ccbed7c3bcac3161cbb4356235c2"
+    },
+    "traffic_distributions": {
+      "bytes": 22172,
+      "path": "artifacts/figures/eda_v1/traffic_distributions.png",
+      "sha256": "f910f77760559cd54f62948208e625b1fdc09fd7a0720f3d5dac86e454ecb73d"
+    },
+    "weather_traffic": {
+      "bytes": 12661,
+      "path": "artifacts/figures/eda_v1/weather_traffic.png",
+      "sha256": "c5b90a8682ad80bf3c0e853ad1c046d966e83fd392ab5b9b4caa4be478a3bc62"
+    }
+  },
+  "findings": [
+    {
+      "finding": "NL-006 has the highest mean volume at 565.69 vehicles/window.",
+      "id": "highest_volume_road"
+    },
+    {
+      "finding": "Local hour 8 has the highest mean volume at 886.01.",
+      "id": "peak_hour"
+    },
+    {
+      "finding": "Rain has the lowest mean speed by weather condition at 40.27 km/h.",
+      "id": "slowest_weather"
+    },
+    {
+      "finding": "Free-flow accounts for 61.43% of origins; Severe accounts for 5.52%.",
+      "id": "congestion_balance"
+    },
+    {
+      "finding": "Observed accident positives are 0.935% (106.0:1 negatives to positives).",
+      "id": "accident_imbalance"
+    },
+    {
+      "finding": "traffic_volume has the strongest configured linear association with next-window volume (r=0.9295).",
+      "id": "volume_predictor"
+    }
+  ],
+  "input_processed": {
+    "dataset": {
+      "bytes": 21813624,
+      "path": "data/processed/processed_targets_v1/dataset.parquet",
+      "sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4"
+    },
+    "manifest": {
+      "bytes": 31747,
+      "path": "artifacts/features/processed_targets_v1/manifest.json",
+      "sha256": "7060d0c6ec8271c2d05e9bacecca821db37b83138a1088cc0610c244edf55500"
+    },
+    "summary": {
+      "bytes": 6140,
+      "path": "artifacts/quality/processed_targets_v1/summary.json",
+      "sha256": "67d71a05a289019ecb6b2e5d3058f8b2d5d85a44a5e883aad5e5deca47f4e756"
+    }
+  },
+  "input_processed_version": "processed_targets_v1",
+  "input_summaries": {
+    "context_cleaning": {
+      "bytes": 5155,
+      "path": "artifacts/quality/cleaned_sources_v1/summary.json",
+      "sha256": "3e5e89dd1c94b6cb89f16d2e962f089ab332757767ac80fed7ae1f7892e7aafe"
+    },
+    "features": {
+      "bytes": 13069,
+      "path": "artifacts/quality/engineered_features_v1/summary.json",
+      "sha256": "45bebcbdd27f5d51a5b2a67c078537b5e09364989e9b6b9c3ca103504d61d31f"
+    },
+    "merge": {
+      "bytes": 2642,
+      "path": "artifacts/quality/merged_sources_v1/summary.json",
+      "sha256": "312320c7b16aa0e1b51696143837de02c62d202639cd7043a05afa3c4603cc7b"
+    },
+    "processed": {
+      "bytes": 6140,
+      "path": "artifacts/quality/processed_targets_v1/summary.json",
+      "sha256": "67d71a05a289019ecb6b2e5d3058f8b2d5d85a44a5e883aad5e5deca47f4e756"
+    },
+    "raw_audit": {
+      "bytes": 8056,
+      "path": "artifacts/audits/raw_v1/audit.json",
+      "sha256": "512cc4a88e7fc7959821d6f1151386ead142af5e931eb254c9715194e4c485f7"
+    },
+    "traffic_cleaning": {
+      "bytes": 6060,
+      "path": "artifacts/quality/cleaned_sources_v1/traffic_summary.json",
+      "sha256": "253c5a2ac8ab37bbc0bfbb2ba11fdb189ce6772252398be7f1fa2a223cae52f4"
+    },
+    "validation": {
+      "bytes": 3721,
+      "path": "data/quarantine/validated_v1/summary.json",
+      "sha256": "08123b6b3a82935773bc3e6a69e72d5241ac4c579233abdfb3580ce3a99cc402"
+    }
+  },
+  "limitations": [
+    "Associations are observational and must not be interpreted as causal effects.",
+    "The data covers one corridor and 151 days, limiting geographic and seasonal generalization.",
+    "Reconstructed traffic windows use documented causal recovery and may smooth short-lived extremes.",
+    "Accident status is unknown for inserted sensor windows and must remain excluded from classifier labels.",
+    "Hourly weather is shared by both half-hour traffic windows and cannot capture sub-hour variation."
+  ],
+  "modelling_decisions": [
+    {
+      "area": "split",
+      "decision": "Use one chronological split; never use a random split.",
+      "evidence": "Strong hour/weekday structure and lag dependence are temporal."
+    },
+    {
+      "area": "scaling",
+      "decision": "Fit scaling on training only for linear, SVM, and recurrent models; retain unscaled inputs for tree models.",
+      "evidence": "Configured numeric ranges differ materially; volume spans 41 to 2090."
+    },
+    {
+      "area": "congestion",
+      "decision": "Select/tune with Macro-F1 and inspect per-class recall.",
+      "evidence": "The four congestion classes are materially imbalanced."
+    },
+    {
+      "area": "accident",
+      "decision": "Use training-only class weights, ROC-AUC plus PR-AUC, and select the operating threshold on validation data.",
+      "evidence": "Observed accident positives are 0.935% (106.0:1 negatives to positives)."
+    },
+    {
+      "area": "redundancy",
+      "decision": "Review highly correlated pairs inside training folds; do not remove features from full-data EDA alone.",
+      "evidence": "3 configured feature pairs meet the redundancy threshold."
+    },
+    {
+      "area": "history",
+      "decision": "Keep origins and apply model-specific history availability rather than globally dropping rows.",
+      "evidence": "Leading lag/rolling nulls are expected and explicitly flagged."
+    }
+  ],
+  "quality_reconciliation": {
+    "checks": [
+      {
+        "detail": "189491 raw rows = validation input rows",
+        "name": "raw_validation_input_rows",
+        "passed": true
+      },
+      {
+        "detail": "valid rows + rejected rows = validation input rows",
+        "name": "validation_row_accounting",
+        "passed": true
+      },
+      {
+        "detail": "raw traffic - duplicate rows = cleaned traffic input",
+        "name": "traffic_duplicate_accounting",
+        "passed": true
+      },
+      {
+        "detail": "deduplicated traffic + inserted windows = complete grid",
+        "name": "traffic_grid_accounting",
+        "passed": true
+      },
+      {
+        "detail": "weather and calendar cleaning preserve source rows",
+        "name": "context_rows_preserved",
+        "passed": true
+      },
+      {
+        "detail": "merge retains one row per traffic origin",
+        "name": "merge_cardinality",
+        "passed": true
+      },
+      {
+        "detail": "weather and calendar joins have zero misses",
+        "name": "join_coverage",
+        "passed": true
+      },
+      {
+        "detail": "feature engineering retains every merged origin",
+        "name": "feature_cardinality",
+        "passed": true
+      },
+      {
+        "detail": "target construction retains every feature origin",
+        "name": "processed_cardinality",
+        "passed": true
+      }
+    ],
+    "cleaning": {
+      "congestion": {
+        "class_counts": {
+          "Free-flow": 111307,
+          "Heavy": 16721,
+          "Moderate": 43168,
+          "Severe": 10004
+        },
+        "derived_labels": 31123,
+        "source_disagreements": 0,
+        "source_labels_preserved": 150077
+      },
+      "inserted_windows": 4499,
+      "remaining_trusted_nulls": {
+        "avg_speed": 0,
+        "congestion_level": 0,
+        "occupancy": 0,
+        "traffic_volume": 0,
+        "travel_time": 0
+      },
+      "traffic_imputation": {
+        "avg_speed": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 9078,
+          "input_missing_after_grid": 9078,
+          "maximum_missing_run_windows": 4,
+          "method_counts": {
+            "previous_day_same_window": 8539,
+            "same_road_causal_forward_fill": 536,
+            "same_timestamp_station_median": 3
+          },
+          "original_missing": 4343,
+          "physical_invalid": 236,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        },
+        "occupancy": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 9072,
+          "input_missing_after_grid": 9072,
+          "maximum_missing_run_windows": 4,
+          "method_counts": {
+            "previous_day_same_window": 8540,
+            "same_road_causal_forward_fill": 529,
+            "same_timestamp_station_median": 3
+          },
+          "original_missing": 4344,
+          "physical_invalid": 229,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        },
+        "signal_timing": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 4499,
+          "input_missing_after_grid": 4499,
+          "maximum_missing_run_windows": 2,
+          "method_counts": {
+            "previous_day_same_window": 4337,
+            "same_road_causal_forward_fill": 162
+          },
+          "original_missing": 0,
+          "physical_invalid": 0,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        },
+        "traffic_volume": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 9086,
+          "input_missing_after_grid": 9086,
+          "maximum_missing_run_windows": 4,
+          "method_counts": {
+            "previous_day_same_window": 4337,
+            "same_road_causal_forward_fill": 162,
+            "same_row_vehicle_count": 4587
+          },
+          "original_missing": 4348,
+          "physical_invalid": 239,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        },
+        "travel_time": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 4499,
+          "input_missing_after_grid": 4499,
+          "maximum_missing_run_windows": 2,
+          "method_counts": {
+            "previous_day_same_window": 4337,
+            "same_road_causal_forward_fill": 162
+          },
+          "original_missing": 0,
+          "physical_invalid": 0,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        },
+        "vehicle_count": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 4499,
+          "input_missing_after_grid": 4499,
+          "maximum_missing_run_windows": 2,
+          "method_counts": {
+            "previous_day_same_window": 4337,
+            "same_road_causal_forward_fill": 162
+          },
+          "original_missing": 0,
+          "physical_invalid": 0,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        },
+        "vehicle_type_dist": {
+          "forward_fill_limit_windows": 4,
+          "imputed": 4499,
+          "input_missing_after_grid": 4499,
+          "maximum_missing_run_windows": 2,
+          "method_counts": {
+            "previous_day_same_window": 4337,
+            "same_road_causal_forward_fill": 162
+          },
+          "original_missing": 0,
+          "physical_invalid": 0,
+          "previous_day_lag_windows": 48,
+          "remaining_missing": 0
+        }
+      },
+      "traffic_output_rows": 181200,
+      "unobserved_accident_windows": 4499,
+      "vehicle_distribution": {
+        "input_sum_maximum": 1.0100000000000002,
+        "input_sum_minimum": 0.9899999999999999,
+        "normalized_rows": 60347,
+        "output_sum_maximum": 1.0000000000000002,
+        "output_sum_minimum": 0.9999999999999998,
+        "required_keys": [
+          "2W",
+          "Car",
+          "LCV",
+          "HCV"
+        ],
+        "sum_tolerance": 0.02
+      },
+      "weather_condition_counts": {
+        "Clear": 8168,
+        "Cloudy": 1844,
+        "Fog": 76,
+        "Overcast": 358,
+        "Rain": 426
+      },
+      "weather_imputation": {
+        "temperature": {
+          "by_station": {
+            "WS-CENTRAL": 48,
+            "WS-NORTH": 59,
+            "WS-SOUTH": 60
+          },
+          "imputed": 167,
+          "input_missing": 167,
+          "max_gap_hours": 2,
+          "maximum_observed_gap_hours": 2,
+          "method": "station_forward_fill",
+          "remaining_missing": 0
+        },
+        "visibility": {
+          "by_station": {
+            "WS-CENTRAL": 38,
+            "WS-NORTH": 40,
+            "WS-SOUTH": 33
+          },
+          "imputed": 111,
+          "input_missing": 111,
+          "max_gap_hours": 2,
+          "maximum_observed_gap_hours": 2,
+          "method": "station_forward_fill",
+          "remaining_missing": 0
+        }
+      },
+      "weather_normalization": [
+        {
+          "canonical_label": "Clear",
+          "count": 1237,
+          "source_label": "CLEAR"
+        },
+        {
+          "canonical_label": "Clear",
+          "count": 5647,
+          "source_label": "Clear"
+        },
+        {
+          "canonical_label": "Clear",
+          "count": 1284,
+          "source_label": "clear"
+        },
+        {
+          "canonical_label": "Cloudy",
+          "count": 1504,
+          "source_label": "Cloudy"
+        },
+        {
+          "canonical_label": "Cloudy",
+          "count": 340,
+          "source_label": "cloudy"
+        },
+        {
+          "canonical_label": "Fog",
+          "count": 7,
+          "source_label": "FOG"
+        },
+        {
+          "canonical_label": "Fog",
+          "count": 59,
+          "source_label": "Fog"
+        },
+        {
+          "canonical_label": "Fog",
+          "count": 10,
+          "source_label": "foggy"
+        },
+        {
+          "canonical_label": "Overcast",
+          "count": 358,
+          "source_label": "Overcast"
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 34,
+          "source_label": "RAIN"
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 307,
+          "source_label": "Rain"
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 48,
+          "source_label": "rain "
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 37,
+          "source_label": "rainy"
+        }
+      ]
+    },
+    "features": {
+      "feature_count": 62,
+      "history_unavailable_rows": 1200,
+      "output_rows": 181200
+    },
+    "merge": {
+      "calendar_missing": 0,
+      "output_rows": 181200,
+      "unique_keys": 181200,
+      "weather_missing": 0
+    },
+    "processed": {
+      "output_rows": 181200,
+      "target_count": 20,
+      "target_coverage": {
+        "target_accident_h1": {
+          "available_rows": 176676,
+          "negative_rows": 175024,
+          "null_target_rows": 4524,
+          "positive_rows": 1652,
+          "unavailable_rows": 4524
+        },
+        "target_accident_h2": {
+          "available_rows": 176651,
+          "negative_rows": 174999,
+          "null_target_rows": 4549,
+          "positive_rows": 1652,
+          "unavailable_rows": 4549
+        },
+        "target_accident_h3": {
+          "available_rows": 176628,
+          "negative_rows": 174976,
+          "null_target_rows": 4572,
+          "positive_rows": 1652,
+          "unavailable_rows": 4572
+        },
+        "target_accident_h4": {
+          "available_rows": 176604,
+          "negative_rows": 174952,
+          "null_target_rows": 4596,
+          "positive_rows": 1652,
+          "unavailable_rows": 4596
+        },
+        "target_congestion_h1": {
+          "available_rows": 181175,
+          "class_counts": {
+            "Free-flow": 111282,
+            "Heavy": 16721,
+            "Moderate": 43168,
+            "Severe": 10004
+          },
+          "null_target_rows": 25,
+          "unavailable_rows": 25
+        },
+        "target_congestion_h2": {
+          "available_rows": 181150,
+          "class_counts": {
+            "Free-flow": 111257,
+            "Heavy": 16721,
+            "Moderate": 43168,
+            "Severe": 10004
+          },
+          "null_target_rows": 50,
+          "unavailable_rows": 50
+        },
+        "target_congestion_h3": {
+          "available_rows": 181125,
+          "class_counts": {
+            "Free-flow": 111232,
+            "Heavy": 16721,
+            "Moderate": 43168,
+            "Severe": 10004
+          },
+          "null_target_rows": 75,
+          "unavailable_rows": 75
+        },
+        "target_congestion_h4": {
+          "available_rows": 181100,
+          "class_counts": {
+            "Free-flow": 111207,
+            "Heavy": 16721,
+            "Moderate": 43168,
+            "Severe": 10004
+          },
+          "null_target_rows": 100,
+          "unavailable_rows": 100
+        },
+        "target_speed_h1": {
+          "available_rows": 181175,
+          "null_target_rows": 25,
+          "unavailable_rows": 25
+        },
+        "target_speed_h2": {
+          "available_rows": 181150,
+          "null_target_rows": 50,
+          "unavailable_rows": 50
+        },
+        "target_speed_h3": {
+          "available_rows": 181125,
+          "null_target_rows": 75,
+          "unavailable_rows": 75
+        },
+        "target_speed_h4": {
+          "available_rows": 181100,
+          "null_target_rows": 100,
+          "unavailable_rows": 100
+        },
+        "target_travel_time_h1": {
+          "available_rows": 181175,
+          "null_target_rows": 25,
+          "unavailable_rows": 25
+        },
+        "target_travel_time_h2": {
+          "available_rows": 181150,
+          "null_target_rows": 50,
+          "unavailable_rows": 50
+        },
+        "target_travel_time_h3": {
+          "available_rows": 181125,
+          "null_target_rows": 75,
+          "unavailable_rows": 75
+        },
+        "target_travel_time_h4": {
+          "available_rows": 181100,
+          "null_target_rows": 100,
+          "unavailable_rows": 100
+        },
+        "target_volume_h1": {
+          "available_rows": 181175,
+          "null_target_rows": 25,
+          "unavailable_rows": 25
+        },
+        "target_volume_h2": {
+          "available_rows": 181150,
+          "null_target_rows": 50,
+          "unavailable_rows": 50
+        },
+        "target_volume_h3": {
+          "available_rows": 181125,
+          "null_target_rows": 75,
+          "unavailable_rows": 75
+        },
+        "target_volume_h4": {
+          "available_rows": 181100,
+          "null_target_rows": 100,
+          "unavailable_rows": 100
+        }
+      },
+      "timestamp_coverage": {
+        "1": {
+          "available_rows": 181175,
+          "expected_trailing_unavailable_rows": 25,
+          "horizon_minutes": 30,
+          "unavailable_rows": 25
+        },
+        "2": {
+          "available_rows": 181150,
+          "expected_trailing_unavailable_rows": 50,
+          "horizon_minutes": 60,
+          "unavailable_rows": 50
+        },
+        "3": {
+          "available_rows": 181125,
+          "expected_trailing_unavailable_rows": 75,
+          "horizon_minutes": 90,
+          "unavailable_rows": 75
+        },
+        "4": {
+          "available_rows": 181100,
+          "expected_trailing_unavailable_rows": 100,
+          "horizon_minutes": 120,
+          "unavailable_rows": 100
+        }
+      },
+      "unique_keys": 181200
+    },
+    "source": {
+      "blank_congestion_labels": 26883,
+      "calendar_rows": 151,
+      "total_rows": 189491,
+      "traffic_exact_duplicates": 1767,
+      "traffic_missing_windows": 4499,
+      "traffic_null_counts": {
+        "accident_count": 0,
+        "avg_speed": 4382,
+        "congestion_level": 26883,
+        "date": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "occupancy": 4383,
+        "road_capacity": 0,
+        "road_id": 0,
+        "road_name": 0,
+        "signal_timing": 0,
+        "time": 0,
+        "traffic_volume": 4387,
+        "travel_time": 0,
+        "vehicle_count": 0,
+        "vehicle_type_dist": 0,
+        "weather_station_id": 0
+      },
+      "traffic_physical_invalid": {
+        "negative_traffic_volume": 241,
+        "occupancy_above_100_percent": 234,
+        "speed_above_200_kmh": 237
+      },
+      "traffic_rows": 178468,
+      "weather_null_counts": {
+        "date": 0,
+        "rainfall": 0,
+        "station_id": 0,
+        "temperature": 167,
+        "time": 0,
+        "visibility": 111,
+        "weather_condition": 0
+      },
+      "weather_rows": 10872
+    },
+    "validation": {
+      "input_rows": 189491,
+      "issues": 42792,
+      "rejected_rows": 1767,
+      "traffic_issue_reasons": {
+        "duplicate_key": 1767,
+        "excessive_speed": 237,
+        "invalid_occupancy": 234,
+        "missing_value": 40035,
+        "negative_traffic_volume": 241
+      },
+      "valid_rows": 187724
+    }
+  },
+  "report_artifact": {
+    "bytes": 6273,
+    "path": "artifacts/reports/eda_v1/data_quality.md",
+    "sha256": "a5c82377be4831a38532a46f4e4be1cf0d80fb01da96cf78a2e3d7b23b3affcf"
+  }
+}

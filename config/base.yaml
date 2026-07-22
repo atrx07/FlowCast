@@ -12,6 +12,7 @@ paths:
   data_contracts: config/data_contracts.yaml
   cleaning: config/cleaning.yaml
   features: config/features.yaml
+  eda: config/eda.yaml
   reference: FlowCast-project_file
   raw: data/raw
   interim: data/interim
@@ -38,3 +39,6 @@ features:
 
 processed:
   version: processed_targets_v1
+
+eda:
+  version: eda_v1

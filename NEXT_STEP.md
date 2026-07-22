@@ -2,68 +2,69 @@
 
 ## Immediate Objective
 
-Execute **Step 09 - Produce Data-Quality Report and EDA**. Build a reproducible
-quality/analysis layer from `processed_targets_v1` and the canonical pipeline
-counters, then convert observed patterns into explicit preprocessing and
-modelling decisions.
+Execute **Step 10 - Freeze Splits and Preprocessing**. Convert the documented
+70/15/15 chronological evaluation plan into exact, persisted timestamp
+boundaries and build reusable model-family preprocessing that can learn only
+from training data.
 
-Do not train or select models, open the final test period, build inference or
-confidence services, or begin dashboard work.
+Do not train or select models, inspect final-test metrics, implement inference
+or confidence services, or begin dashboard work.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 09.
-3. EDA, reporting, split, metrics, artifact, and processed-data sections of
-   `PROJECT.md`, `ROADMAP.md`, and `ARCHITECTURE.md`.
-4. The relevant requirements in the original PRD and field definitions in the
-   original data dictionary.
-5. The processed Parquet, target/schema manifest, all quality summaries,
-   actual distributions, current Git diff, and relevant tests.
+2. `STEPS.md` - Step 10.
+3. Split, preprocessing, target-availability, evaluation, artifact, and leakage
+   sections of `PROJECT.md`, `ROADMAP.md`, and `ARCHITECTURE.md`.
+4. The original PRD/data dictionary where evaluation or field semantics are
+   uncertain.
+5. `config/features.yaml`, `config/eda.yaml`, the processed schema manifest,
+   EDA summary/report, actual timestamp/target coverage, current Git diff, and
+   relevant tests.
 
 ## Single Best Next Action
 
-Build one configuration-backed EDA and data-quality slice:
+Build one frozen split and preprocessing contract:
 
-1. Hash-verify `processed_targets_v1`, its manifest, quality summary, and
-   current configurations before analysis.
-2. Generate the consolidated data-quality report from persisted pipeline
-   counters rather than manually copied estimates.
-3. Analyze volume, speed, occupancy, travel time, congestion, and observed
-   accident labels overall and by road, hour, weekday, weather, holidays,
-   events, and roadworks.
-4. Quantify missingness/availability, duplicate resolution, invalid-value
-   recovery, imputation, normalization, join coverage, target tails, accident
-   imbalance, and congestion imbalance.
-5. Inspect numeric correlation/covariance and likely feature redundancy without
-   using target-horizon information as an origin feature.
-6. Export deterministic, versioned figures and machine-readable analysis
-   summaries plus a human-readable report.
-7. Add an EDA notebook that delegates calculations to tested package functions
-   and runs top-to-bottom against persisted artifacts.
-8. Record concrete preprocessing, split, metric, imbalance, and bias/limitation
-   implications for Step 10 without training a model.
-9. Add calculation, artifact, hash-verification, determinism, and notebook smoke
-   tests.
+1. Hash-verify the Step 09 summary and `processed_targets_v1` lineage before
+   deriving any boundary or schema.
+2. Convert the planned earliest 70%, next 15%, latest 15% origin-time split into
+   exact timestamp boundaries shared by every road and persist them in the
+   approved model configuration.
+3. Define explicit boundary behavior so an origin and its horizon-specific
+   target cannot cross from one split into another; record usable counts per
+   target/horizon without silently dropping unavailable labels.
+4. Define expanding or rolling time-series CV folds strictly inside training.
+5. Freeze model-input order from the feature manifest while excluding IDs,
+   timestamps, target/mask columns, lineage strings, and other non-features.
+6. Build preprocessing by model family with categorical/numeric/boolean handling
+   and fit learned statistics only on training rows.
+7. Add a sealed-test access guard so tuning services cannot load test rows.
+8. Persist deterministic split assignments, feature schemas, preprocessing
+   metadata, config/input hashes, and environment lineage.
+9. Add split-order, horizon-boundary, training-only-fit, deterministic-artifact,
+   tamper-rejection, and loading tests.
 
 ## Acceptance Gate
 
-Step 09 is complete only when:
+Step 10 is complete only when:
 
-- The EDA notebook runs top-to-bottom using package functions and no hidden
-  notebook-only transformation.
-- The consolidated quality report reconciles all source-to-processed row,
-  issue, cleaning, merge, feature, and target counters.
-- Required target/traffic distributions and contextual slices are persisted
-  from real data with denominators and availability stated.
-- Correlation/redundancy results are reproducible and exclude identifiers,
-  lineage strings, and future target columns from feature recommendations.
-- Accident and congestion imbalance are quantified with explicit modelling
-  implications and limitations.
-- Versioned figures, machine-readable summaries, report artifacts, and hashes
-  are reproducible.
-- Focused tests, full tests, CLI/notebook smoke, dependency check, compilation,
-  and whitespace assurance pass.
+- Every prediction origin has one deterministic train/validation/test assignment
+  and exact boundaries are versioned.
+- Train timestamps precede validation timestamps, which precede test timestamps,
+  for every road.
+- Target use is horizon-compatible and no selected origin/target pair crosses a
+  split boundary.
+- Time-series CV exists only inside training and the final test period is
+  inaccessible to tuning code by default.
+- Feature order and exclusions are explicit, stable, and traceable to the Step
+  08 manifest.
+- Learned imputation, encoding, scaling, weighting inputs, and other statistics
+  are fit from training data only; validation/test are transform-only.
+- Persisted assignments, schemas, preprocessing metadata, and hashes reproduce
+  deterministically and fail closed on input/config tampering.
+- Focused tests, full tests, CLI smoke, dependency check, compilation, and
+  whitespace assurance pass.
 - Project-state documents and README timeline are current and every source file
   remains below 400 lines.
 

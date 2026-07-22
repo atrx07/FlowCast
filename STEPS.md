@@ -313,6 +313,25 @@ Explain the data and justify modelling decisions.
 - EDA notebook runs top-to-bottom using package functions.
 - Data-quality report is reproducible.
 - Findings lead to explicit model/preprocessing decisions.
+
+### Proven Step 09 procedure
+
+- `flowcast eda` verifies the current base/feature/EDA configs, processed
+  Parquet, target/schema manifest, and complete upstream quality-summary chain
+  before reading data.
+- The canonical JSON summary drives generated Markdown, context/correlation/
+  covariance CSVs, environment lineage, and six deterministic PNG figures in
+  versioned `eda_v1` report/figure directories.
+- Reconciliation assertions cover delivered source rows, validation retention
+  and quarantine, reconstructed traffic windows, merge cardinality, feature
+  counts, and target counts; any mismatch fails the stage.
+- `notebooks/01_eda.ipynb` contains presentation calls only and delegates all
+  transformations and persistence to tested `flowcast.analysis` modules.
+- Matplotlib is preferred. If a documented platform policy blocks its compiled
+  extension, the Pillow renderer is the approved deterministic PNG fallback.
+- Contract tests verify real full-data findings, safe correlation candidates,
+  PNG dimensions, deterministic hashes, and tamper rejection; the notebook
+  smoke test executes every cell through a fresh kernel.
 ---
 ## Step 10 - Freeze Splits and Preprocessing
 ### Goal

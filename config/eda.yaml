@@ -1,0 +1,58 @@
+eda_contract_version: eda_report_v1
+version: eda_v1
+
+descriptive_columns:
+  - traffic_volume
+  - avg_speed
+  - occupancy
+  - travel_time
+  - temperature
+  - rainfall
+  - visibility
+
+context_dimensions:
+  - road_id
+  - local_hour
+  - day_of_week
+  - weather_condition
+  - public_holiday
+  - event_flag
+  - roadwork_flag
+
+correlation_features:
+  - traffic_volume
+  - avg_speed
+  - occupancy
+  - signal_timing
+  - road_capacity
+  - temperature
+  - rainfall
+  - visibility
+  - hour_sin
+  - hour_cos
+  - day_of_week_sin
+  - day_of_week_cos
+  - volume_lag_1
+  - volume_lag_2
+  - volume_lag_48
+  - volume_rolling_mean_4
+  - volume_rolling_mean_8
+  - speed_lag_1
+  - speed_lag_2
+  - speed_lag_48
+  - speed_rolling_mean_4
+  - speed_rolling_mean_8
+  - volume_capacity_ratio
+  - capacity_headroom
+  - days_to_nearest_event
+
+target_correlation:
+  target: target_volume_h1
+  availability: target_volume_h1_available
+
+redundancy_absolute_correlation: 0.95
+congestion_order: [Free-flow, Moderate, Heavy, Severe]
+
+figures:
+  dpi: 140
+  style: default

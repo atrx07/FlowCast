@@ -26,6 +26,7 @@ class Settings:
     data_contracts_path: Path
     cleaning_config_path: Path
     features_config_path: Path
+    eda_config_path: Path
     reference_dir: Path
     raw_dir: Path
     interim_dir: Path
@@ -39,6 +40,7 @@ class Settings:
     merge_version: str
     feature_version: str
     processed_version: str
+    eda_version: str
     hash_chunk_size: int
 
 
@@ -71,6 +73,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     merge = config["merge"]
     features = config["features"]
     processed = config["processed"]
+    eda = config["eda"]
     return Settings(
         root=root,
         config_path=selected,
@@ -82,6 +85,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         data_contracts_path=_resolve(root, paths["data_contracts"]),
         cleaning_config_path=_resolve(root, paths["cleaning"]),
         features_config_path=_resolve(root, paths["features"]),
+        eda_config_path=_resolve(root, paths["eda"]),
         reference_dir=_resolve(root, paths["reference"]),
         raw_dir=_resolve(root, paths["raw"]),
         interim_dir=_resolve(root, paths["interim"]),
@@ -95,5 +99,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         merge_version=str(merge["version"]),
         feature_version=str(features["version"]),
         processed_version=str(processed["version"]),
+        eda_version=str(eda["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

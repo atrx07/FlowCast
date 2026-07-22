@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 from typing import Sequence
 
+from flowcast.analysis.pipeline import run_eda
 from flowcast.data.audit import run_raw_audit
 from flowcast.data.clean_context import run_context_cleaning
 from flowcast.data.merge_pipeline import run_source_merge
@@ -100,6 +101,15 @@ def build_parser() -> argparse.ArgumentParser:
             "(default: processed_targets_v1)."
         ),
     )
+    eda = subparsers.add_parser(
+        "eda",
+        help="Generate the verified data-quality report and EDA artifacts.",
+    )
+    eda.add_argument(
+        "--version",
+        default=None,
+        help="Versioned EDA artifact directory (default: eda_v1).",
+    )
     return parser
 
 
@@ -193,6 +203,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             dataset["output_rows"],
             dataset["output_unique_keys"],
             dataset["target_count"],
+        )
+        return 0
+    if args.command == "eda":
+        result = run_eda(settings, version=args.version)
+        logger.info("EDA complete: %s", result.summary_path)
+        logger.info("Data-quality report: %s", result.report_path)
+        logger.info(
+            "rows=%s context_slices=%s figures=%s",
+            result.summary["dataset"]["rows"],
+            result.summary["context_aggregates"]["record_count"],
+            len(result.figure_paths),
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")

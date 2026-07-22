@@ -17,6 +17,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+eda = [
+  "jupyterlab==4.6.1",
+  "matplotlib==3.11.1",
+  "Pillow==12.3.0",
+]
 classical = [
   "joblib==1.5.2",
   "scikit-learn==1.9.0",

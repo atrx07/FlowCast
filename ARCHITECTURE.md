@@ -206,7 +206,7 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Global seed.
 - timezone policy.
 - logging level.
-- validation, cleaning, merge, and feature artifact versions.
+- validation, cleaning, merge, feature, target, and EDA artifact versions.
 
 ### `config/data_contracts.yaml`
 - Required columns and types.
@@ -231,6 +231,12 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Capacity denominator, rain/visibility thresholds, weather categories, and
   temperature bands.
 - Event-proximity window.
+
+### `config/eda.yaml`
+- EDA/report contract and artifact version.
+- Descriptive fields and required road/time/weather/calendar context slices.
+- Safe origin-time correlation candidates and target-association definition.
+- Redundancy threshold, congestion order, and figure settings.
 
 ### `config/models.yaml`
 - split dates/ratios.
@@ -354,6 +360,27 @@ Key: `road_id + timestamp`.
   188-column schema, 20 target definitions, source/transform/horizon/dtype/mask
   metadata, and input/output lineage. Coverage JSON and generated Markdown live
   under `artifacts/quality/processed_targets_v1/`.
+
+### 6.10 EDA and quality-report artifact boundary
+
+- `eda` hash-verifies the processed Parquet, schema manifest, Step 08 summary,
+  current configuration files, complete upstream quality-summary chain, and
+  immutable raw-copy hashes before analysis.
+- `src/flowcast/analysis/` owns descriptive calculations, contextual
+  aggregates, correlation/covariance, quality reconciliation, figure rendering,
+  generated Markdown, and pipeline orchestration. The EDA notebook calls this
+  package boundary and contains no unique transformations.
+- Canonical machine-readable results live under
+  `artifacts/reports/<eda_version>/`; deterministic PNGs live under
+  `artifacts/figures/<eda_version>/`. Every artifact path, byte count, and
+  SHA-256 is recorded in the canonical summary.
+- Matplotlib is the preferred renderer. A Pillow renderer provides the approved
+  deterministic fallback when platform application control blocks a compiled
+  Matplotlib extension; the output contract remains PNG.
+- Identifiers, lineage strings, timestamps, future targets, and target masks are
+  excluded from origin-feature correlation candidates. Full-data redundancy
+  flags are descriptive and cannot make feature-selection decisions outside a
+  training fold.
 
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
@@ -570,6 +597,8 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 - invalid-value policy.
 - lag/rolling construction.
 - target shifting.
+- descriptive statistics and imbalance denominators.
+- correlation-candidate safety and quality reconciliation.
 - scratch gradient calculation.
 - metric functions.
 
@@ -579,6 +608,7 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 - range and controlled vocabulary.
 - join cardinality.
 - no unexpected nulls in trusted modelling fields.
+- deterministic EDA artifacts, hashes, figure dimensions, and tamper rejection.
 
 ### Integration
 - raw -> interim.
@@ -590,6 +620,7 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 ### Smoke
 - CLI imports/help.
 - small-sample end-to-end run.
+- EDA notebook top-to-bottom kernel execution.
 - Streamlit app imports all pages.
 - model registry loads active artifacts.
 

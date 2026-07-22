@@ -71,6 +71,7 @@ toolkits must not become mandatory for reproduction.
 |---|---:|---|
 | Plotly | `6.9.0` | Interactive Streamlit charts |
 | Matplotlib | `3.11.1` | Static figures, training curves, and reports |
+| Pillow | `12.3.0` | Deterministic PNG fallback when workstation application control blocks Matplotlib native extensions |
 | Seaborn | `0.13.2` | Optional EDA/report statistical plots only |
 | Streamlit | `1.59.2` | The single user-facing web application |
 | JupyterLab | `4.6.1` | EDA and experiment narrative; never the only pipeline implementation |
@@ -130,6 +131,7 @@ delivery. Pre-releases and yanked releases are prohibited.
 | `venv` + `pip` | Conda environment | Only when it preserves Python 3.11, exact direct pins, and one-command setup |
 | PyArrow Parquet | `fastparquet` | Only for a reproduced PyArrow blocker and documented cross-platform validation |
 | Plotly dashboard charts | Matplotlib static chart | Only when interactivity is not required by the view |
+| Matplotlib static chart | Pillow-rendered PNG | Only when a reproduced workstation application-control policy blocks Matplotlib; preserve the same versioned PNG/data contract |
 | Joblib | Python pickle | Trusted local scikit-learn artifacts only; document why Joblib failed |
 | LSTM/GRU CPU | CUDA acceleration | Optional optimisation; CPU compatibility remains mandatory |
 

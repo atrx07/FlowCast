@@ -13,8 +13,12 @@ dist/
 logs/*.log
 artifacts/models/
 artifacts/predictions/
-artifacts/reports/
-artifacts/figures/
+artifacts/reports/*
+!artifacts/reports/eda_v1/
+!artifacts/reports/eda_v1/**
+artifacts/figures/*
+!artifacts/figures/eda_v1/
+!artifacts/figures/eda_v1/**
 
 # Reproducible/generated data. Raw sources remain in the reference directory.
 data/raw/*.csv

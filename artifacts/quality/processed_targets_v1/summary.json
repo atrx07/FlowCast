@@ -1,9 +1,9 @@
 {
   "configuration": {
     "base": {
-      "bytes": 670,
+      "bytes": 717,
       "path": "config/base.yaml",
-      "sha256": "bd7deb2688c5c6f21731c3251189d0bc9a03b27e50dbdae3a45f8e34f467e20c"
+      "sha256": "4f1a8766fdec4c44d0c224a422ea0809a502c418c82cdab713c40d40f8fff5b6"
     },
     "features": {
       "bytes": 1250,
@@ -19,7 +19,7 @@
     "manifest_artifact": {
       "bytes": 31747,
       "path": "artifacts/features/processed_targets_v1/manifest.json",
-      "sha256": "d5651a8a4354f3f352dbda20009605299e5df9ce8433341da4197540e7493eb8"
+      "sha256": "7060d0c6ec8271c2d05e9bacecca821db37b83138a1088cc0610c244edf55500"
     },
     "model_candidate_feature_count": 62,
     "output_rows": 181200,
@@ -207,7 +207,7 @@
   "input_summary": {
     "bytes": 13069,
     "path": "artifacts/quality/engineered_features_v1/summary.json",
-    "sha256": "d5f1dc28d482d9b6b32b3243700540dd64807f28379925ddcd54fca5970e8115"
+    "sha256": "45bebcbdd27f5d51a5b2a67c078537b5e09364989e9b6b9c3ca103504d61d31f"
   },
   "processed_version": "processed_targets_v1"
 }
