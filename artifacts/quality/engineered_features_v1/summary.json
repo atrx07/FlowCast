@@ -1,0 +1,516 @@
+{
+  "configuration": {
+    "base": {
+      "bytes": 626,
+      "path": "config/base.yaml",
+      "sha256": "0e1f43d7c438b20bc44ab8ea50d48029a9de7a175434918d6b76e0ba49c3943a"
+    },
+    "features": {
+      "bytes": 650,
+      "path": "config/features.yaml",
+      "sha256": "47f6face830258facff241d7d7b5d787a4c5f7503d2a6ca6c8de0c074f264f42"
+    }
+  },
+  "contract_version": "explanatory_features_v1",
+  "dataset": {
+    "duplicate_output_keys": 0,
+    "feature_artifact": {
+      "bytes": 17198757,
+      "path": "data/interim/engineered_features_v1/features.parquet",
+      "sha256": "0ae1bb32a9a53b05f0ac61d393f005785d798490fd33463ba5ffec43da100753"
+    },
+    "feature_count": 62,
+    "feature_null_counts": {
+      "_inserted_window": 0,
+      "avg_speed": 0,
+      "avg_speed_original_missing": 0,
+      "avg_speed_physical_invalid": 0,
+      "capacity_headroom": 0,
+      "day_of_week": 0,
+      "day_of_week_cos": 0,
+      "day_of_week_sin": 0,
+      "days_to_nearest_event": 0,
+      "event_flag": 0,
+      "event_within_proximity": 0,
+      "half_hour_capacity": 0,
+      "history_available": 0,
+      "holiday_peak": 0,
+      "hour_cos": 0,
+      "hour_of_day": 0,
+      "hour_sin": 0,
+      "is_evening_peak": 0,
+      "is_low_visibility": 0,
+      "is_morning_peak": 0,
+      "is_peak": 0,
+      "is_rain": 0,
+      "is_weekend": 0,
+      "occupancy": 0,
+      "public_holiday": 0,
+      "rainfall": 0,
+      "road_capacity": 0,
+      "roadwork_flag": 0,
+      "share_2w": 0,
+      "share_car": 0,
+      "share_hcv": 0,
+      "share_lcv": 0,
+      "signal_timing": 0,
+      "speed_lag_1": 25,
+      "speed_lag_2": 50,
+      "speed_lag_48": 1200,
+      "speed_rolling_mean_4": 100,
+      "speed_rolling_mean_8": 200,
+      "speed_rolling_std_4": 100,
+      "speed_rolling_std_8": 200,
+      "temperature": 0,
+      "temperature_band": 0,
+      "temperature_was_missing": 0,
+      "traffic_volume": 0,
+      "traffic_volume_original_missing": 0,
+      "traffic_volume_physical_invalid": 0,
+      "vehicle_shares_normalized": 0,
+      "visibility": 0,
+      "visibility_was_missing": 0,
+      "volume_capacity_ratio": 0,
+      "volume_lag_1": 25,
+      "volume_lag_2": 50,
+      "volume_lag_48": 1200,
+      "volume_rolling_mean_4": 100,
+      "volume_rolling_mean_8": 200,
+      "volume_rolling_std_4": 100,
+      "volume_rolling_std_8": 200,
+      "weather_is_clear": 0,
+      "weather_is_cloudy": 0,
+      "weather_is_fog": 0,
+      "weather_is_overcast": 0,
+      "weather_is_rain": 0
+    },
+    "feature_stats": {
+      "_inserted_window": {
+        "dtype": "bool",
+        "false_count": 176701,
+        "null_count": 0,
+        "true_count": 4499
+      },
+      "avg_speed": {
+        "dtype": "Float64",
+        "maximum": 64.8,
+        "minimum": 6.7,
+        "null_count": 0
+      },
+      "avg_speed_original_missing": {
+        "dtype": "boolean",
+        "false_count": 176857,
+        "null_count": 0,
+        "true_count": 4343
+      },
+      "avg_speed_physical_invalid": {
+        "dtype": "boolean",
+        "false_count": 180964,
+        "null_count": 0,
+        "true_count": 236
+      },
+      "capacity_headroom": {
+        "dtype": "Float64",
+        "maximum": 1100.5,
+        "minimum": -947.5,
+        "null_count": 0
+      },
+      "day_of_week": {
+        "dtype": "Int8",
+        "maximum": 6,
+        "minimum": 0,
+        "null_count": 0
+      },
+      "day_of_week_cos": {
+        "dtype": "Float64",
+        "maximum": 1.0,
+        "minimum": -0.9009688679024191,
+        "null_count": 0
+      },
+      "day_of_week_sin": {
+        "dtype": "Float64",
+        "maximum": 0.9749279121818236,
+        "minimum": -0.9749279121818236,
+        "null_count": 0
+      },
+      "days_to_nearest_event": {
+        "dtype": "Int16",
+        "maximum": 18,
+        "minimum": 0,
+        "null_count": 0
+      },
+      "event_flag": {
+        "dtype": "Int8",
+        "maximum": 1,
+        "minimum": 0,
+        "null_count": 0
+      },
+      "event_within_proximity": {
+        "dtype": "boolean",
+        "false_count": 159600,
+        "null_count": 0,
+        "true_count": 21600
+      },
+      "half_hour_capacity": {
+        "dtype": "Float64",
+        "maximum": 1163.5,
+        "minimum": 629.5,
+        "null_count": 0
+      },
+      "history_available": {
+        "dtype": "boolean",
+        "false_count": 1200,
+        "null_count": 0,
+        "true_count": 180000
+      },
+      "holiday_peak": {
+        "dtype": "boolean",
+        "false_count": 179400,
+        "null_count": 0,
+        "true_count": 1800
+      },
+      "hour_cos": {
+        "dtype": "Float64",
+        "maximum": 1.0,
+        "minimum": -1.0,
+        "null_count": 0
+      },
+      "hour_of_day": {
+        "dtype": "Float64",
+        "maximum": 23.5,
+        "minimum": 0.0,
+        "null_count": 0
+      },
+      "hour_sin": {
+        "dtype": "Float64",
+        "maximum": 1.0,
+        "minimum": -1.0,
+        "null_count": 0
+      },
+      "is_evening_peak": {
+        "dtype": "boolean",
+        "false_count": 158550,
+        "null_count": 0,
+        "true_count": 22650
+      },
+      "is_low_visibility": {
+        "dtype": "boolean",
+        "false_count": 180246,
+        "null_count": 0,
+        "true_count": 954
+      },
+      "is_morning_peak": {
+        "dtype": "boolean",
+        "false_count": 158550,
+        "null_count": 0,
+        "true_count": 22650
+      },
+      "is_peak": {
+        "dtype": "boolean",
+        "false_count": 135900,
+        "null_count": 0,
+        "true_count": 45300
+      },
+      "is_rain": {
+        "dtype": "boolean",
+        "false_count": 174034,
+        "null_count": 0,
+        "true_count": 7166
+      },
+      "is_weekend": {
+        "dtype": "boolean",
+        "false_count": 129600,
+        "null_count": 0,
+        "true_count": 51600
+      },
+      "occupancy": {
+        "dtype": "Float64",
+        "maximum": 100.0,
+        "minimum": 3.0,
+        "null_count": 0
+      },
+      "public_holiday": {
+        "dtype": "Int8",
+        "maximum": 1,
+        "minimum": 0,
+        "null_count": 0
+      },
+      "rainfall": {
+        "dtype": "Float64",
+        "maximum": 8.9,
+        "minimum": 0.0,
+        "null_count": 0
+      },
+      "road_capacity": {
+        "dtype": "Int64",
+        "maximum": 2327,
+        "minimum": 1259,
+        "null_count": 0
+      },
+      "roadwork_flag": {
+        "dtype": "Int8",
+        "maximum": 1,
+        "minimum": 0,
+        "null_count": 0
+      },
+      "share_2w": {
+        "dtype": "Float64",
+        "maximum": 0.5353535353535354,
+        "minimum": 0.22772277227722773,
+        "null_count": 0
+      },
+      "share_car": {
+        "dtype": "Float64",
+        "maximum": 0.63,
+        "minimum": 0.19801980198019803,
+        "null_count": 0
+      },
+      "share_hcv": {
+        "dtype": "Float64",
+        "maximum": 0.19,
+        "minimum": 0.0099009900990099,
+        "null_count": 0
+      },
+      "share_lcv": {
+        "dtype": "Float64",
+        "maximum": 0.21000000000000002,
+        "minimum": 0.039999999999999994,
+        "null_count": 0
+      },
+      "signal_timing": {
+        "dtype": "Int64",
+        "maximum": 74,
+        "minimum": 21,
+        "null_count": 0
+      },
+      "speed_lag_1": {
+        "dtype": "Float64",
+        "maximum": 64.8,
+        "minimum": 6.7,
+        "null_count": 25
+      },
+      "speed_lag_2": {
+        "dtype": "Float64",
+        "maximum": 64.8,
+        "minimum": 6.7,
+        "null_count": 50
+      },
+      "speed_lag_48": {
+        "dtype": "Float64",
+        "maximum": 64.8,
+        "minimum": 6.7,
+        "null_count": 1200
+      },
+      "speed_rolling_mean_4": {
+        "dtype": "Float64",
+        "maximum": 58.5,
+        "minimum": 7.5,
+        "null_count": 100
+      },
+      "speed_rolling_mean_8": {
+        "dtype": "Float64",
+        "maximum": 57.0375,
+        "minimum": 9.087499999999999,
+        "null_count": 200
+      },
+      "speed_rolling_std_4": {
+        "dtype": "Float64",
+        "maximum": 21.809554481159417,
+        "minimum": 1.4238213521947015e-06,
+        "null_count": 100
+      },
+      "speed_rolling_std_8": {
+        "dtype": "Float64",
+        "maximum": 20.761945786875202,
+        "minimum": 0.47188830397209675,
+        "null_count": 200
+      },
+      "temperature": {
+        "dtype": "Float64",
+        "maximum": 29.8,
+        "minimum": 5.8,
+        "null_count": 0
+      },
+      "temperature_band": {
+        "dtype": "string",
+        "null_count": 0,
+        "value_counts": {
+          "cool": 48878,
+          "mild": 122362,
+          "warm": 9960
+        }
+      },
+      "temperature_was_missing": {
+        "dtype": "bool",
+        "false_count": 178410,
+        "null_count": 0,
+        "true_count": 2790
+      },
+      "traffic_volume": {
+        "dtype": "Int64",
+        "maximum": 2090,
+        "minimum": 41,
+        "null_count": 0
+      },
+      "traffic_volume_original_missing": {
+        "dtype": "boolean",
+        "false_count": 176852,
+        "null_count": 0,
+        "true_count": 4348
+      },
+      "traffic_volume_physical_invalid": {
+        "dtype": "boolean",
+        "false_count": 180961,
+        "null_count": 0,
+        "true_count": 239
+      },
+      "vehicle_shares_normalized": {
+        "dtype": "bool",
+        "false_count": 120853,
+        "null_count": 0,
+        "true_count": 60347
+      },
+      "visibility": {
+        "dtype": "Float64",
+        "maximum": 10000.0,
+        "minimum": 301.0,
+        "null_count": 0
+      },
+      "visibility_was_missing": {
+        "dtype": "bool",
+        "false_count": 179344,
+        "null_count": 0,
+        "true_count": 1856
+      },
+      "volume_capacity_ratio": {
+        "dtype": "Float64",
+        "maximum": 1.8293216630196936,
+        "minimum": 0.04875217643644805,
+        "null_count": 0
+      },
+      "volume_lag_1": {
+        "dtype": "Int64",
+        "maximum": 2090,
+        "minimum": 41,
+        "null_count": 25
+      },
+      "volume_lag_2": {
+        "dtype": "Int64",
+        "maximum": 2090,
+        "minimum": 41,
+        "null_count": 50
+      },
+      "volume_lag_48": {
+        "dtype": "Int64",
+        "maximum": 2090,
+        "minimum": 41,
+        "null_count": 1200
+      },
+      "volume_rolling_mean_4": {
+        "dtype": "Float64",
+        "maximum": 1816.0,
+        "minimum": 47.0,
+        "null_count": 100
+      },
+      "volume_rolling_mean_8": {
+        "dtype": "Float64",
+        "maximum": 1490.875,
+        "minimum": 50.75,
+        "null_count": 200
+      },
+      "volume_rolling_std_4": {
+        "dtype": "Float64",
+        "maximum": 657.8740380954397,
+        "minimum": 0.5000000000476797,
+        "null_count": 100
+      },
+      "volume_rolling_std_8": {
+        "dtype": "Float64",
+        "maximum": 719.6850377570929,
+        "minimum": 2.1876275472721143,
+        "null_count": 200
+      },
+      "weather_is_clear": {
+        "dtype": "boolean",
+        "false_count": 45044,
+        "null_count": 0,
+        "true_count": 136156
+      },
+      "weather_is_cloudy": {
+        "dtype": "boolean",
+        "false_count": 150536,
+        "null_count": 0,
+        "true_count": 30664
+      },
+      "weather_is_fog": {
+        "dtype": "boolean",
+        "false_count": 179922,
+        "null_count": 0,
+        "true_count": 1278
+      },
+      "weather_is_overcast": {
+        "dtype": "boolean",
+        "false_count": 175212,
+        "null_count": 0,
+        "true_count": 5988
+      },
+      "weather_is_rain": {
+        "dtype": "boolean",
+        "false_count": 174086,
+        "null_count": 0,
+        "true_count": 7114
+      }
+    },
+    "history_available_rows": 180000,
+    "history_unavailable_by_road": {
+      "NL-001": 48,
+      "NL-002": 48,
+      "NL-003": 48,
+      "NL-004": 48,
+      "NL-005": 48,
+      "NL-006": 48,
+      "NL-007": 48,
+      "NL-008": 48,
+      "NL-009": 48,
+      "NL-010": 48,
+      "NL-011": 48,
+      "NL-012": 48,
+      "NL-013": 48,
+      "NL-014": 48,
+      "NL-015": 48,
+      "NL-016": 48,
+      "NL-017": 48,
+      "NL-018": 48,
+      "NL-019": 48,
+      "NL-020": 48,
+      "NL-021": 48,
+      "NL-022": 48,
+      "NL-023": 48,
+      "NL-024": 48,
+      "NL-025": 48
+    },
+    "history_unavailable_rows": 1200,
+    "input_rows": 181200,
+    "manifest_artifact": {
+      "bytes": 19835,
+      "path": "artifacts/features/engineered_features_v1/manifest.json",
+      "sha256": "9f8efd6283d095320c339460e0f774b70d1d22c7e1d08dcb0ce9a43c6fe2851f"
+    },
+    "output_rows": 181200,
+    "output_unique_keys": 181200,
+    "road_count": 25,
+    "row_count_change": 0
+  },
+  "feature_version": "engineered_features_v1",
+  "input_artifact": {
+    "bytes": 6618670,
+    "path": "data/interim/merged_sources_v1/merged.parquet",
+    "sha256": "5e562e7fb87bba15e2bedc917d54febf79faab53dd38653b8c568620a84f8113"
+  },
+  "input_merge_version": "merged_sources_v1",
+  "input_summary": {
+    "bytes": 2642,
+    "path": "artifacts/quality/merged_sources_v1/summary.json",
+    "sha256": "1b1283987730c459a549020bb9024121640f70e4313a0886549b5077848b9f0e"
+  }
+}

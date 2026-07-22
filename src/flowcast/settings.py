@@ -25,6 +25,7 @@ class Settings:
     log_level: str
     data_contracts_path: Path
     cleaning_config_path: Path
+    features_config_path: Path
     reference_dir: Path
     raw_dir: Path
     interim_dir: Path
@@ -36,6 +37,7 @@ class Settings:
     validation_version: str
     cleaning_version: str
     merge_version: str
+    feature_version: str
     hash_chunk_size: int
 
 
@@ -66,6 +68,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     validation = config["validation"]
     cleaning = config["cleaning"]
     merge = config["merge"]
+    features = config["features"]
     return Settings(
         root=root,
         config_path=selected,
@@ -76,6 +79,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         log_level=str(runtime["log_level"]),
         data_contracts_path=_resolve(root, paths["data_contracts"]),
         cleaning_config_path=_resolve(root, paths["cleaning"]),
+        features_config_path=_resolve(root, paths["features"]),
         reference_dir=_resolve(root, paths["reference"]),
         raw_dir=_resolve(root, paths["raw"]),
         interim_dir=_resolve(root, paths["interim"]),
@@ -87,5 +91,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         validation_version=str(validation["version"]),
         cleaning_version=str(cleaning["version"]),
         merge_version=str(merge["version"]),
+        feature_version=str(features["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

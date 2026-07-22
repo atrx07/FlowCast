@@ -69,7 +69,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M0 - Governance and plan | Before Week 1 | Reference Markdown pack and approved architecture | Complete |
 | M1 - Ingestion and validation | Week 1 | Validated raw loads, quarantine logs, schema tests | Complete - Step 03 gate passed with deterministic artifacts and 26 tests |
 | M2 - Cleaning and merge | Week 1 | Cleaned source tables and merged interim table | Complete - Step 06 gate passed with zero misses or row multiplication |
-| M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Not started |
+| M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | In progress - Step 07 feature gate passed; Step 08 targets next |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Not started |
 | M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Not started |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Not started |
@@ -232,7 +232,8 @@ A proposed change must be classified before implementation:
 
 ## 13. Current Roadmap Position
 
-Milestones M0 through M2 are complete. Steps 04-06 produced trusted, versioned
-calendar, weather, complete-grid traffic, and a deterministic merged table with
-zero join misses or row multiplication. M3 feature and target engineering is
-next. See `STATUS.md` and `NEXT_STEP.md` for the live state.
+Milestones M0 through M2 are complete. M3 is in progress: Step 07 produced a
+deterministic 181,200-row explanatory-feature table, 62-feature manifest, and
+leakage evidence with exactly 48 history-unavailable origins per road. Step 08
+multi-horizon target construction is next. See `STATUS.md` and `NEXT_STEP.md`
+for the live state.

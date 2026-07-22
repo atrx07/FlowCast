@@ -11,6 +11,7 @@ runtime:
 paths:
   data_contracts: config/data_contracts.yaml
   cleaning: config/cleaning.yaml
+  features: config/features.yaml
   reference: FlowCast-project_file
   raw: data/raw
   interim: data/interim
@@ -31,3 +32,6 @@ cleaning:
 
 merge:
   version: merged_sources_v1
+
+features:
+  version: engineered_features_v1

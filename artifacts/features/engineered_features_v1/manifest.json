@@ -1,0 +1,748 @@
+{
+  "configuration": {
+    "bytes": 650,
+    "path": "config/features.yaml",
+    "sha256": "47f6face830258facff241d7d7b5d787a4c5f7503d2a6ca6c8de0c074f264f42"
+  },
+  "contract_version": "explanatory_features_v1",
+  "feature_count": 62,
+  "feature_version": "engineered_features_v1",
+  "features": [
+    {
+      "dtype": "Int64",
+      "group": "traffic",
+      "leakage_status": "known_at_origin",
+      "name": "traffic_volume",
+      "source_columns": [
+        "traffic_volume"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "traffic",
+      "leakage_status": "known_at_origin",
+      "name": "avg_speed",
+      "source_columns": [
+        "avg_speed"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "traffic",
+      "leakage_status": "known_at_origin",
+      "name": "occupancy",
+      "source_columns": [
+        "occupancy"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int64",
+      "group": "traffic",
+      "leakage_status": "known_at_origin",
+      "name": "signal_timing",
+      "source_columns": [
+        "signal_timing"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int64",
+      "group": "capacity",
+      "leakage_status": "known_at_origin",
+      "name": "road_capacity",
+      "source_columns": [
+        "road_capacity"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "temperature",
+      "source_columns": [
+        "temperature"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "rainfall",
+      "source_columns": [
+        "rainfall"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "visibility",
+      "source_columns": [
+        "visibility"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "vehicle_share",
+      "leakage_status": "known_at_origin",
+      "name": "share_2w",
+      "source_columns": [
+        "share_2w"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "vehicle_share",
+      "leakage_status": "known_at_origin",
+      "name": "share_car",
+      "source_columns": [
+        "share_car"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "vehicle_share",
+      "leakage_status": "known_at_origin",
+      "name": "share_lcv",
+      "source_columns": [
+        "share_lcv"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "vehicle_share",
+      "leakage_status": "known_at_origin",
+      "name": "share_hcv",
+      "source_columns": [
+        "share_hcv"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int8",
+      "group": "calendar",
+      "leakage_status": "known_at_origin",
+      "name": "public_holiday",
+      "source_columns": [
+        "public_holiday"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int8",
+      "group": "calendar",
+      "leakage_status": "known_at_origin",
+      "name": "event_flag",
+      "source_columns": [
+        "event_flag"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int8",
+      "group": "calendar",
+      "leakage_status": "known_at_origin",
+      "name": "roadwork_flag",
+      "source_columns": [
+        "roadwork_flag"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "bool",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "_inserted_window",
+      "source_columns": [
+        "_inserted_window"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "traffic_volume_original_missing",
+      "source_columns": [
+        "traffic_volume_original_missing"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "traffic_volume_physical_invalid",
+      "source_columns": [
+        "traffic_volume_physical_invalid"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "avg_speed_original_missing",
+      "source_columns": [
+        "avg_speed_original_missing"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "avg_speed_physical_invalid",
+      "source_columns": [
+        "avg_speed_physical_invalid"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "bool",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "temperature_was_missing",
+      "source_columns": [
+        "temperature_was_missing"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "bool",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "visibility_was_missing",
+      "source_columns": [
+        "visibility_was_missing"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "bool",
+      "group": "lineage",
+      "leakage_status": "known_at_origin",
+      "name": "vehicle_shares_normalized",
+      "source_columns": [
+        "vehicle_shares_normalized"
+      ],
+      "transform": "trusted source value",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "hour_of_day",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "local hour including half-hour fraction",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "hour_sin",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "sin(2*pi*hour_of_day/24)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "hour_cos",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "cos(2*pi*hour_of_day/24)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int8",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "day_of_week",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "Monday=0 through Sunday=6",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "day_of_week_sin",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "sin(2*pi*day_of_week/7)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "day_of_week_cos",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "cos(2*pi*day_of_week/7)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "is_weekend",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "day_of_week >= 5",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "is_morning_peak",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "local minute in [07:00, 10:00)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "is_evening_peak",
+      "source_columns": [
+        "timestamp"
+      ],
+      "transform": "local minute in [17:00, 20:00)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "temporal",
+      "leakage_status": "known_at_origin",
+      "name": "is_peak",
+      "source_columns": [
+        "is_morning_peak",
+        "is_evening_peak"
+      ],
+      "transform": "any configured peak",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_lag_1",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(1)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_lag_2",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(2)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_lag_48",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(48)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_rolling_mean_4",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(1) then rolling(4).mean()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_rolling_std_4",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(1) then rolling(4).std()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_rolling_mean_8",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(1) then rolling(8).mean()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "volume_rolling_std_8",
+      "source_columns": [
+        "road_id",
+        "traffic_volume"
+      ],
+      "transform": "within-road shift(1) then rolling(8).std()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_lag_1",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(1)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_lag_2",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(2)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_lag_48",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(48)",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_rolling_mean_4",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(1) then rolling(4).mean()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_rolling_std_4",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(1) then rolling(4).std()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_rolling_mean_8",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(1) then rolling(8).mean()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "speed_rolling_std_8",
+      "source_columns": [
+        "road_id",
+        "avg_speed"
+      ],
+      "transform": "within-road shift(1) then rolling(8).std()",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "history",
+      "leakage_status": "known_at_origin",
+      "name": "history_available",
+      "source_columns": [
+        "volume_lag_1",
+        "volume_lag_2",
+        "volume_lag_48",
+        "volume_rolling_mean_4",
+        "volume_rolling_std_4",
+        "volume_rolling_mean_8",
+        "volume_rolling_std_8",
+        "speed_lag_1",
+        "speed_lag_2",
+        "speed_lag_48",
+        "speed_rolling_mean_4",
+        "speed_rolling_std_4",
+        "speed_rolling_mean_8",
+        "speed_rolling_std_8"
+      ],
+      "transform": "all configured lag and rolling features are non-null",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "capacity",
+      "leakage_status": "known_at_origin",
+      "name": "half_hour_capacity",
+      "source_columns": [
+        "road_capacity"
+      ],
+      "transform": "road_capacity / 2",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "capacity",
+      "leakage_status": "known_at_origin",
+      "name": "volume_capacity_ratio",
+      "source_columns": [
+        "traffic_volume",
+        "half_hour_capacity"
+      ],
+      "transform": "traffic_volume / half_hour_capacity",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Float64",
+      "group": "capacity",
+      "leakage_status": "known_at_origin",
+      "name": "capacity_headroom",
+      "source_columns": [
+        "half_hour_capacity",
+        "traffic_volume"
+      ],
+      "transform": "half_hour_capacity - traffic_volume",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "is_rain",
+      "source_columns": [
+        "rainfall",
+        "weather_condition"
+      ],
+      "transform": "rainfall > 0.0 or condition == Rain",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "is_low_visibility",
+      "source_columns": [
+        "visibility"
+      ],
+      "transform": "visibility < 1000.0 metres",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "weather_is_clear",
+      "source_columns": [
+        "weather_condition"
+      ],
+      "transform": "weather_condition == Clear",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "weather_is_cloudy",
+      "source_columns": [
+        "weather_condition"
+      ],
+      "transform": "weather_condition == Cloudy",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "weather_is_overcast",
+      "source_columns": [
+        "weather_condition"
+      ],
+      "transform": "weather_condition == Overcast",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "weather_is_rain",
+      "source_columns": [
+        "weather_condition"
+      ],
+      "transform": "weather_condition == Rain",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "weather_is_fog",
+      "source_columns": [
+        "weather_condition"
+      ],
+      "transform": "weather_condition == Fog",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "string",
+      "group": "weather",
+      "leakage_status": "known_at_origin",
+      "name": "temperature_band",
+      "source_columns": [
+        "temperature"
+      ],
+      "transform": "left-closed bands at [15.0, 25.0] Celsius labelled ['cool', 'mild', 'warm']",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "calendar",
+      "leakage_status": "known_at_origin",
+      "name": "holiday_peak",
+      "source_columns": [
+        "public_holiday",
+        "is_peak"
+      ],
+      "transform": "public_holiday == 1 and is_peak",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "Int16",
+      "group": "calendar",
+      "leakage_status": "known_at_origin",
+      "name": "days_to_nearest_event",
+      "source_columns": [
+        "calendar_date",
+        "event_flag"
+      ],
+      "transform": "absolute calendar days to nearest scheduled event date",
+      "version": "engineered_features_v1"
+    },
+    {
+      "dtype": "boolean",
+      "group": "calendar",
+      "leakage_status": "known_at_origin",
+      "name": "event_within_proximity",
+      "source_columns": [
+        "days_to_nearest_event"
+      ],
+      "transform": "days_to_nearest_event <= 1",
+      "version": "engineered_features_v1"
+    }
+  ],
+  "forecast_horizons_reserved": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "input_artifact": {
+    "bytes": 6618670,
+    "path": "data/interim/merged_sources_v1/merged.parquet",
+    "sha256": "5e562e7fb87bba15e2bedc917d54febf79faab53dd38653b8c568620a84f8113"
+  },
+  "input_merge_version": "merged_sources_v1",
+  "key_columns": [
+    "road_id",
+    "timestamp"
+  ],
+  "output_artifact": {
+    "bytes": 17198757,
+    "path": "data/interim/engineered_features_v1/features.parquet",
+    "sha256": "0ae1bb32a9a53b05f0ac61d393f005785d798490fd33463ba5ffec43da100753"
+  }
+}

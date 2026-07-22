@@ -151,6 +151,9 @@ Prefer the simplest architecture that fully satisfies the PRD.
   work and its required tests/documentation.
 - Before every commit and push, run the smallest relevant tests plus appropriate
   assurance checks. Do not commit or push a failing state.
+- Before every push, update the project status and timeline in `README.md` so
+  they match the verified state in `STATUS.md` and the immediate gate in
+  `NEXT_STEP.md`; never publish a push with stale README progress text.
 - Push each verified atomic commit to `origin` after it is created.
 - Never force-push or rewrite published history unless the user explicitly asks.
 

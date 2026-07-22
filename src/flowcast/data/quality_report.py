@@ -217,3 +217,58 @@ def render_source_merge_markdown(summary: dict[str, Any]) -> str:
         "",
     ]
     return "\n".join(lines)
+
+
+def render_feature_engineering_markdown(summary: dict[str, Any]) -> str:
+    """Render the Step 07 JSON summary as concise generated Markdown."""
+
+    dataset = summary["dataset"]
+    null_features = {
+        name: count
+        for name, count in dataset["feature_null_counts"].items()
+        if count
+    }
+    lines = [
+        "# FlowCast Feature Engineering Report",
+        "",
+        f"- Feature contract: `{summary['contract_version']}`",
+        f"- Output version: `{summary['feature_version']}`",
+        f"- Input merge version: `{summary['input_merge_version']}`",
+        "",
+        "## Dataset contract",
+        "",
+        "| Check | Result |",
+        "|---|---:|",
+        f"| Input rows | {dataset['input_rows']} |",
+        f"| Output rows / keys | {dataset['output_rows']} / "
+        f"{dataset['output_unique_keys']} |",
+        f"| Row-count change | {dataset['row_count_change']} |",
+        f"| Duplicate output keys | {dataset['duplicate_output_keys']} |",
+        f"| Model-candidate features | {dataset['feature_count']} |",
+        f"| History-available rows | {dataset['history_available_rows']} |",
+        f"| History-unavailable rows | {dataset['history_unavailable_rows']} |",
+        "",
+        "## Expected history nulls",
+        "",
+        "| Feature | Null rows |",
+        "|---|---:|",
+    ]
+    for name, count in null_features.items():
+        lines.append(f"| {name} | {count} |")
+    lines.extend(
+        [
+            "",
+            "Lags are computed within each road. Rolling features shift one window "
+            "before applying the configured full-width rolling mean or sample "
+            "standard deviation, so the current and future rows are excluded.",
+            "",
+            "All source, imputation, and inserted-window lineage columns remain in "
+            "the feature Parquet. The JSON manifest records every model-candidate "
+            "feature's dtype, source columns, transform, version, and leakage status.",
+            "",
+            "This file is generated from `summary.json`; edit the pipeline, not "
+            "this report.",
+            "",
+        ]
+    )
+    return "\n".join(lines)

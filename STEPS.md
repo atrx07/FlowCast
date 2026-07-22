@@ -246,6 +246,21 @@ Generate reproducible, leakage-safe explanatory features.
 - Feature tests pass.
 - Feature manifest exists.
 - No feature uses future information.
+
+### Proven Step 07 procedure
+
+- `config/features.yaml` is the single feature contract: 07:00-10:00 and
+  17:00-20:00 half-open peak periods, positive-rainfall/Rain condition flag,
+  visibility below 1,000 metres, temperature bands at 15 and 25 Celsius, and a
+  one-day scheduled-event proximity window.
+- `flowcast engineer-features` hash-verifies `merged_sources_v1`, retains all
+  181,200 keys and source/imputation lineage columns, and writes
+  `data/interim/engineered_features_v1/features.parquet`.
+- The feature manifest lives under `artifacts/features/`; canonical quality JSON
+  and generated Markdown live under `artifacts/quality/`.
+- Full-width shifted rolling windows leave the expected leading nulls. One
+  `history_available` flag accounts for exactly the first 48 origins per road;
+  no row is removed.
 ---
 ## Step 08 - Build Multi-Horizon Targets and Processed Data
 ### Goal

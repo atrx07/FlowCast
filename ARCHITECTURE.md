@@ -48,6 +48,7 @@ python -m flowcast.cli validate
 python -m flowcast.cli clean-context
 python -m flowcast.cli clean-traffic
 python -m flowcast.cli merge-sources
+python -m flowcast.cli engineer-features
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli train-classical
@@ -205,7 +206,7 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Global seed.
 - timezone policy.
 - logging level.
-- validation, cleaning, and merge artifact versions.
+- validation, cleaning, merge, and feature artifact versions.
 
 ### `config/data_contracts.yaml`
 - Required columns and types.
@@ -223,12 +224,13 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Calendar flag/name relationship checks.
 
 ### `config/features.yaml`
-- lag windows: 1, 2, 48.
-- rolling windows: 4, 8.
-- forecast horizons: 1, 2, 3, 4.
-- peak periods.
-- low-visibility threshold.
-- selected feature groups.
+- Explanatory-feature contract and output version.
+- Lag windows 1, 2, and 48; rolling windows 4 and 8.
+- Forecast horizons 1-4 reserved for target construction.
+- Named half-open peak periods.
+- Capacity denominator, rain/visibility thresholds, weather categories, and
+  temperature bands.
+- Event-proximity window.
 
 ### `config/models.yaml`
 - split dates/ratios.
@@ -334,9 +336,16 @@ Key: `road_id + timestamp`.
 ### 6.9 Processed feature contract
 - Sorted by `road_id, timestamp`.
 - Stable feature names and dtypes.
-- Explicit target columns per horizon.
-- Rows without enough history/future for a selected horizon flagged and filtered only in target-specific modelling views.
-- A feature manifest records source columns, transforms, version, and leakage classification.
+- Step 07 writes `data/interim/<feature_version>/features.parquet` while Step 08
+  adds explicit target columns in `data/processed/`.
+- Rows without enough history are retained and marked by `history_available`;
+  target availability is added separately in Step 08.
+- `artifacts/features/<feature_version>/manifest.json` records source columns,
+  transforms, dtype, version, and leakage classification for every
+  model-candidate feature.
+- Canonical quality JSON and generated Markdown under
+  `artifacts/quality/<feature_version>/` record feature null/range counts and
+  input/output/manifest hashes.
 
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
@@ -373,6 +382,12 @@ At prediction origin `t`, every feature must be known at or before `t`.
 - Rolling: shift first, then roll.
 - Weather/calendar: only observations available at `t`; no future weather unless explicitly labelled as a forecast input, which the delivered data is not.
 - Static road metadata may be used directly.
+
+The implemented Step 07 pipeline validates the merged summary and artifact hash
+before reading data. It preserves all source and repair lineage, sorts by road
+and timestamp, uses full-width shifted rolling windows, and retains the expected
+leading nulls rather than dropping origins. Scheduled calendar-event proximity
+is treated as known at origin; it never reads future traffic measurements.
 
 ### 8.2 Horizon targets
 For each horizon `h in {1,2,3,4}`:

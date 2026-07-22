@@ -1,0 +1,31 @@
+feature_contract_version: explanatory_features_v1
+version: engineered_features_v1
+
+keys: [road_id, timestamp]
+forecast_horizons_reserved: [1, 2, 3, 4]
+
+temporal:
+  peak_periods:
+    - name: morning
+      start: "07:00"
+      end: "10:00"
+    - name: evening
+      start: "17:00"
+      end: "20:00"
+
+history:
+  lag_windows: [1, 2, 48]
+  rolling_windows: [4, 8]
+
+capacity:
+  windows_per_hour: 2
+
+weather:
+  rain_minimum_mm_exclusive: 0.0
+  low_visibility_below_metres: 1000.0
+  categories: [Clear, Cloudy, Overcast, Rain, Fog]
+  temperature_boundaries_celsius: [15.0, 25.0]
+  temperature_labels: [cool, mild, warm]
+
+calendar:
+  event_proximity_days: 1
