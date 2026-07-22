@@ -52,6 +52,7 @@ python -m flowcast.cli engineer-features
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli prepare-modeling
+python -m flowcast.cli train-scratch-linear
 python -m flowcast.cli train-classical
 python -m flowcast.cli train-deep
 python -m flowcast.cli evaluate
@@ -199,6 +200,12 @@ flowcast-repository/
 └── .gitignore
 ```
 
+The implemented Step 11 modelling boundary splits pure mathematics
+(`scratch_linear.py`), synthetic proof (`scratch_proof.py`), verified artifact
+loading (`scratch_inputs.py`), generated reporting (`scratch_report.py`), and
+real-data orchestration (`regression.py`) by responsibility. Shared regression
+metrics live in `flowcast/evaluation/regression.py` for reuse in Step 12.
+
 This is a target structure, not permission to create empty files unnecessarily. Create modules when their step begins. Keep each source file below 500 lines unless documented otherwise.
 
 ## 5. Configuration Architecture
@@ -246,6 +253,8 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Expanding-window CV fold count, validation length, and maximum-horizon gap.
 - Default-sealed test-access purpose.
 - Feature grouping, imputation, encoding, and per-family scaling policies.
+- Step 11 scratch-linear target, chronological row budget, optimizer,
+  finite-difference tolerances, and synthetic parameter-recovery contract.
 - Later steps add model grids, search budgets, calibration, recurrent training,
   and early-stopping settings without weakening the frozen split contract.
 
@@ -405,6 +414,27 @@ Key: `road_id + timestamp`.
 - Tuning access can load train and validation only. Loading test requires the
   explicit `final_evaluation` purpose after model selection is frozen.
 
+### 6.12 NumPy regression proof artifact boundary
+
+- `train-scratch-linear` verifies the complete Step 10 summary, assignments,
+  feature schema, and fitted linear preprocessor before loading data.
+- It selects the earliest 25,000 boundary-safe `target_volume_h1` training
+  rows in timestamp/road order and uses every eligible validation row; the test
+  loader is called only to prove default access is rejected before any test row
+  can load.
+- `scratch_linear.py` owns the visible `X @ w + b` prediction, MSE, analytical
+  gradients, central finite differences, and seeded full-batch update loop.
+  Synthetic proof helpers, verified loading, generated reporting, and pipeline
+  orchestration remain separate modules.
+- Canonical JSON, generated Markdown, convergence CSV, and coefficient CSV live
+  under `artifacts/metrics/scratch_linear_v1/`. The reloadable JSON coefficient
+  model and validation prediction Parquet are reproducible ignored artifacts
+  under `artifacts/models/` and `artifacts/predictions/`; all paths and hashes
+  are recorded in the canonical summary.
+- The comparison against scikit-learn uses identical preprocessed training and
+  validation matrices and reports RMSE, MAE, MAPE, and R-squared. It is a
+  mathematical verification, not final model selection or test evaluation.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -489,7 +519,19 @@ common base retains trailing origins instead of globally dropping them.
 - Random seeds and library versions are recorded.
 
 ## 10. Model Architecture
-### 10.1 Classical registry key
+### 10.1 Scratch linear-regression proof
+
+- The Step 11 baseline is implemented directly in NumPy with seeded
+  initialization, a fixed configured learning rate, bounded iterations,
+  relative-loss convergence tolerance, and patience.
+- Every analytical weight and bias gradient is checked against a central
+  finite difference before real data is used; a noiseless synthetic problem
+  must recover its known weights and bias within configured tolerance.
+- The real-data demonstration uses the frozen linear preprocessor and next-
+  window volume target. Persisted coefficients can be reloaded without a
+  modelling-library estimator and must reproduce stored validation predictions.
+
+### 10.2 Classical registry key
 ```text
 {target}/{horizon}/{model_name}/{version}
 ```
@@ -504,14 +546,14 @@ Each registry entry contains:
 - calibration/threshold artifact where relevant.
 - model card.
 
-### 10.2 Accident-risk classifier
+### 10.3 Accident-risk classifier
 - Binary label: future `accident_count > 0`.
 - Use class weights or XGBoost `scale_pos_weight` derived from training only.
 - Do not select by accuracy.
 - Tune threshold on validation data according to operational trade-off and report precision/recall.
 - Calibrate probability when the selected model requires it.
 
-### 10.3 Recurrent volume model
+### 10.4 Recurrent volume model
 Preferred v1 design:
 
 ```text

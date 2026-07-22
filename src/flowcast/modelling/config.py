@@ -146,6 +146,55 @@ def _validate_preprocessing(config: dict[str, Any]) -> None:
             raise ValueError("Tree preprocessing must not scale numeric features")
 
 
+def _positive_number(record: Mapping[str, Any], name: str) -> float:
+    value = float(record.get(name, 0))
+    if value <= 0:
+        raise ValueError(f"Scratch linear {name} must be positive")
+    return value
+
+
+def _validate_optimizer(record: Mapping[str, Any], label: str) -> None:
+    _positive_number(record, "learning_rate")
+    _positive_number(record, "tolerance")
+    _positive_number(record, "initialization_scale")
+    if int(record.get("max_iterations", 0)) <= 0:
+        raise ValueError(f"Scratch linear {label} iterations must be positive")
+    if int(record.get("patience", 0)) <= 0:
+        raise ValueError(f"Scratch linear {label} patience must be positive")
+
+
+def _validate_scratch_linear(config: dict[str, Any]) -> None:
+    scratch = config.get("scratch_linear", {})
+    if scratch.get("contract_version") != "scratch_linear_v1":
+        raise ValueError("Unsupported scratch-linear contract version")
+    if scratch.get("version") != "scratch_linear_v1":
+        raise ValueError("Unsupported scratch-linear artifact version")
+    if scratch.get("target") != "target_volume_h1":
+        raise ValueError("Step 11 must demonstrate next-window volume regression")
+    if scratch.get("availability_column") != "target_volume_h1_available":
+        raise ValueError("Scratch-linear availability column is inconsistent")
+    if scratch.get("horizon_within_split_column") != (
+        "target_within_split_h1"
+    ):
+        raise ValueError("Scratch-linear horizon boundary column is inconsistent")
+    subset = scratch.get("training_subset", {})
+    if subset.get("method") != "earliest_chronological":
+        raise ValueError("Scratch-linear subset must be earliest chronological")
+    if int(subset.get("row_limit", 0)) <= 0:
+        raise ValueError("Scratch-linear training row limit must be positive")
+    _validate_optimizer(scratch.get("optimizer", {}), "optimizer")
+    check = scratch.get("gradient_check", {})
+    for name in ("epsilon", "absolute_tolerance", "relative_tolerance"):
+        _positive_number(check, name)
+    proof = scratch.get("synthetic_proof", {})
+    _validate_optimizer(proof, "synthetic proof")
+    if int(proof.get("rows", 0)) <= int(proof.get("features", 0)):
+        raise ValueError("Synthetic proof needs more rows than features")
+    if int(proof.get("features", 0)) <= 0:
+        raise ValueError("Synthetic proof feature count must be positive")
+    _positive_number(proof, "coefficient_tolerance")
+
+
 def load_model_config(settings: Settings) -> dict[str, Any]:
     """Load and fail closed on an invalid Step 10 modelling configuration."""
 
@@ -163,4 +212,5 @@ def load_model_config(settings: Settings) -> dict[str, Any]:
     _validate_split(config)
     _validate_cv(config)
     _validate_preprocessing(config)
+    _validate_scratch_linear(config)
     return config

@@ -395,6 +395,26 @@ Demonstrate the mathematics behind regression.
 - Gradient check passes within tolerance.
 - Loss decreases on synthetic and real subset.
 - Results are reproducible.
+
+### Proven Step 11 procedure
+
+- `config/models.yaml` fixes `scratch_linear_v1` to next-window volume, the
+  earliest 25,000 eligible training rows, a seeded full-batch optimizer, and
+  explicit finite-difference and synthetic-recovery tolerances.
+- `flowcast train-scratch-linear` hash-verifies Step 10, proves default test
+  access is rejected, transforms the identical training/validation rows once,
+  and fits both the direct NumPy loop and scikit-learn LinearRegression.
+- Prediction `X @ w + b`, MSE, analytical gradients, central finite
+  differences, seeded initialization, convergence tracking, and stopping are
+  visible in `flowcast.modelling.scratch_linear`; no modelling-library fit call
+  participates in the scratch result.
+- All weights and the bias pass numerical gradient checks, and a noiseless
+  synthetic problem must recover the known solution before FlowCast data loads.
+- Machine-readable metrics, full convergence history, both coefficient sets,
+  a reloadable JSON coefficient model, validation predictions, and generated
+  Markdown are persisted beneath versioned artifact directories with hashes.
+- Step 11 validation metrics demonstrate the implementation only. They do not
+  select a production model, report a test result, or change the frozen split.
 ---
 ## Step 12 - Train Classical Regression Models
 ### Goal

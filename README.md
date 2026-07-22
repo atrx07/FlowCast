@@ -13,7 +13,7 @@ learning and a from-scratch recurrent neural network.
 ## Current status
 
 Last verified on 22 July 2026. Milestones M0-M4 are complete and M5 is in
-progress. Steps 00-10 now
+progress. Steps 00-11 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -23,10 +23,15 @@ reconciliations, 67 contextual slices, six inspected figures, machine-readable
 statistics, a generated report, and a notebook that runs top-to-bottom. The
 evaluation layer freezes 5,074/1,087/1,087 train/validation/test timestamps,
 five horizon-gapped training CV folds, four training-only preprocessors, and a
-default-sealed test partition. All 98 tests pass. Step 11, the from-scratch
-NumPy linear-regression baseline, is the immediate next gate. Trained forecast
-models, inference, confidence, report export services, and the dashboard have
-not begun.
+default-sealed test partition. Step 11, the from-scratch NumPy linear-regression
+baseline, now includes explicit prediction, MSE,
+analytical gradients, central finite-difference checks, deterministic synthetic
+recovery, and a real-data comparison on 27,150 validation rows. The scratch
+model converged after 4,153 updates with validation RMSE 86.93 versus 80.87 for
+scikit-learn on identical inputs; test remained sealed. All 106 tests pass.
+Step 12 multi-target, multi-horizon classical regression is the immediate next
+gate. Production model selection, inference, confidence, report export
+services, and the dashboard have not begun.
 
 ## Delivery timeline
 
@@ -34,7 +39,7 @@ not begun.
 |---|---|---|
 | Before Week 1 | M0 governance and plan | Complete |
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
-| Week 2 | M5 classical machine learning | In progress - Step 10 complete; Step 11 next |
+| Week 2 | M5 classical machine learning | In progress - Steps 10-11 complete; Step 12 next |
 | Week 3 | M6 recurrent deep learning and confidence | Not started |
 | Week 4 | M7 dashboard, M8 reproducibility and delivery | Not started |
 
@@ -55,6 +60,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli prepare-data
 .\.venv\Scripts\python.exe -m flowcast.cli eda
 .\.venv\Scripts\python.exe -m flowcast.cli prepare-modeling
+.\.venv\Scripts\python.exe -m flowcast.cli train-scratch-linear
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 

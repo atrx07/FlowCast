@@ -1,0 +1,178 @@
+{
+  "artifacts": {
+    "coefficients": {
+      "bytes": 3448,
+      "path": "artifacts/metrics/scratch_linear_v1/coefficients.csv",
+      "sha256": "6f64a0f6e060190d69add70215ce79fb60c46092112cbcd5d6c631454e2ed72d"
+    },
+    "convergence": {
+      "bytes": 137529,
+      "path": "artifacts/metrics/scratch_linear_v1/convergence.csv",
+      "sha256": "f674728b98451ef1f73200fda7bd70c29e944fff40c6acf3f99cc20989736ab2"
+    },
+    "model": {
+      "bytes": 4016,
+      "path": "artifacts/models/scratch_linear_v1/model.json",
+      "sha256": "a0af8e3979ce6ddc836d70245445fcd52b51581c1c2fa06b4edd49c5bf8cce39"
+    },
+    "report": {
+      "bytes": 2152,
+      "path": "artifacts/metrics/scratch_linear_v1/summary.md",
+      "sha256": "5a473fe6b0c9459584a63c983af0883a1e25d19f9f098c3992b81e58d8d24d67"
+    },
+    "validation_predictions": {
+      "bytes": 605805,
+      "path": "artifacts/predictions/scratch_linear_v1/validation.parquet",
+      "sha256": "73f6785f2f9f499b1c56378e8f84df74f8a36c21a9ab83ac1106e3a1a29fc944"
+    }
+  },
+  "checks": [
+    {
+      "name": "central_gradient_check",
+      "passed": true
+    },
+    {
+      "name": "synthetic_parameter_recovery",
+      "passed": true
+    },
+    {
+      "name": "flowcast_loss_decreased",
+      "passed": true
+    },
+    {
+      "name": "identical_estimator_rows",
+      "passed": true
+    },
+    {
+      "name": "test_partition_sealed",
+      "passed": true
+    }
+  ],
+  "configuration": {
+    "base": {
+      "bytes": 792,
+      "path": "config/base.yaml",
+      "sha256": "c2740c43017fa7fa802d08cb84967490c81d64968fece669ca42af0f62fa08ad"
+    },
+    "models": {
+      "bytes": 2308,
+      "path": "config/models.yaml",
+      "sha256": "94adf467adca6b71665ac0c2579a34d93643fba36bf12b14317b944fd6d3d536"
+    },
+    "seed": 42
+  },
+  "contract_version": "scratch_linear_v1",
+  "gradient_check": {
+    "absolute_tolerance": 1e-06,
+    "epsilon": 1e-06,
+    "maximum_absolute_error": 2.6421437260282232e-09,
+    "maximum_relative_error": 3.3878532350969117e-09,
+    "method": "central_finite_difference",
+    "parameter_count": 6,
+    "passed": true,
+    "relative_tolerance": 1e-05
+  },
+  "input_modeling": {
+    "assignments": {
+      "bytes": 354856,
+      "path": "data/processed/split_preprocessing_v1/assignments.parquet",
+      "sha256": "dd30fe7a475c049f9f981374ee3c97533a7b2270b7ef8336ea5be37cf2f55892"
+    },
+    "feature_schema": {
+      "bytes": 73319,
+      "path": "artifacts/features/split_preprocessing_v1/feature_schema.json",
+      "sha256": "204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453"
+    },
+    "linear_preprocessor": {
+      "bytes": 3418,
+      "path": "artifacts/models/split_preprocessing_v1/linear.joblib",
+      "sha256": "8550eba7e08b44b14e6df1d48afac22494da94746a3ff352c389ff76a23ccd92"
+    },
+    "summary": {
+      "bytes": 76872,
+      "path": "artifacts/features/split_preprocessing_v1/summary.json",
+      "sha256": "bd7da1ee940b553defec116362c136ffb4d1cd3d1cfac566a7c8ba701ce474d4"
+    },
+    "version": "split_preprocessing_v1"
+  },
+  "libraries": {
+    "numpy": "2.3.3",
+    "pandas": "3.0.3",
+    "scikit_learn": "1.9.0"
+  },
+  "limitations": [
+    "This Step 11 slice demonstrates the mathematics on next-window volume only.",
+    "The earliest eligible training subset is bounded for an auditable full-batch gradient loop.",
+    "Validation metrics are not final hold-out metrics and do not select a production model.",
+    "The final test partition remains sealed until Step 12 choices are frozen."
+  ],
+  "metrics": {
+    "coefficient_rmse": 37.2262162201,
+    "prediction_rmse_between_estimators": 32.1061509179,
+    "scratch": {
+      "mae": 62.9818168446,
+      "mape_nonzero_rows": 27150,
+      "mape_percent": 18.2032233855,
+      "mape_zero_actual_rows": 0,
+      "r_squared": 0.9026817634,
+      "rmse": 86.9331070892,
+      "rows": 27150
+    },
+    "sklearn": {
+      "mae": 59.1633814182,
+      "mape_nonzero_rows": 27150,
+      "mape_percent": 16.5848505354,
+      "mape_zero_actual_rows": 0,
+      "r_squared": 0.9157783908,
+      "rmse": 80.8723111105,
+      "rows": 27150
+    },
+    "split": "validation"
+  },
+  "purpose": "mathematical_verification_not_model_selection",
+  "synthetic_proof": {
+    "bias_absolute_error": 6.849574740730446e-09,
+    "coefficient_tolerance": 1e-05,
+    "converged": true,
+    "features": 5,
+    "final_loss": 7.938966311067464e-16,
+    "initial_loss": 10.594295221245458,
+    "iterations_completed": 107,
+    "loss_reduction_ratio": 7.49362382798897e-17,
+    "maximum_coefficient_error": 1.988712394762615e-08,
+    "passed": true,
+    "rows": 256
+  },
+  "target": {
+    "availability_column": "target_volume_h1_available",
+    "horizon_minutes": 30,
+    "horizon_windows": 1,
+    "name": "target_volume_h1",
+    "within_split_column": "target_within_split_h1"
+  },
+  "test_partition": {
+    "default_access_rejected": true,
+    "metrics_calculated": false,
+    "rows_loaded": 0
+  },
+  "training": {
+    "converged": true,
+    "eligible_training_rows": 126825,
+    "final_loss": 6716.115997965631,
+    "initial_loss": 278398.0055897584,
+    "input_feature_count": 62,
+    "iterations_completed": 4153,
+    "output_feature_count": 64,
+    "same_rows_for_both_estimators": true,
+    "subset_method": "earliest_chronological",
+    "train_road_count": 25,
+    "train_rows": 25000,
+    "train_timestamp_end": "2025-01-21T19:30:00+05:30",
+    "train_timestamp_start": "2025-01-01T00:00:00+05:30",
+    "validation_road_count": 25,
+    "validation_rows": 27150,
+    "validation_timestamp_end": "2025-05-09T07:30:00+05:30",
+    "validation_timestamp_start": "2025-04-16T17:00:00+05:30"
+  },
+  "version": "scratch_linear_v1"
+}

@@ -383,34 +383,34 @@
   },
   "figures": {
     "class_balance": {
-      "bytes": 15605,
+      "bytes": 41216,
       "path": "artifacts/figures/eda_v1/class_balance.png",
-      "sha256": "a786d16b3f85c070f77aa75be53993b6b5d27f7d6c5124009944fad5071fbd30"
+      "sha256": "cd8a5f39d4099af277525c2a524d7ea373e8ad03117a42bec4bc3ccd59b8f9a5"
     },
     "correlation_heatmap": {
-      "bytes": 43680,
+      "bytes": 130131,
       "path": "artifacts/figures/eda_v1/correlation_heatmap.png",
-      "sha256": "e415a6caf2db2edfddd97fda4fe574f6433c95419925b3abec821b2e2bc7f53e"
+      "sha256": "0a2665407bf1d18e65dac561f0365ed9c7a936ab3ebf318a4a19dddc9d53da5a"
     },
     "hourly_profiles": {
-      "bytes": 16737,
+      "bytes": 95606,
       "path": "artifacts/figures/eda_v1/hourly_profiles.png",
-      "sha256": "84bd5c75da4bbe4a74cd7c6837600e0040ec0e5579da49eb6eaa0424ebe9f751"
+      "sha256": "118c340d5bfa95ecb4d6b1758d03d0b82134e842d389f81e3a268c3b860624dd"
     },
     "road_comparison": {
-      "bytes": 27141,
+      "bytes": 58467,
       "path": "artifacts/figures/eda_v1/road_comparison.png",
-      "sha256": "bcda5d5741f7bc00a907874288aaa73b5ca1ccbed7c3bcac3161cbb4356235c2"
+      "sha256": "035f9d5cb66a382bf72626ecea9b3a68d914abe8436d79e6eb95381ecf8f30ad"
     },
     "traffic_distributions": {
-      "bytes": 22172,
+      "bytes": 91121,
       "path": "artifacts/figures/eda_v1/traffic_distributions.png",
-      "sha256": "f910f77760559cd54f62948208e625b1fdc09fd7a0720f3d5dac86e454ecb73d"
+      "sha256": "03148588235bbf8b8628479e9d7b55dfc21c3280882b197eb173dd27ac9486ff"
     },
     "weather_traffic": {
-      "bytes": 12661,
+      "bytes": 39609,
       "path": "artifacts/figures/eda_v1/weather_traffic.png",
-      "sha256": "c5b90a8682ad80bf3c0e853ad1c046d966e83fd392ab5b9b4caa4be478a3bc62"
+      "sha256": "8207806de430ea7595fa04d44146bd257948acdbf7001ee5b292605b55f0d463"
     }
   },
   "findings": [

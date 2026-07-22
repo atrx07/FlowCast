@@ -16,6 +16,7 @@ from flowcast.features.pipeline import run_feature_engineering
 from flowcast.features.processed_pipeline import run_processed_data
 from flowcast.logging_config import configure_logging
 from flowcast.modelling.pipeline import run_modeling_prep
+from flowcast.modelling.regression import run_scratch_linear
 from flowcast.settings import load_settings
 
 
@@ -121,6 +122,18 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Versioned split/preprocessing artifact directory "
             "(default: split_preprocessing_v1)."
+        ),
+    )
+    scratch_linear = subparsers.add_parser(
+        "train-scratch-linear",
+        help="Prove NumPy gradient descent against sklearn on frozen data.",
+    )
+    scratch_linear.add_argument(
+        "--version",
+        default=None,
+        help=(
+            "Versioned scratch-linear artifact directory "
+            "(default: scratch_linear_v1)."
         ),
     )
     return parser
@@ -241,6 +254,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             partitions["test"]["row_count"],
             result.summary["preprocessing"]["feature_count"],
             len(result.preprocessor_paths),
+        )
+        return 0
+    if args.command == "train-scratch-linear":
+        result = run_scratch_linear(settings, version=args.version)
+        metrics = result.summary["metrics"]
+        logger.info("Scratch linear proof complete: %s", result.summary_path)
+        logger.info("Generated proof report: %s", result.report_path)
+        logger.info(
+            "train=%s validation=%s iterations=%s scratch_rmse=%.4f sklearn_rmse=%.4f",
+            result.summary["training"]["train_rows"],
+            result.summary["training"]["validation_rows"],
+            result.summary["training"]["iterations_completed"],
+            metrics["scratch"]["rmse"],
+            metrics["sklearn"]["rmse"],
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")

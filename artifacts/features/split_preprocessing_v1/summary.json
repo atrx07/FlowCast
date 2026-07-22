@@ -81,9 +81,9 @@
       "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
     },
     "models": {
-      "bytes": 1584,
+      "bytes": 2308,
       "path": "config/models.yaml",
-      "sha256": "08d822505dc117a7efb222ab5a517e4d5b8a7a95e4b68f613ae24aa8423bd1c4"
+      "sha256": "94adf467adca6b71665ac0c2579a34d93643fba36bf12b14317b944fd6d3d536"
     }
   },
   "contract_version": "split_preprocessing_v1",
@@ -159,9 +159,9 @@
     "version": "split_preprocessing_v1"
   },
   "input_eda_summary": {
-    "bytes": 30917,
+    "bytes": 30918,
     "path": "artifacts/reports/eda_v1/summary.json",
-    "sha256": "633f7318723ce1f9c3d383b9a76dac9ea4c0db36e08316b8dd6449f4256549f7"
+    "sha256": "cd78acf92fdca2006a86732ae1ceda70b3c7f425855ce9de4f335bf487da9fec"
   },
   "input_feature_manifest": {
     "bytes": 19836,

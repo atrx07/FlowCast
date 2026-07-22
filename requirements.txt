@@ -1,4 +1,4 @@
-# Direct dependencies active through Milestone M5 Step 10.
+# Direct dependencies active through Milestone M5 Step 11.
 numpy==2.3.3
 pandas==3.0.3
 pyarrow==25.0.0

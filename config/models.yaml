@@ -65,3 +65,32 @@ preprocessing:
     recurrent:
       numeric_scaling: standard
       bounded_scaling: minmax
+
+scratch_linear:
+  contract_version: scratch_linear_v1
+  version: scratch_linear_v1
+  target: target_volume_h1
+  availability_column: target_volume_h1_available
+  horizon_within_split_column: target_within_split_h1
+  training_subset:
+    method: earliest_chronological
+    row_limit: 25000
+  optimizer:
+    learning_rate: 0.04
+    max_iterations: 5000
+    tolerance: 1.0e-6
+    patience: 25
+    initialization_scale: 0.01
+  gradient_check:
+    epsilon: 1.0e-6
+    absolute_tolerance: 1.0e-6
+    relative_tolerance: 1.0e-5
+  synthetic_proof:
+    rows: 256
+    features: 5
+    learning_rate: 0.1
+    max_iterations: 1000
+    tolerance: 1.0e-12
+    patience: 25
+    initialization_scale: 0.01
+    coefficient_tolerance: 1.0e-5
