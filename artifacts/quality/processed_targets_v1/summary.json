@@ -1,0 +1,213 @@
+{
+  "configuration": {
+    "base": {
+      "bytes": 670,
+      "path": "config/base.yaml",
+      "sha256": "bd7deb2688c5c6f21731c3251189d0bc9a03b27e50dbdae3a45f8e34f467e20c"
+    },
+    "features": {
+      "bytes": 1250,
+      "path": "config/features.yaml",
+      "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
+    }
+  },
+  "contract_version": "multi_horizon_targets_v1",
+  "dataset": {
+    "duplicate_output_keys": 0,
+    "feature_column_count": 144,
+    "input_rows": 181200,
+    "manifest_artifact": {
+      "bytes": 31747,
+      "path": "artifacts/features/processed_targets_v1/manifest.json",
+      "sha256": "d5651a8a4354f3f352dbda20009605299e5df9ce8433341da4197540e7493eb8"
+    },
+    "model_candidate_feature_count": 62,
+    "output_rows": 181200,
+    "output_unique_keys": 181200,
+    "processed_artifact": {
+      "bytes": 21813624,
+      "path": "data/processed/processed_targets_v1/dataset.parquet",
+      "sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4"
+    },
+    "road_count": 25,
+    "row_count_change": 0,
+    "target_count": 20,
+    "target_coverage": {
+      "target_accident_h1": {
+        "available_rows": 176676,
+        "negative_rows": 175024,
+        "null_target_rows": 4524,
+        "positive_rows": 1652,
+        "unavailable_rows": 4524
+      },
+      "target_accident_h2": {
+        "available_rows": 176651,
+        "negative_rows": 174999,
+        "null_target_rows": 4549,
+        "positive_rows": 1652,
+        "unavailable_rows": 4549
+      },
+      "target_accident_h3": {
+        "available_rows": 176628,
+        "negative_rows": 174976,
+        "null_target_rows": 4572,
+        "positive_rows": 1652,
+        "unavailable_rows": 4572
+      },
+      "target_accident_h4": {
+        "available_rows": 176604,
+        "negative_rows": 174952,
+        "null_target_rows": 4596,
+        "positive_rows": 1652,
+        "unavailable_rows": 4596
+      },
+      "target_congestion_h1": {
+        "available_rows": 181175,
+        "class_counts": {
+          "Free-flow": 111282,
+          "Heavy": 16721,
+          "Moderate": 43168,
+          "Severe": 10004
+        },
+        "null_target_rows": 25,
+        "unavailable_rows": 25
+      },
+      "target_congestion_h2": {
+        "available_rows": 181150,
+        "class_counts": {
+          "Free-flow": 111257,
+          "Heavy": 16721,
+          "Moderate": 43168,
+          "Severe": 10004
+        },
+        "null_target_rows": 50,
+        "unavailable_rows": 50
+      },
+      "target_congestion_h3": {
+        "available_rows": 181125,
+        "class_counts": {
+          "Free-flow": 111232,
+          "Heavy": 16721,
+          "Moderate": 43168,
+          "Severe": 10004
+        },
+        "null_target_rows": 75,
+        "unavailable_rows": 75
+      },
+      "target_congestion_h4": {
+        "available_rows": 181100,
+        "class_counts": {
+          "Free-flow": 111207,
+          "Heavy": 16721,
+          "Moderate": 43168,
+          "Severe": 10004
+        },
+        "null_target_rows": 100,
+        "unavailable_rows": 100
+      },
+      "target_speed_h1": {
+        "available_rows": 181175,
+        "null_target_rows": 25,
+        "unavailable_rows": 25
+      },
+      "target_speed_h2": {
+        "available_rows": 181150,
+        "null_target_rows": 50,
+        "unavailable_rows": 50
+      },
+      "target_speed_h3": {
+        "available_rows": 181125,
+        "null_target_rows": 75,
+        "unavailable_rows": 75
+      },
+      "target_speed_h4": {
+        "available_rows": 181100,
+        "null_target_rows": 100,
+        "unavailable_rows": 100
+      },
+      "target_travel_time_h1": {
+        "available_rows": 181175,
+        "null_target_rows": 25,
+        "unavailable_rows": 25
+      },
+      "target_travel_time_h2": {
+        "available_rows": 181150,
+        "null_target_rows": 50,
+        "unavailable_rows": 50
+      },
+      "target_travel_time_h3": {
+        "available_rows": 181125,
+        "null_target_rows": 75,
+        "unavailable_rows": 75
+      },
+      "target_travel_time_h4": {
+        "available_rows": 181100,
+        "null_target_rows": 100,
+        "unavailable_rows": 100
+      },
+      "target_volume_h1": {
+        "available_rows": 181175,
+        "null_target_rows": 25,
+        "unavailable_rows": 25
+      },
+      "target_volume_h2": {
+        "available_rows": 181150,
+        "null_target_rows": 50,
+        "unavailable_rows": 50
+      },
+      "target_volume_h3": {
+        "available_rows": 181125,
+        "null_target_rows": 75,
+        "unavailable_rows": 75
+      },
+      "target_volume_h4": {
+        "available_rows": 181100,
+        "null_target_rows": 100,
+        "unavailable_rows": 100
+      }
+    },
+    "timestamp_coverage": {
+      "1": {
+        "available_rows": 181175,
+        "expected_trailing_unavailable_rows": 25,
+        "horizon_minutes": 30,
+        "unavailable_rows": 25
+      },
+      "2": {
+        "available_rows": 181150,
+        "expected_trailing_unavailable_rows": 50,
+        "horizon_minutes": 60,
+        "unavailable_rows": 50
+      },
+      "3": {
+        "available_rows": 181125,
+        "expected_trailing_unavailable_rows": 75,
+        "horizon_minutes": 90,
+        "unavailable_rows": 75
+      },
+      "4": {
+        "available_rows": 181100,
+        "expected_trailing_unavailable_rows": 100,
+        "horizon_minutes": 120,
+        "unavailable_rows": 100
+      }
+    }
+  },
+  "input_artifact": {
+    "bytes": 17198757,
+    "path": "data/interim/engineered_features_v1/features.parquet",
+    "sha256": "0ae1bb32a9a53b05f0ac61d393f005785d798490fd33463ba5ffec43da100753"
+  },
+  "input_feature_version": "engineered_features_v1",
+  "input_manifest": {
+    "bytes": 19836,
+    "path": "artifacts/features/engineered_features_v1/manifest.json",
+    "sha256": "364816b402b554c82698251f8af05edf6e3f7a23de80299d743784d07e892739"
+  },
+  "input_summary": {
+    "bytes": 13069,
+    "path": "artifacts/quality/engineered_features_v1/summary.json",
+    "sha256": "d5f1dc28d482d9b6b32b3243700540dd64807f28379925ddcd54fca5970e8115"
+  },
+  "processed_version": "processed_targets_v1"
+}

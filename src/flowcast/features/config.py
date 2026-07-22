@@ -12,6 +12,13 @@ from flowcast.settings import Settings
 
 
 _SAFE_NAME = re.compile(r"^[a-z][a-z0-9_]*$")
+_REQUIRED_TARGETS = {
+    "volume": ("traffic_volume", "regression"),
+    "speed": ("avg_speed", "regression"),
+    "travel_time": ("travel_time", "regression"),
+    "congestion": ("congestion_level", "classification_multiclass"),
+    "accident": ("accident_count", "classification_binary"),
+}
 
 
 def _clock(value: str) -> time:
@@ -70,4 +77,26 @@ def load_feature_config(settings: Settings) -> dict[str, Any]:
         raise ValueError("Capacity windows_per_hour must be positive")
     if int(config["calendar"]["event_proximity_days"]) < 0:
         raise ValueError("Event proximity must not be negative")
+    targets = config["targets"]
+    if targets.get("contract_version") != "multi_horizon_targets_v1":
+        raise ValueError("Unsupported multi-horizon target contract version")
+    if targets.get("processed_version") != settings.processed_version:
+        raise ValueError("Processed target version does not match base settings")
+    if int(targets.get("cadence_minutes", 0)) != 30:
+        raise ValueError("Target cadence must be 30 minutes")
+    definitions = targets.get("definitions", [])
+    observed: dict[str, tuple[str, str]] = {}
+    for definition in definitions:
+        name = str(definition.get("name", ""))
+        if not _SAFE_NAME.fullmatch(name) or name in observed:
+            raise ValueError(f"Invalid or duplicate target name: {name}")
+        observed[name] = (
+            str(definition.get("source_column", "")),
+            str(definition.get("task", "")),
+        )
+    if observed != _REQUIRED_TARGETS:
+        raise ValueError("Target definitions do not match the required outputs")
+    accident = next(item for item in definitions if item["name"] == "accident")
+    if accident.get("availability_source") != "_accident_observed":
+        raise ValueError("Accident targets must use observed-incident availability")
     return config

@@ -1,14 +1,14 @@
 {
   "configuration": {
     "base": {
-      "bytes": 626,
+      "bytes": 670,
       "path": "config/base.yaml",
-      "sha256": "0e1f43d7c438b20bc44ab8ea50d48029a9de7a175434918d6b76e0ba49c3943a"
+      "sha256": "bd7deb2688c5c6f21731c3251189d0bc9a03b27e50dbdae3a45f8e34f467e20c"
     },
     "features": {
-      "bytes": 650,
+      "bytes": 1250,
       "path": "config/features.yaml",
-      "sha256": "47f6face830258facff241d7d7b5d787a4c5f7503d2a6ca6c8de0c074f264f42"
+      "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
     }
   },
   "contract_version": "explanatory_features_v1",
@@ -492,9 +492,9 @@
     "history_unavailable_rows": 1200,
     "input_rows": 181200,
     "manifest_artifact": {
-      "bytes": 19835,
+      "bytes": 19836,
       "path": "artifacts/features/engineered_features_v1/manifest.json",
-      "sha256": "9f8efd6283d095320c339460e0f774b70d1d22c7e1d08dcb0ce9a43c6fe2851f"
+      "sha256": "364816b402b554c82698251f8af05edf6e3f7a23de80299d743784d07e892739"
     },
     "output_rows": 181200,
     "output_unique_keys": 181200,
@@ -511,6 +511,6 @@
   "input_summary": {
     "bytes": 2642,
     "path": "artifacts/quality/merged_sources_v1/summary.json",
-    "sha256": "1b1283987730c459a549020bb9024121640f70e4313a0886549b5077848b9f0e"
+    "sha256": "ccd4b76b05979b0f90b27fc4275e711331dedf11b5e3116ab32a8b3b380c16af"
   }
 }

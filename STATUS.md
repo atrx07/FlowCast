@@ -4,100 +4,102 @@
 
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-22
-- **Current milestone:** M3 - Features and targets (in progress)
-- **Current step:** Steps 01-07 complete; Step 08 not started
-- **Overall state:** Step 07 leakage-safe explanatory feature gate passed
+- **Current milestone:** M3 - Features and targets (complete)
+- **Current step:** Steps 01-08 complete; Step 09 next
+- **Overall state:** Analysis-ready processed-data gate passed
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
 
-FlowCast has a reproducible Python 3.11 data pipeline from immutable raw inputs
-through a hash-verified, cardinality-safe merged table and a deterministic
-explanatory-feature artifact. Milestones M0, M1, and M2 are complete. M3 is in
-progress with its feature slice complete and future target construction next.
+FlowCast now has a reproducible Python 3.11 data pipeline from immutable raw
+inputs through validation, cleaning, cardinality-safe merging, leakage-safe
+features, and exact multi-horizon future targets. Milestones M0 through M3 are
+complete.
 
-The feature table retains all 181,200 road/half-hour keys and all source,
-validation, cleaning, imputation, and join lineage. It adds 62 documented
-model-candidate features without constructing a future target or freezing a
-split. EDA, models, inference, confidence, reporting services, and the
-Streamlit dashboard have not begun.
+The versioned processed table retains all 181,200 road/half-hour origins and
+all 144 input feature/source/lineage columns. It appends four exact future
+timestamps, 20 target columns, and 20 target-specific availability masks for a
+total of 188 columns. EDA, modelling, inference, confidence, reporting
+services, and the Streamlit dashboard have not begun.
 
-## 2. Step 07 Implementation
+## 2. Step 08 Implementation
 
-- Added versioned `explanatory_features_v1` configuration and
-  `engineered_features_v1` artifacts.
-- Added a hash-verified merged-input boundary that checks the current base and
-  cleaning configurations, merge summary, Parquet byte count/SHA-256, row
-  count, and unique key contract before reading data.
-- Added local-hour and day-of-week cyclical encodings, weekend flags, named
-  morning/evening peak flags, and a combined peak flag.
-- Added within-road volume and speed lags at 1, 2, and 48 windows.
-- Added four/eight-window rolling means and sample standard deviations after a
-  one-window shift, with full-width minimum history.
-- Added half-hour capacity, V/C ratio, capacity headroom, rain and
-  low-visibility flags, weather-category indicators, and temperature bands.
-- Added holiday x peak, days to the nearest scheduled event, one-day event
-  proximity, and preserved event/roadwork inputs.
-- Retained vehicle shares and selected missingness, repair, inserted-window,
-  and normalization lineage as model-candidate features.
-- Added `history_available`; no origin is discarded because history is
-  unavailable.
-- Added `flowcast engineer-features [--version VERSION]`, deterministic
-  Parquet/JSON/Markdown artifacts, and unit/full-source leakage tests.
-- Updated README status/timeline and added the user-approved governance rule
-  requiring README progress to be current before every push.
+- Added the versioned `multi_horizon_targets_v1` contract and
+  `processed_targets_v1` dataset version.
+- Added hash-verified Step 07 input loading that validates current base and
+  feature configurations, quality summary, feature manifest, Parquet byte
+  count/SHA-256, row/key cardinality, and manifest dtypes before reading.
+- Added same-road future timestamps and volume, speed, travel-time, congestion,
+  and accident targets for 30, 60, 90, and 120 minutes.
+- Added one availability mask per target and horizon while retaining every
+  prediction origin.
+- Defined accident risk as shifted future `accident_count > 0` only when the
+  shifted `_accident_observed` flag is true. Reconstructed unobserved windows
+  remain null and are never converted to negative labels.
+- Preserved all explanatory features and lineage exactly; the processed runner
+  fails if target creation changes an input column.
+- Added a complete column/target schema manifest, coverage summary, generated
+  Markdown report, and `flowcast prepare-data [--version VERSION]`.
+- Added focused and full-source tests for exact timestamps/shifts, road
+  isolation, availability, accident unknowns, manifest coverage, determinism,
+  and hash-tamper rejection.
 
 ## 3. Produced Artifacts
 
 ```text
-data/interim/engineered_features_v1/
-  features.parquet
+data/processed/processed_targets_v1/
+  dataset.parquet
 
-artifacts/features/engineered_features_v1/
+artifacts/features/processed_targets_v1/
   manifest.json
 
-artifacts/quality/engineered_features_v1/
+artifacts/quality/processed_targets_v1/
   summary.json
   summary.md
 ```
 
-Generated Parquet remains ignored by Git. The feature manifest, canonical
-quality JSON, and generated Markdown report are tracked.
+Generated Parquet remains ignored by Git. The target/schema manifest,
+canonical quality JSON, and generated Markdown report are tracked.
 
-## 4. Step 07 Data Evidence
+## 4. Step 08 Data Evidence
 
 | Check | Verified result |
 |---|---:|
 | Input rows / keys | 181,200 / 181,200 |
 | Output rows / keys | 181,200 / 181,200 |
 | Row-count change / duplicate keys | 0 / 0 |
+| Roads | 25 |
+| Preserved input columns | 144 |
 | Model-candidate features | 62 |
-| History-available rows | 180,000 |
-| History-unavailable rows | 1,200 |
-| History-unavailable origins per road | 48 |
-| Peak rows | 45,300 |
-| Rain rows | 7,166 |
-| Low-visibility rows | 954 |
-| Event-proximity rows | 21,600 |
-| Holiday x peak rows | 1,800 |
-| Cool / mild / warm rows | 48,878 / 122,362 / 9,960 |
+| Future timestamp columns | 4 |
+| Target definitions / masks | 20 / 20 |
+| Total processed columns | 188 |
 
-Expected history nulls are fully accounted for: lag-1 has 25 nulls, lag-2 has
-50, lag-48 has 1,200, four-window rolling features have 100, and eight-window
-rolling features have 200. Volume and speed follow the same counts. All other
-manifest features have zero nulls.
+| Horizon | Minutes | Standard targets available | Tail unavailable | Accident available | Accident unavailable | Accident positive |
+|---:|---:|---:|---:|---:|---:|---:|
+| h1 | 30 | 181,175 | 25 | 176,676 | 4,524 | 1,652 |
+| h2 | 60 | 181,150 | 50 | 176,651 | 4,549 | 1,652 |
+| h3 | 90 | 181,125 | 75 | 176,628 | 4,572 | 1,652 |
+| h4 | 120 | 181,100 | 100 | 176,604 | 4,596 | 1,652 |
+
+Volume, speed, travel time, and congestion have only the exact 25 x horizon
+corridor-tail unavailable rows. Accident availability additionally respects
+the 4,499 source windows whose incident status is unknown; overlap with the
+road tails is accounted per horizon.
 
 ## 5. Artifact Evidence
 
 | Artifact | Bytes | SHA-256 |
 |---|---:|---|
-| Feature Parquet | 17,198,757 | `0ae1bb32a9a53b05f0ac61d393f005785d798490fd33463ba5ffec43da100753` |
-| Feature manifest | 19,835 | `9f8efd6283d095320c339460e0f774b70d1d22c7e1d08dcb0ce9a43c6fe2851f` |
-| Quality JSON | 13,068 | `f4b706215beb02f3f5db4574954b49fc2bad06efed1fec55d40bd2ffe223275f` |
-| Quality Markdown | 1,390 | `488fce040c6566d7181b1a912faac11a9f1d577ed3a48833b8f750979565e1a2` |
+| Processed Parquet | 21,813,624 | `f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4` |
+| Target/schema manifest | 31,747 | `d5651a8a4354f3f352dbda20009605299e5df9ce8433341da4197540e7493eb8` |
+| Quality JSON | 6,140 | `e5588965ce8e1ac667004e87175a34e2f330fd05c62cae463241ee8a8c6c32df` |
+| Quality Markdown | 2,017 | `3619126de26a06983160a2898c3384f59b364642d3e0839b85958dae1e613a9f` |
 
-Repeated Step 07 runs produced byte-identical Parquet, manifest, quality JSON,
-and generated Markdown.
+Repeated Step 08 runs produced byte-identical Parquet, manifest, quality JSON,
+and generated Markdown. The merge and Step 07 lineage summaries were refreshed
+after the version contracts changed; Step 07 feature Parquet content and hash
+remain unchanged.
 
 ## 6. Validation and Assurance Evidence
 
@@ -106,55 +108,58 @@ Executed with project-local CPython 3.11.9:
 ```text
 .venv/Scripts/python.exe -m flowcast.cli merge-sources
 .venv/Scripts/python.exe -m flowcast.cli engineer-features
-.venv/Scripts/python.exe -m pytest -q tests/unit/test_features.py tests/unit/test_package.py
-.venv/Scripts/python.exe -m pytest -q tests/data_contracts/test_feature_contract.py
+.venv/Scripts/python.exe -m flowcast.cli prepare-data
+.venv/Scripts/python.exe -m pytest -q tests/unit/test_targets.py tests/unit/test_features.py tests/unit/test_package.py
+.venv/Scripts/python.exe -m pytest -q tests/data_contracts/test_processed_contract.py
 .venv/Scripts/python.exe -m pytest -q
+.venv/Scripts/python.exe -m pip check
+.venv/Scripts/python.exe -m compileall -q src tests
+.venv/Scripts/python.exe -m flowcast.cli prepare-data --help
+git diff --check
 ```
 
 Verified results:
 
-- Both CLI commands exited 0; Step 07 reported 181,200 rows/keys, 62 features,
-  and 1,200 explicitly marked history-unavailable origins.
-- Focused unit/config tests: 7 passed.
-- Full-source feature contract tests: 4 passed.
-- Full suite: 66 passed in 43.06 seconds.
-- Future-row mutation left all earlier model-candidate features unchanged.
-- Segment-boundary, shift-before-roll, formula/boundary, manifest completeness,
-  input-hash rejection, and deterministic rerun tests passed.
+- All three CLI commands exited 0; `prepare-data` reported 181,200 rows/keys
+  and 20 target definitions.
+- Focused target/feature/config tests: 12 passed.
+- Full-source processed-data contract tests: 6 passed.
+- Full suite: 77 passed in 46.99 seconds.
+- Dependency check, byte compilation, CLI help smoke, and whitespace checks
+  passed.
+- Exact same-road target timestamp/value alignment passed for all horizons.
+- Input-column equality, manifest completeness, deterministic rerun, and
+  pre-read hash rejection checks passed.
 - Largest source module remains `src/flowcast/data/audit.py` at 366 physical
-  lines; the new engineering module is 350 lines and every source file remains
-  below 400 lines.
+  lines; every source file remains below 400 lines.
 
 ## 7. Decisions and Constraints
 
-- Peak periods are half-open 07:00-10:00 and 17:00-20:00 local time.
-- Rain means positive rainfall or the controlled `Rain` condition;
-  low visibility means strictly below 1,000 metres.
-- Temperature bands are left-closed: cool below 15 C, mild from 15 to below
-  25 C, and warm from 25 C.
-- Capacity features use `road_capacity / 2` for the half-hour denominator.
-- Scheduled events are treated as known exogenous calendar inputs. Event
-  proximity is the absolute distance to the nearest scheduled event and does
-  not read future traffic measurements.
-- Rolling standard deviation uses Pandas sample standard deviation (`ddof=1`)
-  over a complete shifted window.
-- Forecast horizons remain reserved configuration only; target columns and
-  availability masks belong exclusively to Step 08.
+- A common 181,200-row base is retained; model-specific filtering must use the
+  applicable target/horizon mask.
+- `target_timestamp_h1` through `target_timestamp_h4` are shared across target
+  families and advance by exactly 30 minutes per horizon within a road.
+- Classical model targets use normalized names such as `target_volume_h1` and
+  the corresponding `target_volume_h1_available` mask.
+- Accident targets are nullable booleans; null means label unavailable, not no
+  accident.
+- Exact split boundaries remain intentionally unfrozen until Step 09 findings
+  inform the modelling plan.
 - No dependency or technology change was required.
 
 ## 8. Risks and Unresolved Work
 
-- Step 08 must preserve the common base table and add target-specific
-  availability masks rather than globally deleting leading-history or
-  trailing-future rows.
-- Accident targets must remain unavailable when the future window has
-  `_accident_observed = false`; reconstructed windows must not become fake
-  negative incidents.
-- Exact train/validation/test boundaries remain intentionally unfrozen until
-  target coverage is measured.
-- Modelling, deep-learning, and dashboard dependency groups remain deferred.
+- Accident positives are rare: 1,652 available positives at every horizon.
+  Step 09 must characterize imbalance and Step 10 must use training-only class
+  weighting and validation-based threshold selection.
+- Congestion is imbalanced, with Free-flow dominant; EDA must quantify this by
+  road and time before preprocessing/model choices are frozen.
+- The processed Parquet is reproducible but ignored by Git, so clean rebuild
+  evidence remains required before delivery.
+- Modelling, deep learning, confidence, and dashboard dependency groups remain
+  deferred.
 
 ## 9. Next Gate
 
-Proceed only to **Step 08 - Build Multi-Horizon Targets and Processed Data**.
-The bounded action and acceptance gate are maintained in `NEXT_STEP.md`.
+Proceed only to **Step 09 - Produce Data-Quality Report and EDA**. The bounded
+action and acceptance gate are maintained in `NEXT_STEP.md`.

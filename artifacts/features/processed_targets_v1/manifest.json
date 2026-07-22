@@ -1,0 +1,1256 @@
+{
+  "cadence_minutes": 30,
+  "columns": [
+    {
+      "dtype": "str",
+      "name": "road_id",
+      "role": "key"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "timestamp",
+      "role": "key"
+    },
+    {
+      "dtype": "str",
+      "name": "road_name",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "latitude",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "longitude",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "weather_station_id",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "date",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "time",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "traffic_volume",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "vehicle_count",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "vehicle_type_dist",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "avg_speed",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "occupancy",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "congestion_level",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "travel_time",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "accident_count",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "signal_timing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "road_capacity",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "_source_file",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "_validation_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "bool",
+      "name": "_inserted_window",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "bool",
+      "name": "_accident_observed",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "traffic_volume_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "traffic_volume_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "vehicle_count_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "vehicle_count_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "avg_speed_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "avg_speed_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "occupancy_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "occupancy_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "travel_time_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "travel_time_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "signal_timing_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "signal_timing_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "vehicle_type_dist_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "vehicle_type_dist_physical_invalid",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "congestion_level_original_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "traffic_volume_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "traffic_volume_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "traffic_volume_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "traffic_volume_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "vehicle_count_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "vehicle_count_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "vehicle_count_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "vehicle_count_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "avg_speed_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "avg_speed_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "avg_speed_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "avg_speed_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "occupancy_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "occupancy_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "occupancy_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "occupancy_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "travel_time_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "travel_time_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "travel_time_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "travel_time_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "signal_timing_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "signal_timing_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "signal_timing_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "signal_timing_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "vehicle_type_dist_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "vehicle_type_dist_imputation_donor_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "vehicle_type_dist_imputation_donor_timestamp",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "vehicle_type_dist_imputation_donor_source_rows",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "share_2w",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "share_car",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "share_lcv",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "share_hcv",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "vehicle_share_original_sum",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "bool",
+      "name": "vehicle_shares_normalized",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "congestion_level_derived",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "bool",
+      "name": "congestion_level_was_derived",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "congestion_level_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "_cleaning_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "weather_hour",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us]",
+      "name": "calendar_date",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "station_id",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "weather_date",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "weather_time",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "weather_condition",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "temperature",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "rainfall",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "visibility",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "weather_source_file",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "weather_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "weather_validation_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "bool",
+      "name": "temperature_was_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "temperature_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "temperature_imputed_from_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "bool",
+      "name": "visibility_was_missing",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "visibility_imputation_method",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "visibility_imputed_from_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "weather_cleaning_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "weather_join_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int8",
+      "name": "public_holiday",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "holiday_name",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int8",
+      "name": "event_flag",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "event_name",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int8",
+      "name": "roadwork_flag",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "calendar_source_file",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "calendar_source_row",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "str",
+      "name": "calendar_validation_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "calendar_join_status",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "hour_of_day",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "hour_sin",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "hour_cos",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int8",
+      "name": "day_of_week",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "day_of_week_sin",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "day_of_week_cos",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "is_weekend",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "is_morning_peak",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "is_evening_peak",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "is_peak",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "volume_lag_1",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "volume_lag_2",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int64",
+      "name": "volume_lag_48",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "volume_rolling_mean_4",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "volume_rolling_std_4",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "volume_rolling_mean_8",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "volume_rolling_std_8",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_lag_1",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_lag_2",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_lag_48",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_rolling_mean_4",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_rolling_std_4",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_rolling_mean_8",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "speed_rolling_std_8",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "history_available",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "half_hour_capacity",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "volume_capacity_ratio",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Float64",
+      "name": "capacity_headroom",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "is_rain",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "is_low_visibility",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "weather_is_clear",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "weather_is_cloudy",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "weather_is_overcast",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "weather_is_rain",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "weather_is_fog",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "string",
+      "name": "temperature_band",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "holiday_peak",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "Int16",
+      "name": "days_to_nearest_event",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "boolean",
+      "name": "event_within_proximity",
+      "role": "feature_or_lineage"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "target_timestamp_h1",
+      "role": "target_timestamp"
+    },
+    {
+      "dtype": "Int64",
+      "name": "target_volume_h1",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_volume_h1_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_speed_h1",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_speed_h1_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_travel_time_h1",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_travel_time_h1_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "string",
+      "name": "target_congestion_h1",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_congestion_h1_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h1",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h1_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "target_timestamp_h2",
+      "role": "target_timestamp"
+    },
+    {
+      "dtype": "Int64",
+      "name": "target_volume_h2",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_volume_h2_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_speed_h2",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_speed_h2_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_travel_time_h2",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_travel_time_h2_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "string",
+      "name": "target_congestion_h2",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_congestion_h2_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h2",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h2_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "target_timestamp_h3",
+      "role": "target_timestamp"
+    },
+    {
+      "dtype": "Int64",
+      "name": "target_volume_h3",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_volume_h3_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_speed_h3",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_speed_h3_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_travel_time_h3",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_travel_time_h3_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "string",
+      "name": "target_congestion_h3",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_congestion_h3_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h3",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h3_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "datetime64[us, Asia/Kolkata]",
+      "name": "target_timestamp_h4",
+      "role": "target_timestamp"
+    },
+    {
+      "dtype": "Int64",
+      "name": "target_volume_h4",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_volume_h4_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_speed_h4",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_speed_h4_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "Float64",
+      "name": "target_travel_time_h4",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_travel_time_h4_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "string",
+      "name": "target_congestion_h4",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_congestion_h4_available",
+      "role": "target_availability"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h4",
+      "role": "target"
+    },
+    {
+      "dtype": "boolean",
+      "name": "target_accident_h4_available",
+      "role": "target_availability"
+    }
+  ],
+  "configuration": {
+    "base": {
+      "bytes": 670,
+      "path": "config/base.yaml",
+      "sha256": "bd7deb2688c5c6f21731c3251189d0bc9a03b27e50dbdae3a45f8e34f467e20c"
+    },
+    "features": {
+      "bytes": 1250,
+      "path": "config/features.yaml",
+      "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
+    }
+  },
+  "contract_version": "multi_horizon_targets_v1",
+  "feature_column_count": 144,
+  "forecast_horizons": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "input_artifact": {
+    "bytes": 17198757,
+    "path": "data/interim/engineered_features_v1/features.parquet",
+    "sha256": "0ae1bb32a9a53b05f0ac61d393f005785d798490fd33463ba5ffec43da100753"
+  },
+  "input_feature_version": "engineered_features_v1",
+  "input_manifest": {
+    "bytes": 19836,
+    "path": "artifacts/features/engineered_features_v1/manifest.json",
+    "sha256": "364816b402b554c82698251f8af05edf6e3f7a23de80299d743784d07e892739"
+  },
+  "input_summary": {
+    "bytes": 13069,
+    "path": "artifacts/quality/engineered_features_v1/summary.json",
+    "sha256": "d5f1dc28d482d9b6b32b3243700540dd64807f28379925ddcd54fca5970e8115"
+  },
+  "key_columns": [
+    "road_id",
+    "timestamp"
+  ],
+  "model_candidate_feature_count": 62,
+  "output_artifact": {
+    "bytes": 21813624,
+    "path": "data/processed/processed_targets_v1/dataset.parquet",
+    "sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4"
+  },
+  "processed_version": "processed_targets_v1",
+  "row_count": 181200,
+  "target_count": 20,
+  "targets": [
+    {
+      "availability_column": "target_volume_h1_available",
+      "availability_source": null,
+      "dtype": "Int64",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "name": "target_volume_h1",
+      "source_column": "traffic_volume",
+      "target_timestamp_column": "target_timestamp_h1",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_speed_h1_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "name": "target_speed_h1",
+      "source_column": "avg_speed",
+      "target_timestamp_column": "target_timestamp_h1",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_travel_time_h1_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "name": "target_travel_time_h1",
+      "source_column": "travel_time",
+      "target_timestamp_column": "target_timestamp_h1",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_congestion_h1_available",
+      "availability_source": null,
+      "dtype": "string",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "name": "target_congestion_h1",
+      "source_column": "congestion_level",
+      "target_timestamp_column": "target_timestamp_h1",
+      "task": "classification_multiclass",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_accident_h1_available",
+      "availability_source": "_accident_observed",
+      "dtype": "boolean",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "name": "target_accident_h1",
+      "source_column": "accident_count",
+      "target_timestamp_column": "target_timestamp_h1",
+      "task": "classification_binary",
+      "transform": "future_count_greater_than_zero",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_volume_h2_available",
+      "availability_source": null,
+      "dtype": "Int64",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "name": "target_volume_h2",
+      "source_column": "traffic_volume",
+      "target_timestamp_column": "target_timestamp_h2",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_speed_h2_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "name": "target_speed_h2",
+      "source_column": "avg_speed",
+      "target_timestamp_column": "target_timestamp_h2",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_travel_time_h2_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "name": "target_travel_time_h2",
+      "source_column": "travel_time",
+      "target_timestamp_column": "target_timestamp_h2",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_congestion_h2_available",
+      "availability_source": null,
+      "dtype": "string",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "name": "target_congestion_h2",
+      "source_column": "congestion_level",
+      "target_timestamp_column": "target_timestamp_h2",
+      "task": "classification_multiclass",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_accident_h2_available",
+      "availability_source": "_accident_observed",
+      "dtype": "boolean",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "name": "target_accident_h2",
+      "source_column": "accident_count",
+      "target_timestamp_column": "target_timestamp_h2",
+      "task": "classification_binary",
+      "transform": "future_count_greater_than_zero",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_volume_h3_available",
+      "availability_source": null,
+      "dtype": "Int64",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "name": "target_volume_h3",
+      "source_column": "traffic_volume",
+      "target_timestamp_column": "target_timestamp_h3",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_speed_h3_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "name": "target_speed_h3",
+      "source_column": "avg_speed",
+      "target_timestamp_column": "target_timestamp_h3",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_travel_time_h3_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "name": "target_travel_time_h3",
+      "source_column": "travel_time",
+      "target_timestamp_column": "target_timestamp_h3",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_congestion_h3_available",
+      "availability_source": null,
+      "dtype": "string",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "name": "target_congestion_h3",
+      "source_column": "congestion_level",
+      "target_timestamp_column": "target_timestamp_h3",
+      "task": "classification_multiclass",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_accident_h3_available",
+      "availability_source": "_accident_observed",
+      "dtype": "boolean",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "name": "target_accident_h3",
+      "source_column": "accident_count",
+      "target_timestamp_column": "target_timestamp_h3",
+      "task": "classification_binary",
+      "transform": "future_count_greater_than_zero",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_volume_h4_available",
+      "availability_source": null,
+      "dtype": "Int64",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "name": "target_volume_h4",
+      "source_column": "traffic_volume",
+      "target_timestamp_column": "target_timestamp_h4",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_speed_h4_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "name": "target_speed_h4",
+      "source_column": "avg_speed",
+      "target_timestamp_column": "target_timestamp_h4",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_travel_time_h4_available",
+      "availability_source": null,
+      "dtype": "Float64",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "name": "target_travel_time_h4",
+      "source_column": "travel_time",
+      "target_timestamp_column": "target_timestamp_h4",
+      "task": "regression",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_congestion_h4_available",
+      "availability_source": null,
+      "dtype": "string",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "name": "target_congestion_h4",
+      "source_column": "congestion_level",
+      "target_timestamp_column": "target_timestamp_h4",
+      "task": "classification_multiclass",
+      "transform": "same_road_future_shift",
+      "version": "processed_targets_v1"
+    },
+    {
+      "availability_column": "target_accident_h4_available",
+      "availability_source": "_accident_observed",
+      "dtype": "boolean",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "name": "target_accident_h4",
+      "source_column": "accident_count",
+      "target_timestamp_column": "target_timestamp_h4",
+      "task": "classification_binary",
+      "transform": "future_count_greater_than_zero",
+      "version": "processed_targets_v1"
+    }
+  ]
+}

@@ -35,3 +35,6 @@ merge:
 
 features:
   version: engineered_features_v1
+
+processed:
+  version: processed_targets_v1

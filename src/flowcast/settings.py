@@ -38,6 +38,7 @@ class Settings:
     cleaning_version: str
     merge_version: str
     feature_version: str
+    processed_version: str
     hash_chunk_size: int
 
 
@@ -69,6 +70,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     cleaning = config["cleaning"]
     merge = config["merge"]
     features = config["features"]
+    processed = config["processed"]
     return Settings(
         root=root,
         config_path=selected,
@@ -92,5 +94,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         cleaning_version=str(cleaning["version"]),
         merge_version=str(merge["version"]),
         feature_version=str(features["version"]),
+        processed_version=str(processed["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

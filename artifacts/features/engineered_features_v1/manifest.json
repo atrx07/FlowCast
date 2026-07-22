@@ -1,8 +1,8 @@
 {
   "configuration": {
-    "bytes": 650,
+    "bytes": 1250,
     "path": "config/features.yaml",
-    "sha256": "47f6face830258facff241d7d7b5d787a4c5f7503d2a6ca6c8de0c074f264f42"
+    "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
   },
   "contract_version": "explanatory_features_v1",
   "feature_count": 62,

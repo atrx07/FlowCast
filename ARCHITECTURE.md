@@ -336,16 +336,24 @@ Key: `road_id + timestamp`.
 ### 6.9 Processed feature contract
 - Sorted by `road_id, timestamp`.
 - Stable feature names and dtypes.
-- Step 07 writes `data/interim/<feature_version>/features.parquet` while Step 08
-  adds explicit target columns in `data/processed/`.
+- Step 07 writes `data/interim/engineered_features_v1/features.parquet`; Step
+  08 preserves its 144 columns exactly and writes the 188-column
+  `data/processed/processed_targets_v1/dataset.parquet`.
 - Rows without enough history are retained and marked by `history_available`;
-  target availability is added separately in Step 08.
+  each of the 20 target/horizon pairs has its own nullable target and explicit
+  boolean availability mask.
 - `artifacts/features/<feature_version>/manifest.json` records source columns,
   transforms, dtype, version, and leakage classification for every
   model-candidate feature.
 - Canonical quality JSON and generated Markdown under
   `artifacts/quality/<feature_version>/` record feature null/range counts and
   input/output/manifest hashes.
+- `prepare-data` verifies the Step 07 summary, manifest, configuration hashes,
+  Parquet hash, cardinality, and feature dtypes before target construction.
+- `artifacts/features/processed_targets_v1/manifest.json` records the complete
+  188-column schema, 20 target definitions, source/transform/horizon/dtype/mask
+  metadata, and input/output lineage. Coverage JSON and generated Markdown live
+  under `artifacts/quality/processed_targets_v1/`.
 
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
@@ -393,14 +401,19 @@ is treated as known at origin; it never reads future traffic measurements.
 For each horizon `h in {1,2,3,4}`:
 
 ```text
-target_volume_h = traffic_volume shifted by -h within road
- target_speed_h = avg_speed shifted by -h within road
- target_travel_time_h = travel_time shifted by -h within road
- target_congestion_h = congestion_level shifted by -h within road
- target_accident_h = (accident_count shifted by -h) > 0
+target_timestamp_h{h} = timestamp shifted by -h within road
+target_volume_h{h} = traffic_volume shifted by -h within road
+target_speed_h{h} = avg_speed shifted by -h within road
+target_travel_time_h{h} = travel_time shifted by -h within road
+target_congestion_h{h} = congestion_level shifted by -h within road
+target_accident_h{h} = (accident_count shifted by -h) > 0
+target_{name}_h{h}_available = target-specific future-label availability
 ```
 
-The leading space in the example is visual only; actual column names must be normalized.
+Every shifted timestamp must equal `t + (30 minutes x h)` within the same road.
+Accident availability additionally requires the shifted `_accident_observed`
+flag; unknown reconstructed windows remain null rather than negative. The
+common base retains trailing origins instead of globally dropping them.
 
 ### 8.3 Multi-horizon strategy
 - Classical models use a shared training loop that produces one model per target and horizon.

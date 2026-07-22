@@ -29,3 +29,25 @@ weather:
 
 calendar:
   event_proximity_days: 1
+
+targets:
+  contract_version: multi_horizon_targets_v1
+  processed_version: processed_targets_v1
+  cadence_minutes: 30
+  definitions:
+    - name: volume
+      source_column: traffic_volume
+      task: regression
+    - name: speed
+      source_column: avg_speed
+      task: regression
+    - name: travel_time
+      source_column: travel_time
+      task: regression
+    - name: congestion
+      source_column: congestion_level
+      task: classification_multiclass
+    - name: accident
+      source_column: accident_count
+      task: classification_binary
+      availability_source: _accident_observed

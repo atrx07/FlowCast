@@ -275,6 +275,21 @@ Create prediction targets for 30, 60, 90, and 120 minutes.
 6. Persist versioned processed Parquet and metadata JSON.
 7. Add contract tests for target alignment.
 
+### Proven implementation
+- `flowcast prepare-data` hash-verifies the Step 07 feature configuration,
+  quality summary, manifest, Parquet, cardinality, and manifest dtypes.
+- `multi_horizon_targets_v1` adds exact same-road target timestamps, five target
+  families, and five availability masks at each of horizons 1-4 without
+  changing or dropping an origin/input column.
+- Accident labels additionally require shifted `_accident_observed = true`;
+  unobserved reconstructed windows remain nullable unknowns.
+- The versioned Parquet is written beneath `data/processed/`; the complete
+  target/schema manifest and generated coverage reports are written beneath
+  `artifacts/features/` and `artifacts/quality/`.
+- Unit and full-source contracts verify exact shifts, tail counts, road
+  isolation, feature preservation, accident unknowns, hashes, and deterministic
+  reruns.
+
 ### Exit gate
 - A row at time `t` maps to the correct `t+h` target within the same road.
 - No road boundary contamination.

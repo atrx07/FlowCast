@@ -272,3 +272,72 @@ def render_feature_engineering_markdown(summary: dict[str, Any]) -> str:
         ]
     )
     return "\n".join(lines)
+
+
+def render_processed_data_markdown(summary: dict[str, Any]) -> str:
+    """Render the Step 08 JSON summary as concise generated Markdown."""
+
+    dataset = summary["dataset"]
+    lines = [
+        "# FlowCast Processed Target Report",
+        "",
+        f"- Target contract: `{summary['contract_version']}`",
+        f"- Output version: `{summary['processed_version']}`",
+        f"- Input feature version: `{summary['input_feature_version']}`",
+        "",
+        "## Dataset contract",
+        "",
+        "| Check | Result |",
+        "|---|---:|",
+        f"| Input rows | {dataset['input_rows']} |",
+        f"| Output rows / keys | {dataset['output_rows']} / "
+        f"{dataset['output_unique_keys']} |",
+        f"| Row-count change | {dataset['row_count_change']} |",
+        f"| Duplicate output keys | {dataset['duplicate_output_keys']} |",
+        f"| Preserved input columns | {dataset['feature_column_count']} |",
+        f"| Model-candidate features | "
+        f"{dataset['model_candidate_feature_count']} |",
+        f"| Target/horizon definitions | {dataset['target_count']} |",
+        "",
+        "## Horizon coverage",
+        "",
+        "| Horizon | Minutes | Available timestamps | Trailing unavailable |",
+        "|---:|---:|---:|---:|",
+    ]
+    for horizon, record in dataset["timestamp_coverage"].items():
+        lines.append(
+            f"| h{horizon} | {record['horizon_minutes']} | "
+            f"{record['available_rows']} | {record['unavailable_rows']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Target availability",
+            "",
+            "| Target | Available | Unavailable |",
+            "|---|---:|---:|",
+        ]
+    )
+    for name, record in dataset["target_coverage"].items():
+        lines.append(
+            f"| `{name}` | {record['available_rows']} | "
+            f"{record['unavailable_rows']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "Each future value is shifted within its road segment and paired with "
+            "an exact future timestamp. All origin rows and explanatory columns are "
+            "preserved; trailing targets remain null with an explicit false "
+            "availability mask.",
+            "",
+            "Accident-risk labels are available only when the future source window "
+            "was observed. Inserted, unobserved windows remain null instead of being "
+            "silently treated as no incident.",
+            "",
+            "This file is generated from `summary.json`; edit the pipeline, not "
+            "this report.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
