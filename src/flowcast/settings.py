@@ -24,6 +24,7 @@ class Settings:
     timezone: str
     log_level: str
     data_contracts_path: Path
+    cleaning_config_path: Path
     reference_dir: Path
     raw_dir: Path
     interim_dir: Path
@@ -33,6 +34,7 @@ class Settings:
     logs_dir: Path
     audit_version: str
     validation_version: str
+    cleaning_version: str
     hash_chunk_size: int
 
 
@@ -61,6 +63,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     paths = config["paths"]
     audit = config["audit"]
     validation = config["validation"]
+    cleaning = config["cleaning"]
     return Settings(
         root=root,
         config_path=selected,
@@ -70,6 +73,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         timezone=str(runtime["timezone"]),
         log_level=str(runtime["log_level"]),
         data_contracts_path=_resolve(root, paths["data_contracts"]),
+        cleaning_config_path=_resolve(root, paths["cleaning"]),
         reference_dir=_resolve(root, paths["reference"]),
         raw_dir=_resolve(root, paths["raw"]),
         interim_dir=_resolve(root, paths["interim"]),
@@ -79,5 +83,6 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         logs_dir=_resolve(root, paths["logs"]),
         audit_version=str(audit["version"]),
         validation_version=str(validation["version"]),
+        cleaning_version=str(cleaning["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
     )

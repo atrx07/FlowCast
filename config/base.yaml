@@ -10,6 +10,7 @@ runtime:
 
 paths:
   data_contracts: config/data_contracts.yaml
+  cleaning: config/cleaning.yaml
   reference: FlowCast-project_file
   raw: data/raw
   interim: data/interim
@@ -24,3 +25,6 @@ audit:
 
 validation:
   version: validated_v1
+
+cleaning:
+  version: cleaned_sources_v1

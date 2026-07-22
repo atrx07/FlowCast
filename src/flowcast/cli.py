@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from flowcast.data.audit import run_raw_audit
+from flowcast.data.clean_context import run_context_cleaning
 from flowcast.data.quarantine import run_validation_pipeline
 from flowcast.logging_config import configure_logging
 from flowcast.settings import load_settings
@@ -44,6 +45,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Versioned validation output directory (default: validated_v1).",
     )
+    clean_context = subparsers.add_parser(
+        "clean-context",
+        help="Clean validated calendar and hourly weather source tables.",
+    )
+    clean_context.add_argument(
+        "--version",
+        default=None,
+        help="Versioned context output directory (default: cleaned_sources_v1).",
+    )
     return parser
 
 
@@ -72,6 +82,22 @@ def main(argv: Sequence[str] | None = None) -> int:
                 summary["issue_count"],
             )
         return 2 if result.has_dataset_failure else 0
+    if args.command == "clean-context":
+        result = run_context_cleaning(settings, version=args.version)
+        logger.info("Context cleaning complete: %s", result.summary_path)
+        logger.info("Generated quality report: %s", result.markdown_path)
+        logger.info(
+            "calendar=%s weather=%s temperature_imputed=%s visibility_imputed=%s",
+            len(result.calendar),
+            len(result.weather),
+            result.summary["datasets"]["weather"]["imputation"]["temperature"][
+                "imputed"
+            ],
+            result.summary["datasets"]["weather"]["imputation"]["visibility"][
+                "imputed"
+            ],
+        )
+        return 0
     raise RuntimeError(f"Unhandled command: {args.command}")
 
 

@@ -143,6 +143,21 @@ Produce trusted calendar and hourly weather tables before touching the large mer
 - 10,872 final station-hour keys.
 - Zero uncontrolled weather labels.
 
+```bash
+python -m flowcast.cli clean-context
+pytest -q
+```
+
+### Proven missing-weather policy
+
+- Sort strictly by `station_id + weather_hour`.
+- Add missingness, imputation-method, and donor-source-row columns.
+- Forward-fill within the same station for at most two hourly gaps.
+- Fail closed on leading gaps, longer gaps, incomplete hourly grids, or unknown
+  labels; never use a future or cross-station observation.
+- Persist cleaned Parquet plus canonical JSON and generated Markdown quality
+  evidence.
+
 ### Exit gate
 - Calendar and weather contracts pass.
 - Normalization and imputation counts are reported.

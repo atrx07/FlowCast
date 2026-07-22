@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
-import json
-import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
-from flowcast.data.audit import sha256_file
+from flowcast.data.artifacts import (
+    artifact_record,
+    validate_artifact_version,
+    write_json,
+    write_parquet,
+)
 from flowcast.data.contracts import (
     ValidationResult,
     load_contract_bundle,
@@ -20,7 +23,6 @@ from flowcast.data.ingest import validate_raw_sources
 from flowcast.settings import Settings
 
 
-_SAFE_VERSION = re.compile(r"^[A-Za-z0-9_.-]+$")
 _ISSUE_COLUMNS = [
     "dataset",
     "source_file",
@@ -55,19 +57,6 @@ class ValidationArtifacts:
         return any(result.has_dataset_failure for result in self.results.values())
 
 
-def _validate_version(version: str) -> str:
-    if not version or not _SAFE_VERSION.fullmatch(version):
-        raise ValueError(
-            "Validation version must contain only letters, numbers, '.', '_', or '-'"
-        )
-    return version
-
-
-def _write_parquet(frame: pd.DataFrame, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    frame.to_parquet(path, index=False, engine="pyarrow")
-
-
 def _issue_frame(results: dict[str, ValidationResult]) -> pd.DataFrame:
     records = [
         issue.as_record()
@@ -82,14 +71,6 @@ def _issue_frame(results: dict[str, ValidationResult]) -> pd.DataFrame:
     return frame
 
 
-def _artifact_record(path: Path, settings: Settings) -> dict[str, Any]:
-    return {
-        "path": portable_path(path, settings.root),
-        "bytes": path.stat().st_size,
-        "sha256": sha256_file(path, settings.hash_chunk_size),
-    }
-
-
 def persist_validation_results(
     settings: Settings,
     results: dict[str, ValidationResult],
@@ -97,7 +78,7 @@ def persist_validation_results(
 ) -> ValidationArtifacts:
     """Write a complete versioned validation result with row-accounting evidence."""
 
-    selected_version = _validate_version(version)
+    selected_version = validate_artifact_version(version)
     interim_dir = settings.interim_dir / selected_version
     quarantine_dir = settings.quarantine_dir / selected_version
     interim_dir.mkdir(parents=True, exist_ok=True)
@@ -110,13 +91,13 @@ def persist_validation_results(
             raise RuntimeError(f"Row accounting failed for {dataset}")
         valid_path = interim_dir / f"{dataset}.parquet"
         rejected_path = quarantine_dir / f"{dataset}_rejected.parquet"
-        _write_parquet(result.valid_rows, valid_path)
-        _write_parquet(result.rejected_rows, rejected_path)
+        write_parquet(result.valid_rows, valid_path)
+        write_parquet(result.rejected_rows, rejected_path)
         valid_paths[dataset] = valid_path
         rejected_paths[dataset] = rejected_path
 
     issues_path = quarantine_dir / "issues.parquet"
-    _write_parquet(_issue_frame(results), issues_path)
+    write_parquet(_issue_frame(results), issues_path)
 
     bundle = load_contract_bundle(settings)
     dataset_summaries: dict[str, Any] = {}
@@ -131,8 +112,8 @@ def persist_validation_results(
                 "bytes": int(contract["bytes"]),
                 "sha256": str(contract["sha256"]),
             },
-            "validated_artifact": _artifact_record(valid_paths[dataset], settings),
-            "rejected_artifact": _artifact_record(
+            "validated_artifact": artifact_record(valid_paths[dataset], settings),
+            "rejected_artifact": artifact_record(
                 rejected_paths[dataset], settings
             ),
         }
@@ -150,13 +131,11 @@ def persist_validation_results(
             len(result.rejected_rows) for result in results.values()
         ),
         "total_issues": sum(len(result.issues) for result in results.values()),
-        "issues_artifact": _artifact_record(issues_path, settings),
+        "issues_artifact": artifact_record(issues_path, settings),
         "datasets": dataset_summaries,
     }
     summary_path = quarantine_dir / "summary.json"
-    summary_path.write_text(
-        json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    write_json(summary, summary_path)
     return ValidationArtifacts(
         version=selected_version,
         interim_dir=interim_dir,

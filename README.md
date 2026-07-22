@@ -12,11 +12,12 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Milestone M1 is complete. The repository can preserve and verify the delivered
-raw files, audit their quality, enforce executable data contracts, resolve
-duplicate keys deterministically, and persist validated and quarantined rows
-with source-level lineage. Cleaning, feature engineering, modelling, and the
-dashboard are later milestones; the current outputs are not model-ready.
+Milestone M1 is complete and M2 is in progress. The repository can preserve and
+verify raw files, enforce executable data contracts, resolve duplicate keys,
+and persist complete validation lineage. Calendar and hourly weather cleaning
+are also complete, including controlled label normalization and causal,
+station-local imputation. Traffic cleaning, feature engineering, modelling,
+and the dashboard are later milestones; current outputs are not model-ready.
 
 ## Quick start
 
@@ -28,6 +29,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[test]"
 .\.venv\Scripts\python.exe -m flowcast.cli audit
 .\.venv\Scripts\python.exe -m flowcast.cli validate
+.\.venv\Scripts\python.exe -m flowcast.cli clean-context
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 

@@ -3,140 +3,135 @@
 ## Status Metadata
 
 - **Project:** FlowCast v1.0
-- **Last updated:** 2026-07-21
-- **Current milestone:** M1 - Ingestion and validation (complete)
-- **Current step:** Steps 01-03 complete; Step 04 not started
-- **Overall state:** Deterministic raw validation and quarantine gate passed
+- **Last updated:** 2026-07-22
+- **Current milestone:** M2 - Cleaning and merge (in progress)
+- **Current step:** Steps 01-04 complete; Step 05 not started
+- **Overall state:** Trusted calendar and hourly weather gate passed
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
 
-FlowCast now has an installable Python 3.11 `src/` package, versioned YAML
-configuration, immutable raw-data preservation, SHA-256 audit, executable source
-contracts, deterministic duplicate resolution, complete issue lineage, and a
-versioned validation CLI.
+FlowCast has a reproducible Python 3.11 package with immutable raw preservation,
+SHA-256 audit, executable source contracts, reason-preserving quarantine, and
+versioned validation artifacts. Milestone M1 is complete.
 
-Milestone M1 is complete. No source cleaning, traffic-grid reconstruction,
-cross-source merge, feature engineering, EDA, model training, inference,
-reporting service, or Streamlit dashboard has begun.
+Step 04 now adds trusted calendar and hourly weather tables. The pipeline
+verifies validated-input hashes, normalizes weather labels, applies causal
+station-local imputation, preserves donor-row lineage, and emits canonical JSON
+plus generated Markdown quality evidence.
 
-## 2. Step 03 Implementation
+Traffic cleaning, grid reconstruction, source merging, features, EDA, models,
+inference, reporting services, and the Streamlit dashboard have not begun.
 
-- Expanded `config/data_contracts.yaml` into the executable
-  `raw_contract_v1` bundle for traffic, weather, and calendar sources.
-- Added typed validation issues and results with source filename, physical CSV
-  row, field, rejected value, stable reason code, disposition, and retained-row
-  identity for duplicates.
-- Added exact timestamp/frequency parsing, categorical and ID checks, numeric
-  coercion and physical boundaries, vehicle-distribution JSON checks, calendar
-  flag/name checks, uniqueness checks, and schema failure handling.
-- Added deterministic duplicate retention by greatest post-validation
-  completeness, then earliest source row.
-- Added cell invalidation for recoverable values and row quarantine for invalid
-  structure, keys, timestamps, flags, and non-retained duplicates.
-- Added `flowcast validate [--version VERSION]`. Complete schema failure returns
-  exit code 2 after persisting evidence; successful source validation returns 0.
-- Added versioned Parquet writers and a JSON summary containing row accounting,
-  source hashes, artifact hashes, and issue counts.
-- Rewrote `README.md` as a concise product overview, current-state explanation,
-  and quick-start guide.
+## 2. Step 04 Implementation
+
+- Added `config/cleaning.yaml` as `context_cleaning_v1` and configured the
+  versioned output `cleaned_sources_v1`.
+- Added shared deterministic Parquet/JSON artifact helpers.
+- Added independent calendar and weather cleaners plus a bounded context
+  pipeline and generated quality-report renderer.
+- Added `flowcast clean-context [--version VERSION]`.
+- Calendar cleaning normalizes dates, enforces unique keys and 0/1 flags,
+  validates flag/name relationships, and preserves source lineage.
+- Weather cleaning enforces a complete unique hourly grid, maps all delivered
+  label variants to `Clear`, `Cloudy`, `Overcast`, `Rain`, or `Fog`, and
+  validates trusted numeric fields.
+- Temperature and visibility use station-local forward fill for at most two
+  consecutive hours. Each output row records original missingness, method, and
+  donor source row. Leading/longer gaps fail closed.
+- Added unit tests for boundaries, invalid inputs, donor lineage, and future
+  mutation; added full-source and byte-deterministic artifact tests.
 
 ## 3. Produced Artifacts
 
-The successful default run produced ignored, reproducible local artifacts:
-
 ```text
-data/interim/validated_v1/
+data/interim/cleaned_sources_v1/
   calendar.parquet
   weather.parquet
-  traffic.parquet
 
-data/quarantine/validated_v1/
-  calendar_rejected.parquet
-  weather_rejected.parquet
-  traffic_rejected.parquet
-  issues.parquet
+artifacts/quality/cleaned_sources_v1/
   summary.json
+  summary.md
 ```
 
-The validated tables are a contract boundary, not cleaned/model-ready data.
-Weather label normalization and numeric imputation belong to Step 04; traffic
-JSON expansion, grid reconstruction, and imputation belong to Step 05.
+The Parquet files are reproducible generated data and remain ignored by Git.
+The compact quality report and canonical JSON evidence are tracked.
 
-## 4. Validation Evidence
+## 4. Step 04 Data Evidence
 
-Executed from the repository root with project-local CPython 3.11.9:
+| Check | Verified result |
+|---|---:|
+| Calendar rows / unique dates | 151 / 151 |
+| Calendar range | 2025-01-01 to 2025-05-31 |
+| Holiday / event / roadwork days | 6 / 6 / 11 |
+| Weather rows / unique station-hours | 10,872 / 10,872 |
+| Stations / rows per station | 3 / 3,624 |
+| Controlled weather labels | 5 |
+| Temperature values imputed | 167 |
+| Visibility values imputed | 111 |
+| Maximum observed missing run | 2 hours |
+| Remaining trusted weather nulls | 0 |
+| Negative rainfall / visibility | 0 / 0 |
+
+Controlled label counts are Clear 8,168; Cloudy 1,844; Fog 76; Overcast 358;
+and Rain 426. All 278 fills use an earlier value from the same station and store
+the donor `_source_row`.
+
+## 5. Validation and Assurance Evidence
+
+Executed with project-local CPython 3.11.9:
 
 ```text
-.venv/Scripts/python.exe -m flowcast.cli validate
+.venv/Scripts/python.exe -m flowcast.cli clean-context
 .venv/Scripts/python.exe -m pytest -q
 .venv/Scripts/python.exe -m pip check
 .venv/Scripts/python.exe -m compileall -q src
 git diff --check
 ```
 
-Results:
+Verified results:
 
-- CLI validation: exit code 0; no dataset-level schema failure.
-- Tests: `26 passed in 10.24s`, including two full deterministic validation runs.
-- Dependency integrity: `No broken requirements found.`
-- Package byte-compilation: succeeded.
-- Patch whitespace check: succeeded.
-- Largest source module: `src/flowcast/data/validation.py`, 331 physical lines;
-  every
-  source file remains below the 500-line limit.
-- Repeated validation produced byte-identical validated, rejected, issue, and
-  summary artifacts.
+- Context CLI: exit code 0; calendar 151 rows, weather 10,872 rows.
+- Tests: 42 passed, including deterministic full-source reruns.
+- Dependency integrity: no broken requirements.
+- Package byte-compilation and patch whitespace checks succeeded.
+- Repeated runs produced byte-identical cleaned Parquet, JSON, and Markdown.
+- Largest source module remains `src/flowcast/data/audit.py` at 366 physical
+  lines; every source file is below 400 lines.
+- Raw and validated input hashes remain unchanged.
 
-## 5. Source and Row Accounting
+## 6. Source Validation Baseline
 
-| Dataset | Input | Retained | Quarantined rows | Issues |
+| Dataset | Input | Retained after validation | Quarantined rows | Issues |
 |---|---:|---:|---:|---:|
 | Calendar | 151 | 151 | 0 | 0 |
 | Weather | 10,872 | 10,872 | 0 | 278 |
 | Traffic | 178,468 | 176,701 | 1,767 | 42,514 |
 | **Total** | **189,491** | **187,724** | **1,767** | **42,792** |
 
-Traffic reason counts:
+## 7. Decisions and Constraints
 
-- `duplicate_key`: 1,767
-- `missing_value`: 40,035
-- `negative_traffic_volume`: 241
-- `excessive_speed`: 237
-- `invalid_occupancy`: 234
+- The source documents permit forward/interpolated weather fill. FlowCast uses
+  forward-only fill because weather at time `t` must not depend on `t+1`.
+- The actual 167 temperature and 111 visibility gaps are all internal runs of
+  one or two hours with an earlier same-station observation, so no fallback or
+  learned global statistic is needed.
+- Known normalization variants pass raw validation but are changed only in the
+  versioned cleaned weather artifact; raw and validated artifacts remain intact.
+- The cleaning report is generated from `summary.json` and is not edited by
+  hand.
+- No dependency or technology change was required.
 
-Weather has 278 `missing_value` findings: 167 temperature cells and 111
-visibility cells. Calendar has no source findings.
+## 8. Risks and Unresolved Work
 
-All three `data/raw/` SHA-256 values still match the delivered reference files
-and `raw_contract_v1`. No raw or reference file was rewritten.
+- Traffic still contains missing/invalid measurements, blank congestion labels,
+  and 4,499 absent road/time windows. Step 05 must choose field-specific,
+  leakage-safe recovery rules from observed gap structure.
+- M2 remains open until traffic is cleaned and all three trusted sources are
+  merged without row multiplication.
+- Modelling, deep-learning, and dashboard dependency groups remain deferred.
 
-## 6. Decisions and Constraints
+## 9. Next Gate
 
-- Physical numeric violations are set to nullable values with issue lineage so
-  later cleaning can make an explicit recovery decision; they are not silently
-  capped or imputed during validation.
-- Duplicate rows are the only delivered rows quarantined in Step 03. Findings
-  on a row later removed as a duplicate remain in the unified issue ledger.
-- Known weather spelling/casing/whitespace variants pass vocabulary validation
-  but remain unchanged until Step 04.
-- The configured vehicle-share tolerance is an absolute 0.02, covering the
-  delivered rounding range of 0.99-1.01 without normalizing the raw JSON.
-- Empty rejected-row Parquet files are intentionally written for calendar and
-  weather to make row accounting and downstream automation uniform.
-- Generated validation data remains outside Git; configuration, code, tests,
-  and reproducibility evidence are tracked.
-
-## 7. Risks and Unresolved Work
-
-- Step 04 must define and test a causal, station-local weather imputation policy
-  before it mutates any validated values.
-- Traffic still contains missing and invalid measurements, blank congestion
-  labels, and 4,499 absent road/time windows; these belong to Step 05.
-- Deferred modelling, deep-learning, and dashboard dependencies remain
-  uninstalled until their milestones.
-
-## 8. Next Gate
-
-Proceed only to **Step 04 - Clean Calendar and Weather**. The bounded action and
-acceptance gate are maintained in `NEXT_STEP.md`.
+Proceed only to **Step 05 - Clean Traffic and Reconstruct the Grid**. The bounded
+action and acceptance gate are maintained in `NEXT_STEP.md`.

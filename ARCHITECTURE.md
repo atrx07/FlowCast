@@ -45,6 +45,7 @@ Proposed commands:
 ```bash
 python -m flowcast.cli audit
 python -m flowcast.cli validate
+python -m flowcast.cli clean-context
 python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli train-classical
@@ -82,6 +83,7 @@ flowcast-repository/
 ├── config/
 │   ├── base.yaml
 │   ├── data_contracts.yaml
+│   ├── cleaning.yaml
 │   ├── features.yaml
 │   └── models.yaml
 ├── data/
@@ -91,6 +93,7 @@ flowcast-repository/
 │   └── quarantine/                 # invalid rows and rejection reasons
 ├── artifacts/
 │   ├── audits/
+│   ├── quality/
 │   ├── features/
 │   ├── predictions/
 │   ├── metrics/
@@ -131,9 +134,12 @@ flowcast-repository/
 │       │   ├── validation.py
 │       │   ├── validation_state.py
 │       │   ├── audit.py
+│       │   ├── artifacts.py
+│       │   ├── cleaning_types.py
 │       │   ├── clean_traffic.py
 │       │   ├── clean_weather.py
 │       │   ├── clean_calendar.py
+│       │   ├── clean_context.py
 │       │   ├── align.py
 │       │   ├── merge.py
 │       │   ├── quarantine.py
@@ -203,6 +209,11 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - null policy.
 - weather normalization map.
 
+### `config/cleaning.yaml`
+- Context-cleaning contract version.
+- Causal numeric imputation methods and maximum supported gap lengths.
+- Calendar flag/name relationship checks.
+
 ### `config/features.yaml`
 - lag windows: 1, 2, 48.
 - rolling windows: 4, 8.
@@ -243,9 +254,12 @@ Required source fields are the 17 delivered columns. Original values are preserv
 Key: `station_id + weather_hour`.
 
 - Date parsed with day-first semantics.
-- Controlled weather vocabulary.
+- Controlled vocabulary: Clear, Cloudy, Overcast, Rain, and Fog.
 - Complete hourly grid per station.
-- Missing numeric values imputed with a documented time-aware policy.
+- Missing temperature and visibility values use a causal station-local forward
+  fill limited to two consecutive hours.
+- Every imputed value carries a missingness flag, method, and donor source-row
+  identity; unsupported leading or longer gaps fail closed.
 
 ### 6.4 Calendar contract
 Key: normalized date.
@@ -266,7 +280,18 @@ set to missing and labelled `valid_with_issues`; invalid structural rows and
 non-retained duplicate keys are quarantined. A schema failure still serializes
 the affected rows and causes the CLI to return a non-zero exit status.
 
-### 6.6 Merged contract
+### 6.6 Cleaned context artifact boundary
+
+The `clean-context` command verifies the hashes of the `validated_v1` calendar
+and weather Parquet inputs. It writes trusted outputs to
+`data/interim/<cleaning_version>/` and writes canonical JSON plus generated
+Markdown quality evidence to `artifacts/quality/<cleaning_version>/`.
+
+The cleaned calendar preserves one row per normalized date. The cleaned weather
+table preserves one row per station/hour and retains validation/source lineage
+alongside normalization and imputation metadata.
+
+### 6.7 Merged contract
 Key: `road_id + timestamp`.
 
 - Many-to-one joins only.
@@ -275,7 +300,7 @@ Key: `road_id + timestamp`.
 - Join indicators and missing join counts recorded during pipeline execution.
 - `weather_station_id` may remain for lineage but is excluded where redundant for modelling.
 
-### 6.7 Processed feature contract
+### 6.8 Processed feature contract
 - Sorted by `road_id, timestamp`.
 - Stable feature names and dtypes.
 - Explicit target columns per horizon.

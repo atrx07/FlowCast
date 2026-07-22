@@ -1,0 +1,192 @@
+{
+  "cleaning_version": "cleaned_sources_v1",
+  "configuration": {
+    "cleaning": {
+      "bytes": 347,
+      "path": "config/cleaning.yaml",
+      "sha256": "368e329622850ed1ebef1a152c69f5a56956b20aa4a22a8a0e3778a9aeba3c2c"
+    },
+    "data_contracts": {
+      "bytes": 6484,
+      "path": "config/data_contracts.yaml",
+      "sha256": "a4b8db7d60d94fcfefcc37bda3daaecc7cdd65e134320f24f997aa0d2a758ec0"
+    }
+  },
+  "contract_version": "context_cleaning_v1",
+  "datasets": {
+    "calendar": {
+      "cleaned_artifact": {
+        "bytes": 8207,
+        "path": "data/interim/cleaned_sources_v1/calendar.parquet",
+        "sha256": "4cf9cbed5857f51cc342ef88e7524422deb11dab189bce58f429fa5aae817e2e"
+      },
+      "date_end": "2025-05-31",
+      "date_start": "2025-01-01",
+      "duplicate_dates": 0,
+      "flag_counts": {
+        "event_flag": 6,
+        "public_holiday": 6,
+        "roadwork_flag": 11
+      },
+      "input_artifact": {
+        "bytes": 8300,
+        "path": "data/interim/validated_v1/calendar.parquet",
+        "sha256": "9dd5adf8ed5171c1d7287879e48849ae948e8d95ec43be79ee6c924588eab731"
+      },
+      "input_rows": 151,
+      "invalid_flag_name_pairs": 0,
+      "output_rows": 151,
+      "unique_dates": 151
+    },
+    "weather": {
+      "cleaned_artifact": {
+        "bytes": 133256,
+        "path": "data/interim/cleaned_sources_v1/weather.parquet",
+        "sha256": "8a41a633837eaf8582d34b599e0186395f7e58625f5dc1095c0f841c3c7fe88d"
+      },
+      "condition_counts": {
+        "Clear": 8168,
+        "Cloudy": 1844,
+        "Fog": 76,
+        "Overcast": 358,
+        "Rain": 426
+      },
+      "condition_normalization": [
+        {
+          "canonical_label": "Clear",
+          "count": 1237,
+          "source_label": "CLEAR"
+        },
+        {
+          "canonical_label": "Clear",
+          "count": 5647,
+          "source_label": "Clear"
+        },
+        {
+          "canonical_label": "Clear",
+          "count": 1284,
+          "source_label": "clear"
+        },
+        {
+          "canonical_label": "Cloudy",
+          "count": 1504,
+          "source_label": "Cloudy"
+        },
+        {
+          "canonical_label": "Cloudy",
+          "count": 340,
+          "source_label": "cloudy"
+        },
+        {
+          "canonical_label": "Fog",
+          "count": 7,
+          "source_label": "FOG"
+        },
+        {
+          "canonical_label": "Fog",
+          "count": 59,
+          "source_label": "Fog"
+        },
+        {
+          "canonical_label": "Fog",
+          "count": 10,
+          "source_label": "foggy"
+        },
+        {
+          "canonical_label": "Overcast",
+          "count": 358,
+          "source_label": "Overcast"
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 34,
+          "source_label": "RAIN"
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 307,
+          "source_label": "Rain"
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 48,
+          "source_label": "rain "
+        },
+        {
+          "canonical_label": "Rain",
+          "count": 37,
+          "source_label": "rainy"
+        }
+      ],
+      "imputation": {
+        "temperature": {
+          "by_station": {
+            "WS-CENTRAL": 48,
+            "WS-NORTH": 59,
+            "WS-SOUTH": 60
+          },
+          "imputed": 167,
+          "input_missing": 167,
+          "max_gap_hours": 2,
+          "maximum_observed_gap_hours": 2,
+          "method": "station_forward_fill",
+          "remaining_missing": 0
+        },
+        "visibility": {
+          "by_station": {
+            "WS-CENTRAL": 38,
+            "WS-NORTH": 40,
+            "WS-SOUTH": 33
+          },
+          "imputed": 111,
+          "input_missing": 111,
+          "max_gap_hours": 2,
+          "maximum_observed_gap_hours": 2,
+          "method": "station_forward_fill",
+          "remaining_missing": 0
+        }
+      },
+      "input_artifact": {
+        "bytes": 126614,
+        "path": "data/interim/validated_v1/weather.parquet",
+        "sha256": "e7cdbfc80276a783d118229aa3f75e48bfd101fa49ae3bcd79b91bf1559be534"
+      },
+      "input_rows": 10872,
+      "numeric_ranges": {
+        "rainfall": {
+          "maximum": 8.9,
+          "minimum": 0.0
+        },
+        "temperature": {
+          "maximum": 29.8,
+          "minimum": 5.8
+        },
+        "visibility": {
+          "maximum": 10000.0,
+          "minimum": 301.0
+        }
+      },
+      "output_rows": 10872,
+      "remaining_nulls": {
+        "rainfall": 0,
+        "temperature": 0,
+        "visibility": 0,
+        "weather_condition": 0
+      },
+      "station_counts": {
+        "WS-CENTRAL": 3624,
+        "WS-NORTH": 3624,
+        "WS-SOUTH": 3624
+      },
+      "unique_station_hours": 10872,
+      "weather_hour_end": "2025-05-31T23:00:00+05:30",
+      "weather_hour_start": "2025-01-01T00:00:00+05:30"
+    }
+  },
+  "input_validation_summary": {
+    "bytes": 3721,
+    "path": "data/quarantine/validated_v1/summary.json",
+    "sha256": "08123b6b3a82935773bc3e6a69e72d5241ac4c579233abdfb3580ce3a99cc402"
+  },
+  "input_validation_version": "validated_v1"
+}

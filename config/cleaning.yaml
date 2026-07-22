@@ -1,0 +1,17 @@
+contract_version: context_cleaning_v1
+
+weather:
+  numeric_imputation:
+    temperature:
+      method: station_forward_fill
+      max_gap_hours: 2
+    visibility:
+      method: station_forward_fill
+      max_gap_hours: 2
+
+calendar:
+  flag_name_pairs:
+    - flag: public_holiday
+      name: holiday_name
+    - flag: event_flag
+      name: event_name
