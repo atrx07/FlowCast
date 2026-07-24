@@ -189,6 +189,9 @@ Required prediction tasks:
 
 - Primary model: LSTM or GRU sequence forecaster built with no pretrained weights.
 - Framework: PyTorch by default.
+- Execution: device-agnostic by contract. Use an available, verified NVIDIA CUDA
+  device for material recurrent training; retain an explicit CPU mode for
+  reproduction, small jobs, tests, and fallback.
 - Time-ordered sequence generation and splitting.
 - Dropout, early stopping, learning-rate scheduling, and best-weight restoration.
 - Multi-horizon volume output is the preferred v1 design.
@@ -268,6 +271,9 @@ These are honest evaluation targets. Failure to reach a target must be documente
 8. Classification confidence uses calibrated probabilities; accident-risk threshold is selected on validation data.
 9. Raw files and original reference documents are immutable.
 10. No separate API or database is required for v1.0.
+11. GPU acceleration is a workload-aware optimisation, not an acceptance
+    dependency. Training code and portable state dictionaries must remain usable
+    on CPU-only Windows, macOS, and Linux.
 
 ## 12. Expected Deliverables
 

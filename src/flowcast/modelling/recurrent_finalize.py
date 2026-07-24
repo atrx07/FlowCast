@@ -86,6 +86,34 @@ def _upstream(context: RecurrentFinalization) -> dict[str, Any]:
     }
 
 
+def _device_record(
+    device: torch.device,
+    config: dict[str, Any],
+) -> dict[str, Any]:
+    """Return portable CPU/CUDA execution and memory evidence."""
+
+    using_cuda = device.type == "cuda"
+    properties = torch.cuda.get_device_properties(device) if using_cuda else None
+    return {
+        "selected": str(device),
+        "policy": config["device"]["policy"],
+        "torch_version": torch.__version__,
+        "cuda_available": torch.cuda.is_available(),
+        "cuda_version": torch.version.cuda,
+        "gpu_used": using_cuda,
+        "gpu_name": properties.name if properties is not None else None,
+        "gpu_total_memory_bytes": (
+            int(properties.total_memory) if properties is not None else None
+        ),
+        "gpu_peak_memory_allocated_bytes": (
+            int(torch.cuda.max_memory_allocated(device)) if using_cuda else 0
+        ),
+        "cpu_fallback_supported": True,
+        "npu_used": False,
+        "cpu_threads": int(config["device"]["cpu_threads"]),
+    }
+
+
 def _all_artifacts(
     context: RecurrentFinalization,
     checkpoint: dict[str, Any],
@@ -276,16 +304,7 @@ def finalize_recurrent_run(context: RecurrentFinalization) -> dict[str, Any]:
             "selection_status_before_load": "frozen_before_test_access",
             "models_refit_after_test_load": False,
         },
-        "device": {
-            "selected": str(context.device),
-            "policy": config["device"]["policy"],
-            "torch_version": torch.__version__,
-            "cuda_available": torch.cuda.is_available(),
-            "cuda_version": torch.version.cuda,
-            "gpu_used": context.device.type == "cuda",
-            "npu_used": False,
-            "cpu_threads": int(config["device"]["cpu_threads"]),
-        },
+        "device": _device_record(context.device, config),
         "sequences": sequences,
         "target_scaling": context.scaler_metadata,
         "metrics": context.metrics,

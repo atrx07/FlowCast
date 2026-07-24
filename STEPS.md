@@ -595,6 +595,12 @@ Train a from-scratch LSTM/GRU that predicts future volume across four horizons.
   per-horizon training-only target scaling, learning-rate reduction, early
   stopping, deterministic CPU/CUDA policy, and validation mean-RMSE selection.
   The independent file preserves all Step 10-14 configuration hashes.
+- The canonical Step 15 evidence was produced on CPU before CUDA support was
+  installed and remains frozen. Subsequent material recurrent retraining may
+  use the verified `torch 2.13.0+cu130` path under `auto`/`cuda`; small probes
+  and tests should use CPU when GPU overhead would dominate. Both paths must
+  retain identical artifact schemas, portable state dictionaries, and an
+  explicit CPU fallback.
 - `flowcast train-recurrent-volume` recursively verifies the frozen Step 10
   modelling artifacts and classical registry before loading train/validation.
   The fitted Step 10 recurrent preprocessor produces 64 finite features from

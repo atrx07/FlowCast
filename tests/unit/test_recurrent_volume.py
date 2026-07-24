@@ -13,9 +13,10 @@ from flowcast.modelling.recurrent_config import (
     RecurrentCandidate,
     load_recurrent_config,
 )
+from flowcast.modelling.recurrent_finalize import _device_record
 from flowcast.modelling.recurrent_model import RecurrentVolumeForecaster
 from flowcast.modelling.recurrent_outputs import compare_with_classical
-from flowcast.modelling.recurrent_training import seed_torch
+from flowcast.modelling.recurrent_training import seed_torch, select_device
 from flowcast.modelling.sequence_data import (
     PreparedPartition,
     RecurrentSequenceDataset,
@@ -174,6 +175,31 @@ def test_dataset_and_model_have_required_shapes_and_seeded_weights() -> None:
     assert first(features.unsqueeze(0)).shape == (1, 4)
     for one, two in zip(first.parameters(), second.parameters(), strict=True):
         assert torch.equal(one, two)
+
+
+def test_device_policy_preserves_explicit_cpu_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    assert select_device("cpu").type == "cpu"
+
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    assert select_device("auto").type == "cpu"
+    with pytest.raises(RuntimeError, match="not available"):
+        select_device("cuda")
+
+
+def test_cpu_device_evidence_is_portable() -> None:
+    record = _device_record(
+        torch.device("cpu"),
+        {"device": {"policy": "cpu", "cpu_threads": 2}},
+    )
+
+    assert record["selected"] == "cpu"
+    assert record["gpu_used"] is False
+    assert record["gpu_name"] is None
+    assert record["gpu_total_memory_bytes"] is None
+    assert record["gpu_peak_memory_allocated_bytes"] == 0
+    assert record["cpu_fallback_supported"] is True
 
 
 def test_classical_comparison_requires_exact_origin_mapping() -> None:

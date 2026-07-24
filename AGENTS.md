@@ -61,6 +61,33 @@ The notice must be specific enough for the user to free resources safely:
 - If the planned hardware usage changes during the turn, notify the user before
   beginning the newly resource-intensive phase.
 
+### 3.2 Accelerator Selection and Portability
+
+- CPU execution is the mandatory reproduction and fallback path. Core training,
+  inference, loading, and tests must not depend on CUDA-only code or a particular
+  GPU.
+- The approved local accelerator is the NVIDIA GeForce RTX 5070 Laptop GPU.
+  Before using it, verify `torch.cuda.is_available()`, the resolved device name,
+  CUDA runtime, VRAM capacity, and driver compatibility.
+- Prefer the GPU for full recurrent/deep-learning candidate training, large
+  tensor workloads, and other measured jobs where transfer/startup overhead is
+  small relative to the computation. Prefer CPU for unit tests, tiny training
+  probes, lightweight inference, report generation, tabular processing, and
+  workloads for which GPU use provides no meaningful benefit.
+- Device choice must be automatic or configuration-driven, never a hard-coded
+  unconditional `cuda` selection. An explicit CPU override must remain
+  available even on CUDA-capable machines, and unavailable CUDA must fall back
+  cleanly unless the user explicitly requested a GPU-only diagnostic.
+- Keep datasets lazy where practical, use bounded/configurable batch sizes,
+  avoid copying the full dataset into VRAM, use pinned memory and non-blocking
+  transfers only on CUDA, and release device tensors between bounded runs.
+- Save portable state dictionaries and load them with an explicit
+  `map_location`; do not persist device-bound whole-model objects.
+- Record the selected device, GPU name, CUDA/PyTorch versions, relevant memory
+  evidence, batch size, and runtime with every material training artifact.
+- The Intel NPU is not part of the approved v1 execution path. Do not target it
+  without a separately documented compatibility need and stack decision.
+
 ## 4. Mandatory End-of-Turn Protocol
 
 After every implementation turn, even if the work is partial, the agent must:
@@ -157,6 +184,10 @@ Prefer the simplest architecture that fully satisfies the PRD.
 - Use the standard open-source stack named in the PRD.
 - Prefer one deep-learning framework; the architecture chooses PyTorch unless a documented compatibility problem requires a change.
 - Pin direct dependencies after verifying installation compatibility.
+- Keep the portable PyTorch pin as the dependency identity. A verified
+  CUDA-enabled wheel from the official PyTorch index may be installed as the
+  approved local acceleration variant documented in `TECH_STACK.md`; it must
+  not make the project unreproducible on CPU-only Windows, macOS, or Linux.
 - Do not introduce an unlisted dependency or artifact format without updating
   `TECH_STACK.md` and recording the decision in `STATUS.md`.
 - Do not add a database, API server, orchestration platform, cloud service, or heavy UI framework without a demonstrated need.

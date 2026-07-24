@@ -63,7 +63,7 @@ def select_device(policy: str) -> torch.device:
     if normalized not in {"auto", "cpu", "cuda"}:
         raise ValueError(f"Unsupported recurrent device policy: {policy}")
     if normalized == "cuda" and not torch.cuda.is_available():
-        raise RuntimeError("CUDA was required but the installed PyTorch build is CPU-only")
+        raise RuntimeError("CUDA was required but is not available to PyTorch")
     if normalized in {"auto", "cuda"} and torch.cuda.is_available():
         return torch.device("cuda")
     return torch.device("cpu")

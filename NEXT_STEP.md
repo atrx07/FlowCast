@@ -28,10 +28,11 @@ visible test results.
 
 Before execution, obey the workstation-resource disclosure rule in
 `AGENTS.md`. Step 16 should normally use the Intel Core Ultra 9 CPU, moderate
-system RAM, and disk I/O for grouping/calibration/report artifacts. The
-installed PyTorch 2.13.0 build is CPU-only, so the RTX 5070 Laptop GPU, VRAM,
-and Intel NPU should not be claimed or used unless the approved environment
-changes and is reverified.
+system RAM, and disk I/O for grouping/calibration/report artifacts. PyTorch
+`2.13.0+cu130` now verifies the RTX 5070 Laptop GPU, but Step 16 is primarily
+tabular aggregation and should remain on CPU unless a measured tensor workload
+justifies CUDA. The GPU/VRAM and Intel NPU should not be claimed as used when
+they are idle; the NPU remains outside the approved v1 path.
 
 ## Single Best Next Action
 

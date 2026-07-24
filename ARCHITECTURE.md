@@ -697,7 +697,16 @@ Input: [batch, sequence_length, feature_count]
 - PyTorch implementation.
 - MSE-based training loss, optionally horizon-weighted only if documented.
 - Early stopping on validation RMSE/loss.
-- CPU-compatible; CUDA used when available.
+- Device policy supports `auto`, explicit `cpu`, and guarded `cuda`. Material
+  full-candidate recurrent training may use a verified CUDA device; small
+  probes/tests and non-tensor stages normally use CPU to avoid transfer and
+  startup overhead.
+- CPU is a required execution and reproduction path. Model code must not contain
+  CUDA-only operators, datasets remain lazy, batch sizes and workers remain
+  configurable, pinned/non-blocking transfers are enabled only for CUDA, and
+  checkpoints are portable state dictionaries loaded with `map_location`.
+- The approved local CUDA distribution is PyTorch `2.13.0+cu130`; the portable
+  dependency identity remains `torch==2.13.0`.
 - Checkpoint stores model state, architecture config, scaler/feature manifest, split, seed, and metrics.
 
 The verified v1 implementation tunes two predeclared unidirectional LSTM

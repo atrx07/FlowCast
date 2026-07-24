@@ -1,4 +1,5 @@
-# Direct dependencies active through Milestone M6 Step 15.
+# Portable direct dependencies active through Milestone M6.
+# NVIDIA hosts may replace the torch distribution with requirements-cuda.txt.
 numpy==2.3.3
 pandas==3.0.3
 pyarrow==25.0.0

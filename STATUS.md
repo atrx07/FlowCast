@@ -43,6 +43,10 @@ frozen classical source artifacts remain unchanged.
 - Added candidate training, gradient clipping, scheduler, early stopping,
   best-state restoration, deterministic inference, and CPU/CUDA policy
   resolution.
+- Post-Step-15 CUDA hardening adds GPU name, total VRAM, peak allocated VRAM,
+  CUDA/PyTorch version, selected policy, and explicit CPU-fallback evidence to
+  future recurrent run summaries. Unit coverage now protects explicit CPU,
+  unavailable-CUDA auto fallback, and guarded CUDA failure.
 - Persisted candidate metrics, epoch curves, feature/scaler manifests,
   pre-test sequence/card/selection evidence, state dictionary, validation/test
   predictions, metrics, exact-row comparison, JSON/Markdown model card,
@@ -67,10 +71,26 @@ frozen classical source artifacts remain unchanged.
 - Non-contiguous sequences: 0.
 - Target-boundary violations: 0.
 - Candidate fit time: 69.19 seconds; total canonical run: 76.72 seconds.
-- Installed framework: PyTorch `2.13.0+cpu`.
-- Execution device: Intel Core Ultra 9 CPU, 8 PyTorch threads.
-- RTX 5070 Laptop GPU/VRAM used: no; CUDA unavailable in the installed build.
+- Frozen Step 15 training framework: PyTorch `2.13.0+cpu`.
+- Frozen Step 15 execution device: Intel Core Ultra 9 CPU, 8 PyTorch threads.
+- RTX 5070 Laptop GPU/VRAM used for the frozen Step 15 run: no; CUDA was
+  unavailable in that recorded environment.
 - Intel NPU used: no.
+
+Post-Step-15 environment update, verified 2026-07-24:
+
+- Installed framework: PyTorch `2.13.0+cu130` from the official PyTorch CUDA
+  13.0 wheel index.
+- NVIDIA driver `610.74` exposes CUDA UMD compatibility 13.3.
+- `torch.cuda.is_available()` is true for the NVIDIA GeForce RTX 5070 Laptop
+  GPU with compute capability 12.0 and 8,151 MiB VRAM.
+- CUDA LSTM forward/backward smoke: passed with output shape `[32, 4]`, cuDNN
+  9.2, 64.19 MiB allocated VRAM, and 0.213 seconds measured kernel/test time.
+- Forced-CPU LSTM forward/backward smoke: passed with finite output shape
+  `[8, 4]`.
+- The existing Step 15 checkpoint, predictions, and hold-out metrics were not
+  retrained or rewritten; their original CPU environment evidence remains
+  immutable.
 
 ## 4. Frozen Hold-Out Results
 
@@ -147,6 +167,27 @@ Executed with project-local CPython 3.11.9:
 git diff --check
 ```
 
+Post-Step-15 CUDA enablement:
+
+```text
+.venv/Scripts/python.exe -m pip install --force-reinstall "torch==2.13.0+cu130" --index-url https://download.pytorch.org/whl/cu130
+.venv/Scripts/python.exe -c "<CUDA LSTM forward/backward smoke>"
+.venv/Scripts/python.exe -c "<forced-CPU LSTM forward/backward smoke>"
+.venv/Scripts/python.exe -m pip check
+nvidia-smi
+```
+
+CUDA enablement verification results:
+
+- Optional `requirements-cuda.txt` reinstall path resolves the already installed
+  official `torch==2.13.0+cu130` build.
+- Focused recurrent unit/full-artifact contracts after CUDA enablement:
+  12 passed.
+- Existing recurrent checkpoint loading and persisted-prediction equality pass
+  under the CUDA-capable environment without retraining.
+- `pip check`, source/test byte compilation, `git diff --check`, and the
+  under-400-line source-size assurance pass.
+
 Verified results:
 
 - Canonical Step 15 build: passed in 76.72 seconds.
@@ -178,7 +219,16 @@ Verified results:
   intersection. This gives every candidate the same selection origins and
   gives deep/classical models identical comparison rows.
 - The CPU-only PyTorch build satisfies the approved CPU acceptance baseline.
-  CUDA acceleration remains optional and was not represented as active.
+  The current local environment now adds the approved CUDA wheel for
+  workload-aware acceleration, while CPU execution remains mandatory and was
+  reverified after installation.
+- Full recurrent/deep candidate training should normally use the verified RTX
+  5070 when accelerator overhead is justified. Unit tests, small training
+  probes, tabular confidence/error analysis, and lightweight inference should
+  normally stay on CPU.
+- The portable dependency remains `torch==2.13.0`; the optional local NVIDIA
+  distribution is pinned separately as `torch==2.13.0+cu130` in
+  `requirements-cuda.txt`.
 
 ## 8. Risks and Unresolved Work
 

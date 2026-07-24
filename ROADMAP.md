@@ -134,6 +134,9 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 - Build segment-wise sequence windows with no cross-road contamination.
 - Train a PyTorch LSTM or GRU for multi-horizon volume forecasting.
 - Tune sequence length, hidden size, layers, dropout, learning rate, and batch size within a controlled budget.
+- Use the verified CUDA path for material recurrent training when it provides a
+  practical benefit, while retaining configurable CPU execution and portable
+  checkpoints as acceptance requirements.
 - Apply early stopping and best-weight restoration.
 - Persist train/validation curves and the best checkpoint.
 - Evaluate on the exact classical hold-out.
@@ -221,6 +224,8 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Multi-horizon complexity | Too many model artifacts | Use generated horizon loops and shared interfaces/configuration |
 | Streamlit rerun retrains models | Slow and unsafe UI | Persist artifacts; explicit retraining service only |
 | Cross-platform environment issues | Reviewer cannot run project | Python module CLI, pathlib, pinned dependencies, CPU fallback |
+| CUDA path becomes a hidden requirement | CPU-only reviewers cannot reproduce training or load artifacts | Keep device-agnostic code, explicit CPU override, bounded batches, portable state dictionaries, and CPU smoke coverage |
+| GPU used for trivial work | Startup/transfer overhead wastes time and power | Reserve CUDA for material tensor workloads; keep small tests, probes, tabular processing, and lightweight inference on CPU |
 | Large files committed to Git | Bloated repository | Gitignore generated artifacts; document artifact generation |
 
 ## 12. Change Control

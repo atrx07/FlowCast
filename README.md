@@ -97,6 +97,19 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
+On a compatible NVIDIA Windows/Linux workstation, install the optional official
+CUDA wheel after the portable environment:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --force-reinstall -r requirements-cuda.txt
+.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
+```
+
+FlowCast selects devices through configuration. Use CUDA for material recurrent
+training when available; CPU remains supported for training, tests, inference,
+small jobs, and machines without an NVIDIA GPU. A separate system-wide CUDA
+Toolkit is not required by the approved wheel.
+
 On macOS or Linux, use `.venv/bin/python` in place of the Windows interpreter
 path.
 

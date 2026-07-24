@@ -19,7 +19,7 @@ introduced outside this contract without documenting the need here and updating
 | Language | CPython | 3.11.9 for the current Windows build; project compatibility is Python `>=3.11,<3.12` |
 | Environment | Standard-library `venv` + `pip` | Repository-local `.venv`; never committed |
 | Packaging | `pyproject.toml` with setuptools | PEP 517/518, `src/` package layout |
-| Dependency record | `pyproject.toml` + `requirements.txt` | Direct dependencies pinned exactly after compatibility verification |
+| Dependency record | `pyproject.toml` + `requirements.txt` | Direct dependencies pinned exactly after compatibility verification; `requirements-cuda.txt` is the optional NVIDIA wheel override |
 | Configuration | YAML plus environment variables | YAML is versioned; secrets are never committed |
 | Timezone | IANA `Asia/Kolkata` | Raw strings preserved; canonical timestamps use the configured timezone policy |
 | Global seed | Integer `42` | Used across Python, NumPy, scikit-learn, XGBoost, and PyTorch |
@@ -60,10 +60,22 @@ here.
 
 | Package | Pin | Purpose |
 |---|---:|---|
-| PyTorch (`torch`) | `2.13.0` | CPU-first LSTM/GRU training and native checkpoints |
+| PyTorch (`torch`) | `2.13.0` | Device-agnostic LSTM/GRU training and portable state-dictionary checkpoints |
+| PyTorch CUDA distribution | `2.13.0+cu130` | Approved optional NVIDIA build from the official PyTorch `cu130` wheel index |
 
-CUDA is optional. CPU execution is the acceptance baseline; GPU wheels or CUDA
-toolkits must not become mandatory for reproduction.
+The CUDA distribution is installed locally from
+`https://download.pytorch.org/whl/cu130` through `requirements-cuda.txt`.
+The wheel bundles the required CUDA runtime libraries; FlowCast does not require
+a separately installed system CUDA Toolkit. The NVIDIA driver must be compatible
+with the bundled runtime. On the current Windows workstation, PyTorch
+`2.13.0+cu130`, CUDA runtime 13.0, cuDNN 9.2, and the NVIDIA GeForce RTX 5070
+Laptop GPU have been verified together.
+
+CUDA remains an optional acceleration path, not a separate framework or a
+portable dependency requirement. The base `torch==2.13.0` identity and every
+model path remain CPU-compatible. CPU-only Windows/Linux installations and the
+supported macOS backend must be able to train, load, infer, and run tests without
+editing application code.
 
 ### 3.4 Visualisation, dashboard, and notebooks
 
@@ -115,6 +127,15 @@ delivery. Pre-releases and yanked releases are prohibited.
 - The CLI is the canonical automation and end-to-end reproduction surface.
 - The default target is a workstation with 16 GB RAM and roughly 10 GB free space.
 - Windows, macOS, and Linux are supported through Python 3.11 and pinned packages.
+- Full recurrent/deep candidate training should use a verified CUDA device when
+  available and when the workload is large enough to offset device-transfer and
+  startup overhead. Small training probes, tests, tabular pipelines, confidence
+  aggregation, and lightweight inference normally remain on CPU.
+- Runtime device selection is configuration-driven with `auto`, `cpu`, and
+  guarded `cuda` modes. `auto` may choose the verified RTX 5070 for material
+  deep-learning work; `cpu` is the required fallback and portability gate.
+- CUDA batch sizes must stay bounded for the current 8,151 MiB VRAM capacity;
+  CPU thread counts and DataLoader workers remain configurable.
 - Dashboard pages read persisted artifacts and never retrain on an ordinary rerun.
 - Retraining is explicit, confirmed, and may be synchronous for v1.
 - Near-real-time means batch refresh/latest persisted or uploaded data; there is no
@@ -133,7 +154,7 @@ delivery. Pre-releases and yanked releases are prohibited.
 | Plotly dashboard charts | Matplotlib static chart | Only when interactivity is not required by the view |
 | Matplotlib static chart | Pillow-rendered PNG | Only when a reproduced workstation application-control policy blocks Matplotlib; preserve the same versioned PNG/data contract |
 | Joblib | Python pickle | Trusted local scikit-learn artifacts only; document why Joblib failed |
-| LSTM/GRU CPU | CUDA acceleration | Optional optimisation; CPU compatibility remains mandatory |
+| LSTM/GRU CPU | Official PyTorch CUDA 13.0 wheel | Approved local optimisation for material tensor training; CPU compatibility, explicit override, and portable checkpoints remain mandatory |
 
 Bidirectional LSTM and TCN comparisons are optional roadmap items and may begin only
 after required recurrent-model acceptance gates are met. Transformers, graph neural

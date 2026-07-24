@@ -1,0 +1,5 @@
+# Optional NVIDIA acceleration override for Windows/Linux CUDA-capable hosts.
+# Install the portable project requirements first, then install this file.
+# CPU-only and macOS environments must not install this override.
+--index-url https://download.pytorch.org/whl/cu130
+torch==2.13.0+cu130
