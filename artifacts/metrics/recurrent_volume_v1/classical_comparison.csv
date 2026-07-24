@@ -1,0 +1,5 @@
+horizon_windows,horizon_minutes,rows,deep_rmse,classical_rmse,rmse_delta_deep_minus_classical,deep_beats_classical,origin_mapping_complete,actual_values_identical,target_timestamps_identical
+1,30,26500,60.1443300477,63.2353608803,-3.0910308326,True,True,True,True
+2,60,26500,60.8154341757,62.6832533222,-1.8678191465,True,True,True,True
+3,90,26500,61.2014480977,65.0565453333,-3.8550972356,True,True,True,True
+4,120,26500,61.8965757989,61.8495141862,0.0470616127,False,True,True,True

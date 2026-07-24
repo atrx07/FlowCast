@@ -1,0 +1,526 @@
+{
+  "acceptance": {
+    "all_horizons_met": false,
+    "deep_beats_classical_horizons": 3,
+    "required_horizons": 4
+  },
+  "artifacts": {
+    "candidate_metrics": {
+      "bytes": 492,
+      "path": "artifacts/metrics/recurrent_volume_v1/candidate_metrics.csv",
+      "sha256": "0ddd8d4454a4de24f8fb70b31e88b00db3bfc27af87c97df852ba49aeff08ed0"
+    },
+    "checkpoint": {
+      "bytes": 64125,
+      "path": "artifacts/models/recurrent_volume_v1/best_checkpoint.pt",
+      "sha256": "c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd"
+    },
+    "environment": {
+      "bytes": 2236,
+      "path": "artifacts/metrics/recurrent_volume_v1/environment.txt",
+      "sha256": "34979d64bcdc134eb90bb69baffa6f602eefef963056b99c0392e4c9940e2396"
+    },
+    "classical_comparison": {
+      "bytes": 484,
+      "path": "artifacts/metrics/recurrent_volume_v1/classical_comparison.csv",
+      "sha256": "aec0dd2feb36566cf12b51db4bd82b5f148501d07f2e832fab60be8315f35c20"
+    },
+    "feature_manifest": {
+      "bytes": 3871,
+      "path": "artifacts/models/recurrent_volume_v1/feature_manifest.json",
+      "sha256": "ba149f674a637ae402da6e226e254acc6c133e00c635d370aaa1fa9c85d68b62"
+    },
+    "horizon_metrics": {
+      "bytes": 728,
+      "path": "artifacts/metrics/recurrent_volume_v1/horizon_metrics.csv",
+      "sha256": "61adcd74f573d8f70c0e12121a61370b108ded09e3936b507c4db0e7c1496de6"
+    },
+    "model_card_json": {
+      "bytes": 17681,
+      "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.json",
+      "sha256": "8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c"
+    },
+    "model_card_markdown": {
+      "bytes": 1593,
+      "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.md",
+      "sha256": "015e3b25e9d757bdbe3bb79dcd1706c37a70039bfdc48452617ab010ac493a5b"
+    },
+    "predictions": {
+      "bytes": 4414323,
+      "path": "artifacts/predictions/recurrent_volume_v1/predictions.parquet",
+      "sha256": "ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82"
+    },
+    "pretest_model_card": {
+      "bytes": 6626,
+      "path": "artifacts/metrics/recurrent_volume_v1/pretest_model_card.json",
+      "sha256": "ebbf1f1f3a081e1180c7eb47929f699e804060b0dfb598005fdf1c741058d912"
+    },
+    "pretest_sequence_manifest": {
+      "bytes": 1358,
+      "path": "artifacts/metrics/recurrent_volume_v1/pretest_sequence_manifest.json",
+      "sha256": "46b78d0bfdbf1c9266d5a98085d57d9755e3cc4bc89c35dcf91c82e01e3f3cb5"
+    },
+    "registry_extension": {
+      "bytes": 5535,
+      "path": "artifacts/metrics/recurrent_volume_v1/registry_extension.json",
+      "sha256": "f75a3805759b5a39df6beb3c19821ad4aebefb08aba35e013337caf206354f90"
+    },
+    "report": {
+      "bytes": 1825,
+      "path": "artifacts/metrics/recurrent_volume_v1/summary.md",
+      "sha256": "5920e61de8b1663e9b93dbec25e227ba0ad9c26ac932cae7d16e5e6e43a68401"
+    },
+    "selection": {
+      "bytes": 1758,
+      "path": "artifacts/metrics/recurrent_volume_v1/selection_manifest.json",
+      "sha256": "63c8a615bd73312942ac2569f64593dfbc86f883943e131b500a77dfc9240bfa"
+    },
+    "sequence_manifest": {
+      "bytes": 1832,
+      "path": "artifacts/metrics/recurrent_volume_v1/sequence_manifest.json",
+      "sha256": "eca45985e1a299325e57d2a61b1946af76717a0791e90399fa98cd0949971c81"
+    },
+    "target_scaler": {
+      "bytes": 588,
+      "path": "artifacts/models/recurrent_volume_v1/target_scaler.json",
+      "sha256": "124cbb4f981f1f6193445b13598c9960415c55aaaa4615e98b7be7c0f052de2d"
+    },
+    "training_curves": {
+      "bytes": 1327,
+      "path": "artifacts/metrics/recurrent_volume_v1/training_curves.csv",
+      "sha256": "1952241d5363100cb6435a321169e0733041a2b0518f3819be0dee67c2c2e4d7"
+    }
+  },
+  "checks": [
+    {
+      "name": "road_partition_gap_target_isolation",
+      "passed": true
+    },
+    {
+      "name": "training_only_feature_and_target_scaling",
+      "passed": true
+    },
+    {
+      "name": "from_scratch_four_horizon_output",
+      "passed": true
+    },
+    {
+      "name": "selection_and_checkpoint_frozen_before_test",
+      "passed": true
+    },
+    {
+      "name": "best_checkpoint_reload_equality",
+      "passed": true
+    },
+    {
+      "name": "exact_classical_row_mapping",
+      "passed": true
+    },
+    {
+      "name": "four_entry_registry_extension",
+      "passed": true
+    }
+  ],
+  "classical_comparison": [
+    {
+      "actual_values_identical": true,
+      "classical_metrics": {
+        "mae": 41.9200251189,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.2320152741,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9515018532,
+        "rmse": 63.2353608803,
+        "rows": 26500
+      },
+      "classical_rmse": 63.2353608803,
+      "deep_beats_classical": true,
+      "deep_metrics": {
+        "mae": 40.5448427652,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.2095931538,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9561272837,
+        "rmse": 60.1443300477,
+        "rows": 26500
+      },
+      "deep_rmse": 60.1443300477,
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "origin_mapping_complete": true,
+      "rmse_delta_deep_minus_classical": -3.0910308326,
+      "rows": 26500,
+      "target_timestamps_identical": true
+    },
+    {
+      "actual_values_identical": true,
+      "classical_metrics": {
+        "mae": 41.7693825545,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.2878549992,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9523864082,
+        "rmse": 62.6832533222,
+        "rows": 26500
+      },
+      "classical_rmse": 62.6832533222,
+      "deep_beats_classical": true,
+      "deep_metrics": {
+        "mae": 41.108597521,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.3877330505,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9551816865,
+        "rmse": 60.8154341757,
+        "rows": 26500
+      },
+      "deep_rmse": 60.8154341757,
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "origin_mapping_complete": true,
+      "rmse_delta_deep_minus_classical": -1.8678191465,
+      "rows": 26500,
+      "target_timestamps_identical": true
+    },
+    {
+      "actual_values_identical": true,
+      "classical_metrics": {
+        "mae": 43.7584767295,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.9693440648,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9487539902,
+        "rmse": 65.0565453333,
+        "rows": 26500
+      },
+      "classical_rmse": 65.0565453333,
+      "deep_beats_classical": true,
+      "deep_metrics": {
+        "mae": 41.6956081508,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.9788224194,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9546474765,
+        "rmse": 61.2014480977,
+        "rows": 26500
+      },
+      "deep_rmse": 61.2014480977,
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "origin_mapping_complete": true,
+      "rmse_delta_deep_minus_classical": -3.8550972356,
+      "rows": 26500,
+      "target_timestamps_identical": true
+    },
+    {
+      "actual_values_identical": true,
+      "classical_metrics": {
+        "mae": 41.4106073311,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.3180061081,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9537092554,
+        "rmse": 61.8495141862,
+        "rows": 26500
+      },
+      "classical_rmse": 61.8495141862,
+      "deep_beats_classical": false,
+      "deep_metrics": {
+        "mae": 42.5216443478,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 11.5348290586,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9536387829,
+        "rmse": 61.8965757989,
+        "rows": 26500
+      },
+      "deep_rmse": 61.8965757989,
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "origin_mapping_complete": true,
+      "rmse_delta_deep_minus_classical": 0.0470616127,
+      "rows": 26500,
+      "target_timestamps_identical": true
+    }
+  ],
+  "configuration": {
+    "bytes": 2029,
+    "path": "config/recurrent.yaml",
+    "sha256": "e7a0fca98c5454dcfbd4c6824c559373339cab2a28b8901c6d3e3482575d9b46"
+  },
+  "contract_version": "recurrent_volume_v1",
+  "coverage": {
+    "candidate_count": 2,
+    "horizon_count": 4,
+    "registry_entry_count": 4,
+    "selected_model_count": 1,
+    "test_prediction_rows": 106000,
+    "total_prediction_rows": 212000,
+    "validation_prediction_rows": 106000
+  },
+  "device": {
+    "cpu_threads": 8,
+    "cuda_available": false,
+    "cuda_version": null,
+    "gpu_used": false,
+    "npu_used": false,
+    "policy": "auto",
+    "selected": "cpu",
+    "torch_version": "2.13.0+cpu"
+  },
+  "libraries": {
+    "numpy": "2.3.3",
+    "pandas": "3.0.3",
+    "scikit_learn": "1.9.0",
+    "torch": "2.13.0+cpu"
+  },
+  "limitations": [
+    "The model forecasts volume only; confidence intervals arrive in Step 16.",
+    "Observed origin weather is used; future weather forecasts are unavailable.",
+    "Sequence isolation removes the first sequence_length-1 origins per road from each partition, so classical comparison is restricted to the exact deep-model origin subset.",
+    "The installed PyTorch 2.13.0 build is CPU-only on this workstation."
+  ],
+  "metrics": {
+    "test": {
+      "horizons": [
+        {
+          "horizon_windows": 1,
+          "mae": 40.5448427652,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.2095931538,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9561272837,
+          "rmse": 60.1443300477,
+          "rows": 26500
+        },
+        {
+          "horizon_windows": 2,
+          "mae": 41.108597521,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.3877330505,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9551816865,
+          "rmse": 60.8154341757,
+          "rows": 26500
+        },
+        {
+          "horizon_windows": 3,
+          "mae": 41.6956081508,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.9788224194,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9546474765,
+          "rmse": 61.2014480977,
+          "rows": 26500
+        },
+        {
+          "horizon_windows": 4,
+          "mae": 42.5216443478,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 11.5348290586,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9536387829,
+          "rmse": 61.8965757989,
+          "rows": 26500
+        }
+      ],
+      "mean_rmse": 61.01444703
+    },
+    "validation": {
+      "horizons": [
+        {
+          "horizon_windows": 1,
+          "mae": 39.737911818,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.0671978463,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.956253281,
+          "rmse": 58.1037429723,
+          "rows": 26500
+        },
+        {
+          "horizon_windows": 2,
+          "mae": 40.1469363446,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.0939350259,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9551899712,
+          "rmse": 58.8065503963,
+          "rows": 26500
+        },
+        {
+          "horizon_windows": 3,
+          "mae": 40.5291193961,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.3967703292,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9549169119,
+          "rmse": 59.0321533051,
+          "rows": 26500
+        },
+        {
+          "horizon_windows": 4,
+          "mae": 41.3047339461,
+          "mape_nonzero_rows": 26500,
+          "mape_percent": 10.8251889132,
+          "mape_zero_actual_rows": 0,
+          "r_squared": 0.9542250032,
+          "rmse": 59.5989174586,
+          "rows": 26500
+        }
+      ],
+      "mean_rmse": 58.885341033075
+    }
+  },
+  "model": {
+    "checkpoint": {
+      "bytes": 64125,
+      "path": "artifacts/models/recurrent_volume_v1/best_checkpoint.pt",
+      "sha256": "c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd"
+    },
+    "model_card_json": {
+      "bytes": 17681,
+      "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.json",
+      "sha256": "8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c"
+    },
+    "model_card_markdown": {
+      "bytes": 1593,
+      "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.md",
+      "sha256": "015e3b25e9d757bdbe3bb79dcd1706c37a70039bfdc48452617ab010ac493a5b"
+    },
+    "target_scaler": {
+      "bytes": 588,
+      "path": "artifacts/models/recurrent_volume_v1/target_scaler.json",
+      "sha256": "124cbb4f981f1f6193445b13598c9960415c55aaaa4615e98b7be7c0f052de2d"
+    }
+  },
+  "runtime": {
+    "candidate_fit_seconds": 69.1914241000195,
+    "test_prediction_seconds": 0.10852169996360317,
+    "total_seconds": 76.7242932000081,
+    "validation_reload_prediction_seconds": 0.11293480003951117
+  },
+  "selection": {
+    "best_epoch": 8,
+    "bytes": 1758,
+    "path": "artifacts/metrics/recurrent_volume_v1/selection_manifest.json",
+    "selected_candidate_id": "lstm_s12_h32",
+    "sha256": "63c8a615bd73312942ac2569f64593dfbc86f883943e131b500a77dfc9240bfa",
+    "status": "frozen_before_test_access",
+    "test_metrics_used": false,
+    "validation_mean_rmse": 58.885341033075
+  },
+  "sequences": {
+    "common_validation_and_test_origin_policy": true,
+    "contract_version": "recurrent_sequence_manifest_v1",
+    "maximum_candidate_sequence_length": 24,
+    "selected_candidate_id": "lstm_s12_h32",
+    "test": {
+      "cadence_minutes": 30,
+      "cross_partition_sequences": 0,
+      "cross_road_sequences": 0,
+      "feature_count": 64,
+      "non_contiguous_sequences": 0,
+      "origin_end": "2025-05-31T21:30:00+05:30",
+      "origin_start": "2025-05-09T20:00:00+05:30",
+      "partition": "test",
+      "road_count": 25,
+      "sequence_count": 26500,
+      "sequence_length": 12,
+      "target_boundary_violations": 0,
+      "target_columns": [
+        "target_volume_h1",
+        "target_volume_h2",
+        "target_volume_h3",
+        "target_volume_h4"
+      ]
+    },
+    "train": {
+      "cadence_minutes": 30,
+      "cross_partition_sequences": 0,
+      "cross_road_sequences": 0,
+      "feature_count": 64,
+      "non_contiguous_sequences": 0,
+      "origin_end": "2025-04-16T14:30:00+05:30",
+      "origin_start": "2025-01-01T05:30:00+05:30",
+      "partition": "train",
+      "road_count": 25,
+      "sequence_count": 126475,
+      "sequence_length": 12,
+      "target_boundary_violations": 0,
+      "target_columns": [
+        "target_volume_h1",
+        "target_volume_h2",
+        "target_volume_h3",
+        "target_volume_h4"
+      ]
+    },
+    "validation": {
+      "cadence_minutes": 30,
+      "cross_partition_sequences": 0,
+      "cross_road_sequences": 0,
+      "feature_count": 64,
+      "non_contiguous_sequences": 0,
+      "origin_end": "2025-05-09T06:00:00+05:30",
+      "origin_start": "2025-04-17T04:30:00+05:30",
+      "partition": "validation",
+      "road_count": 25,
+      "sequence_count": 26500,
+      "sequence_length": 12,
+      "target_boundary_violations": 0,
+      "target_columns": [
+        "target_volume_h1",
+        "target_volume_h2",
+        "target_volume_h3",
+        "target_volume_h4"
+      ]
+    }
+  },
+  "target_scaling": {
+    "columns": [
+      "target_volume_h1",
+      "target_volume_h2",
+      "target_volume_h3",
+      "target_volume_h4"
+    ],
+    "fitted_rows": 126175,
+    "mean": {
+      "target_volume_h1": 429.6673984545274,
+      "target_volume_h2": 429.7329978204874,
+      "target_volume_h3": 429.8178561521696,
+      "target_volume_h4": 429.9173132553992
+    },
+    "scale": {
+      "target_volume_h1": 283.71584860647755,
+      "target_volume_h2": 283.7164624404918,
+      "target_volume_h3": 283.73277638099506,
+      "target_volume_h4": 283.75973511803176
+    },
+    "source_partition": "train",
+    "type": "per_horizon_standard"
+  },
+  "test_access": {
+    "loader_invocation_count": 1,
+    "models_refit_after_test_load": false,
+    "purpose": "final_evaluation",
+    "selection_status_before_load": "frozen_before_test_access"
+  },
+  "upstream": {
+    "classical_registry_summary": {
+      "bytes": 2966,
+      "path": "artifacts/metrics/classical_registry_v1/summary.json",
+      "sha256": "b64ddfb87e6abe0868d9e6782b177d661d937cea29e858c290650c2c56bc8e6a"
+    },
+    "classical_regression_summary": {
+      "bytes": 25868,
+      "path": "artifacts/metrics/classical_regression_v1/summary.json",
+      "sha256": "519b91265fbec38370f0d2821a3cf08cc22058fc845828d5f175f90bf103a382"
+    },
+    "modelling_summary": {
+      "bytes": 76872,
+      "path": "artifacts/features/split_preprocessing_v1/summary.json",
+      "sha256": "1e2194c52d8442c72cbb3b402e38ab5d4570938437006af85c3a5a311769e011"
+    }
+  },
+  "version": "recurrent_volume_v1"
+}

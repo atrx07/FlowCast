@@ -12,8 +12,8 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 24 July 2026. Milestones M0-M5 are complete and M6 is next.
-Steps 00-14 now
+Last verified on 24 July 2026. Milestones M0-M5 are complete and M6 is in
+progress. Steps 00-15 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -48,10 +48,19 @@ adds a deterministic, tamper-checked 20-entry classical registry and task-aware
 scoreboard while preserving every frozen choice and test result. Its indexed
 manifest maps all 1,078,957 existing validation/test prediction rows without
 copying or fabricating values, and verified loading resolves every registered
-model/card lineage. All 137 tests pass. Step 15 from-scratch recurrent volume
-forecasting is the
-immediate gate; confidence, inference services, report export, and the
-dashboard remain ahead.
+model/card lineage. Step 15 adds a from-scratch PyTorch LSTM that consumes 12
+road-local half-hour steps and produces all four volume horizons in one pass.
+The selected epoch-8 checkpoint uses 126,475 training sequences and 26,500
+validation/test sequences with zero road, split, cadence, or target-boundary
+violations. Hold-out RMSE is 60.1443, 60.8154, 61.2014, and 61.8966 for
+30-120 minutes. On the exact shared test origins, it beats the frozen classical
+model at the first three horizons and trails by 0.0471 RMSE at 120 minutes, so
+the formal all-horizon goal remains honestly unmet. Its state dictionary,
+training curves, model card, environment snapshot, 212,000 persisted
+predictions, and four-entry registry extension pass verified reload and
+tamper-rejection tests. The complete assurance suite now passes all 147 tests.
+Step 16 confidence and error analysis is the immediate
+gate; inference services, report export, and the dashboard remain ahead.
 
 ## Delivery timeline
 
@@ -60,7 +69,7 @@ dashboard remain ahead.
 | Before Week 1 | M0 governance and plan | Complete |
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
 | Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
-| Week 3 | M6 recurrent deep learning and confidence | Next - Step 15 recurrent model |
+| Week 3 | M6 recurrent deep learning and confidence | In progress - Step 15 verified; Step 16 next |
 | Week 4 | M7 dashboard, M8 reproducibility and delivery | Not started |
 
 ## Quick start
@@ -70,7 +79,7 @@ Python 3.11 is required.
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -e ".[classical,eda,test]"
+.\.venv\Scripts\python.exe -m pip install -e ".[classical,deep,eda,test]"
 .\.venv\Scripts\python.exe -m flowcast.cli audit
 .\.venv\Scripts\python.exe -m flowcast.cli validate
 .\.venv\Scripts\python.exe -m flowcast.cli clean-context
@@ -84,6 +93,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli train-classical-regression
 .\.venv\Scripts\python.exe -m flowcast.cli train-classical-classification
 .\.venv\Scripts\python.exe -m flowcast.cli build-classical-registry
+.\.venv\Scripts\python.exe -m flowcast.cli train-recurrent-volume
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 

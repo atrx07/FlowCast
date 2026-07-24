@@ -55,7 +55,7 @@ python -m flowcast.cli prepare-modeling
 python -m flowcast.cli train-scratch-linear
 python -m flowcast.cli train-classical-regression
 python -m flowcast.cli train-classical-classification
-python -m flowcast.cli train-deep
+python -m flowcast.cli train-recurrent-volume
 python -m flowcast.cli evaluate
 python -m flowcast.cli predict --horizons 1 2 3 4
 python -m flowcast.cli build-reports
@@ -268,8 +268,11 @@ This is a target structure, not permission to create empty files unnecessarily. 
   prediction-index policy, and deterministic key template. Keeping registry
   settings separate prevents reporting changes from invalidating frozen
   training hashes.
-- Later steps add recurrent training and early-stopping settings without
-  weakening the frozen split contract.
+- `config/recurrent.yaml` independently defines the Step 15 multi-horizon
+  volume target, sequence isolation policy, bounded LSTM candidates, Adam
+  settings, learning-rate schedule, early stopping, device policy, validation
+  selection rule, and exact-row classical comparison. Keeping it independent
+  prevents recurrent work from invalidating the frozen Step 10-14 lineage.
 
 ## 6. Data Contracts
 ### 6.1 Raw traffic contract
@@ -500,6 +503,27 @@ Key: `road_id + timestamp`.
   evidence, feature importance, hashes, JSON/Markdown model cards, and a
   verified Joblib loader live under `classical_classification_v1`.
 
+### 6.15 Recurrent volume artifact boundary
+
+- `train-recurrent-volume` recursively verifies the Step 10 modelling summary,
+  recurrent preprocessor, processed lineage, classical regression outputs, and
+  Step 14 registry before training.
+- `sequence_data.py` owns lazy road-local sequence views, contiguous-cadence
+  checks, common validation/test origin eligibility, and training-only
+  per-horizon target scaling. A sequence cannot cross a road, chronological
+  partition, 30-minute gap, or target boundary.
+- `recurrent_model.py` owns the from-scratch PyTorch LSTM/GRU plus four-value
+  volume head. `recurrent_training.py` owns seeding, Adam, mini-batches,
+  gradient clipping, learning-rate reduction, validation-led early stopping,
+  best-weight restoration, and deterministic inference.
+- Candidate metrics, epoch curves, feature/scaler manifests, sequence
+  evidence, selection manifest, pre-test card, and the selected state-dictionary
+  checkpoint are persisted before one explicit `final_evaluation` test load.
+- Canonical metrics, exact-row classical comparison, JSON/Markdown card,
+  environment snapshot, four-entry registry extension, and long-form
+  validation/test predictions live under `recurrent_volume_v1`. Verified
+  loading checks every recorded dependency before reconstructing the network.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -676,6 +700,14 @@ Input: [batch, sequence_length, feature_count]
 - CPU-compatible; CUDA used when available.
 - Checkpoint stores model state, architecture config, scaler/feature manifest, split, seed, and metrics.
 
+The verified v1 implementation tunes two predeclared unidirectional LSTM
+candidates on common validation origins. `lstm_s12_h32` was selected at epoch
+8. It consumes 12 half-hour steps of 64 transformed known-at-origin features
+and produces all four volume horizons. On 26,500 exact shared hold-out origins
+per horizon it beats the frozen classical model at 30, 60, and 90 minutes but
+trails by 0.0471 RMSE at 120 minutes. Test results cannot trigger a refit or
+architecture change.
+
 ## 11. Confidence Architecture
 ### Regression
 Preferred minimum:
@@ -800,6 +832,11 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
   frozen-source equality, complete lineage, deterministic generation,
   one-to-one prediction indexing, all-model reloadability, and
   registry/upstream tamper rejection.
+- recurrent road/split/gap/target isolation, training-only target scaling,
+  four-output shapes, seeded initialization, validation-only selection,
+  pre-test checkpoint freeze, best-weight reload equality, exact classical
+  origin mapping, metric correctness, registry-extension coverage, and
+  checkpoint tamper rejection.
 
 ### Integration
 - raw -> interim.

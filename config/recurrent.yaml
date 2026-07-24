@@ -1,0 +1,77 @@
+recurrent_volume:
+  contract_version: recurrent_volume_v1
+  version: recurrent_volume_v1
+  upstream:
+    modelling_version: split_preprocessing_v1
+    classical_regression_version: classical_regression_v1
+    classical_registry_version: classical_registry_v1
+  target:
+    key: volume
+    horizons: [1, 2, 3, 4]
+    columns:
+      - target_volume_h1
+      - target_volume_h2
+      - target_volume_h3
+      - target_volume_h4
+  sequence:
+    cadence_minutes: 30
+    require_contiguous: true
+    forbid_cross_partition: true
+    require_all_horizon_targets: true
+  candidates:
+    - candidate_id: lstm_s12_h32
+      recurrent_type: lstm
+      sequence_length: 12
+      hidden_size: 32
+      layer_count: 1
+      recurrent_dropout: 0.0
+      head_hidden_size: 32
+      head_dropout: 0.20
+      batch_size: 1024
+      learning_rate: 0.002
+      weight_decay: 0.00001
+    - candidate_id: lstm_s24_h48
+      recurrent_type: lstm
+      sequence_length: 24
+      hidden_size: 48
+      layer_count: 2
+      recurrent_dropout: 0.20
+      head_hidden_size: 32
+      head_dropout: 0.20
+      batch_size: 1024
+      learning_rate: 0.001
+      weight_decay: 0.00001
+  training:
+    loss: mean_squared_error
+    optimizer: adam
+    maximum_epochs: 12
+    minimum_epochs: 3
+    early_stopping:
+      metric: validation_mean_rmse
+      patience: 3
+      minimum_improvement: 0.01
+    scheduler:
+      type: reduce_lr_on_plateau
+      factor: 0.5
+      patience: 1
+      minimum_learning_rate: 0.00001
+    gradient_clip_norm: 1.0
+    target_scaling: per_horizon_standard
+  selection:
+    primary_metric: validation_mean_rmse
+    direction: minimize
+    common_validation_origins: true
+    tie_breakers:
+      - parameter_count
+      - candidate_id
+    freeze_before_test: true
+  device:
+    policy: auto
+    cpu_threads: 8
+    dataloader_workers: 0
+    deterministic_algorithms: true
+  comparison:
+    classical_prediction_split: test
+    require_exact_origin_mapping: true
+    metric: rmse
+    acceptance_rule: deep_rmse_less_than_classical_rmse

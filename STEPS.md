@@ -588,11 +588,48 @@ Train a from-scratch LSTM/GRU that predicts future volume across four horizons.
 9. Evaluate on the identical test rows/horizons used for classical comparison.
 10. Optionally add a congestion head only after the volume model is stable.
 
+### Proven Step 15 procedure
+
+- `config/recurrent.yaml` independently freezes two bounded LSTM candidates,
+  the four volume targets, contiguous 30-minute road-local sequences, Adam,
+  per-horizon training-only target scaling, learning-rate reduction, early
+  stopping, deterministic CPU/CUDA policy, and validation mean-RMSE selection.
+  The independent file preserves all Step 10-14 configuration hashes.
+- `flowcast train-recurrent-volume` recursively verifies the frozen Step 10
+  modelling artifacts and classical registry before loading train/validation.
+  The fitted Step 10 recurrent preprocessor produces 64 finite features from
+  the exact 62 known-at-origin inputs.
+- Sequence endpoints require all four targets and target timestamps to remain
+  within the same partition. Windows are built within one road and one
+  contiguous 30-minute run. Candidate selection uses the same validation
+  origins eligible for the longest candidate, so sequence length cannot win by
+  changing validation coverage.
+- Candidate metrics, all epoch curves, feature/target scaling manifests,
+  sequence evidence, selection manifest, pre-test model card, and the selected
+  state-dictionary checkpoint are persisted before the single explicit
+  `final_evaluation` test load.
+- The selected `lstm_s12_h32` checkpoint restores epoch 8 and predicts volume
+  at all four horizons in one forward pass. It uses 126,475 training sequences
+  and 26,500 validation/test sequences, with zero road, partition, cadence, or
+  target-boundary violations.
+- Test RMSE is 60.1443, 60.8154, 61.2014, and 61.8966 at 30-120 minutes.
+  On the exact 26,500 shared classical origins per horizon, deep RMSE is lower
+  at 30, 60, and 90 minutes and higher by 0.0471 RMSE at 120 minutes. The
+  unmet all-horizon goal remains visible and cannot trigger post-test tuning.
+- The run persists the state dictionary, JSON scaler/config/feature metadata,
+  212,000 validation/test prediction rows, per-horizon metrics, comparison,
+  JSON/Markdown model card, complete environment snapshot, and a four-entry
+  recurrent registry extension. Verified loading reproduces predictions and
+  rejects checkpoint tampering.
+
 ### Exit gate
 - No pretrained weights.
 - Training/validation curves and best epoch are saved.
 - Checkpoint reload reproduces inference.
 - Head-to-head benchmark is fair and documented.
+- Verified 2026-07-24: all implementation/persistence gates pass; the formal
+  deep-beats-classical goal is met at 3 of 4 horizons and remains an explicit
+  model-risk finding for Step 16.
 ---
 ## Step 16 - Add Confidence and Error Analysis
 ### Goal

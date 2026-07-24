@@ -4,10 +4,10 @@
 
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-24
-- **Current milestone:** M5 - Classical machine learning (complete)
-- **Current step:** Steps 00-14 complete; Step 15 next
-- **Overall state:** Classical model registry verified; recurrent volume modelling
-  is the next gate
+- **Current milestone:** M6 - Deep learning and confidence (in progress)
+- **Current step:** Steps 00-15 complete; Step 16 next
+- **Overall state:** Recurrent multi-horizon volume model verified; confidence
+  and error analysis is the next gate
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
@@ -15,169 +15,184 @@
 FlowCast has a reproducible Python 3.11 pipeline from immutable raw inputs
 through validation, cleaning, merge, leakage-safe features, four-horizon
 targets, EDA, frozen chronological evaluation, training-only preprocessing,
-the NumPy regression proof, complete classical regression/classification, and a
-combined classical model registry.
+NumPy regression proof, complete classical regression/classification, a
+combined classical registry, and a from-scratch recurrent volume forecaster.
 
-Step 14 consolidates all 20 selected classical target/horizon jobs without
-retraining, changing a selection, or loading the sealed source test partition.
-The registry recursively verifies the frozen Step 12/13 summaries, selection
-manifests, source scoreboards, model/card artifacts, prediction Parquets,
-Step 10 feature schema, processed-data lineage, and configuration hashes.
+Step 15 consumes the exact frozen Step 10 recurrent preprocessing contract and
+does not change the Step 10-14 configuration hashes, model choices, test
+boundaries, or persisted classical predictions. It persists selection and the
+best state-dictionary checkpoint before the single explicit test load.
 
-The requested workstation-resource disclosure rule is now part of `AGENTS.md`.
-Before hardware-using work, future agents must name the expected CPU, GPU, NPU,
-system-RAM, VRAM, and disk usage, including resources that will not be used.
+`FlowCast-project_file/`, `data/raw/`, the delivered CSV/DOCX sources, and all
+frozen classical source artifacts remain unchanged.
 
-## 2. Step 14 Implementation
+## 2. Step 15 Implementation
 
-- Added independent `config/registry.yaml` with the
-  `classical_registry_v1` contract, five required targets, four horizons,
-  task-aware primary metrics/directions, acceptance gates, frozen upstream
-  versions, indexed prediction mapping, and registry-key template.
-- Kept registry configuration separate from `config/models.yaml`. This
-  preserves the hashes of the already-frozen Step 10/12/13 training artifacts
-  and avoids unnecessary retraining.
-- Added deterministic registry construction, normalized scoreboard generation,
-  selection rationales, runtime/interpretability context, honest acceptance
-  results, and an indexed source-prediction manifest.
-- Added recursive verified loading. The loader rejects missing, stale, or
-  tampered registry outputs or upstream artifacts before resolving a model
-  through the existing regression/classification loaders.
-- Added `flowcast build-classical-registry [--version VERSION]`.
-- Added unit/full-artifact contracts for configuration coverage, task-aware
-  metrics, exact lineage, deterministic bytes, prediction mapping, all-model
-  Joblib reloads, public loader resolution, and registry/upstream tampering.
+- Added independent `config/recurrent.yaml` with the
+  `recurrent_volume_v1` contract, two bounded LSTM candidates, target columns
+  h1-h4, sequence/cadence isolation, Adam, training-only per-horizon target
+  scaling, learning-rate reduction, early stopping, device policy, validation
+  selection, and exact-row classical comparison.
+- Added lazy PyTorch datasets over transformed partitions; sequences cannot
+  cross roads, chronological partitions, 30-minute gaps, or target boundaries.
+- Restricted candidate validation to the exact origins eligible for the
+  longest configured sequence so sequence length cannot win through different
+  validation coverage.
+- Added a unidirectional LSTM/GRU implementation with dropout and a four-value
+  volume head. All weights are seeded and initialized from scratch.
+- Added candidate training, gradient clipping, scheduler, early stopping,
+  best-state restoration, deterministic inference, and CPU/CUDA policy
+  resolution.
+- Persisted candidate metrics, epoch curves, feature/scaler manifests,
+  pre-test sequence/card/selection evidence, state dictionary, validation/test
+  predictions, metrics, exact-row comparison, JSON/Markdown model card,
+  environment snapshot, report, and a four-entry recurrent registry extension.
+- Added `flowcast train-recurrent-volume`.
+- Added unit/full-artifact contracts for config coverage, sequence isolation,
+  target boundaries, training-only scaling, shapes/seeding, exact comparison,
+  freeze order, metric/artifact coverage, reload equality, and tamper
+  rejection.
 
-## 3. Registry Coverage and Governance Evidence
+## 3. Sequence, Training, and Resource Evidence
 
-- Required targets: volume, speed, travel time, congestion, accident risk.
-- Required horizons: 1-4 windows (30, 60, 90, and 120 minutes).
-- Registry entries: 20 unique entries from 20 unique jobs.
-- Regression entries: 12; classification entries: 8.
-- Prediction sources: 2 immutable Parquets.
-- Indexed validation/test predictions: 1,078,957 rows.
-- Unmapped source prediction rows: 0.
-- Registry entries without prediction rows: 0.
-- Source selections changed: 0.
-- Models retrained in Step 14: 0.
-- Direct source test-partition loads in Step 14: 0.
-- Test metrics used for selection: no.
-
-Registry keys use:
-
-```text
-{target}/h{horizon}/{family}/{model_version}
-```
-
-Each entry records model/card/prediction/selection artifacts, hashes,
-preprocessing and feature versions, processed-data lineage, seed,
-hyperparameters, train/validation/test windows and row counts, validation/test
-metrics, class/probability information where relevant, runtime,
-interpretability, selection rationale, acceptance state, and limitations.
+- Selected candidate: `lstm_s12_h32`.
+- Recurrent type: unidirectional LSTM; sequence length: 12 windows.
+- Transformed inputs: 64 from the frozen 62-feature origin schema.
+- Best epoch: 8; stopped epoch: 11 through validation-led early stopping.
+- Training sequences: 126,475 across 25 roads.
+- Validation sequences: 26,500 across 25 roads.
+- Test sequences: 26,500 across 25 roads.
+- Cross-road sequences: 0.
+- Cross-partition sequences: 0.
+- Non-contiguous sequences: 0.
+- Target-boundary violations: 0.
+- Candidate fit time: 69.19 seconds; total canonical run: 76.72 seconds.
+- Installed framework: PyTorch `2.13.0+cpu`.
+- Execution device: Intel Core Ultra 9 CPU, 8 PyTorch threads.
+- RTX 5070 Laptop GPU/VRAM used: no; CUDA unavailable in the installed build.
+- Intel NPU used: no.
 
 ## 4. Frozen Hold-Out Results
 
-Step 14 preserves the Step 12/13 outcomes exactly:
+The recurrent model was evaluated once after candidate/checkpoint freeze.
+Each comparison uses the exact same 26,500 road/timestamp origins and actual
+values as the corresponding frozen classical prediction.
 
-| Target | Primary metric | Test range across h1-h4 | Formal target | Result |
-|---|---|---:|---:|---|
-| Volume | RMSE | 62.0092-65.3058 | MAPE <= 12% | Met at 4/4 horizons |
-| Speed | RMSE | 3.73998-3.79402 | Not specified | Reported |
-| Travel time | RMSE | 1.08217-1.14263 | Not specified | Reported |
-| Congestion | Macro-F1 | 0.7468-0.7540 | >= 0.80 | Met at 0/4 horizons |
-| Accident risk | ROC-AUC | 0.5894-0.6237 | >= 0.75 | Met at 0/4 horizons |
+| Horizon | Deep RMSE | Classical RMSE | Delta deep-classical | Deep wins | Deep MAPE |
+|---:|---:|---:|---:|---|---:|
+| 30 min | 60.1443 | 63.2354 | -3.0910 | Yes | 10.210% |
+| 60 min | 60.8154 | 62.6833 | -1.8678 | Yes | 10.388% |
+| 90 min | 61.2014 | 65.0565 | -3.8551 | Yes | 10.979% |
+| 120 min | 61.8966 | 61.8495 | +0.0471 | No | 11.535% |
 
-The missed classifier goals remain explicit model-risk findings. No split,
-feature, family, calibrator, threshold, prediction, or score was changed after
-the frozen test results became visible.
+- Mean deep test RMSE: 61.0144.
+- The volume MAPE target remains met at all four horizons.
+- Deep RMSE beats classical at 3 of 4 horizons.
+- The formal all-horizon deep-vs-classical target is therefore not met.
+- No post-test architecture, sequence-length, epoch, or prediction change was
+  made to chase the 120-minute result.
 
 ## 5. Produced Artifacts
 
 ```text
-artifacts/metrics/classical_registry_v1/
-  prediction_index.json
-  registry.json
-  scoreboard.csv
+artifacts/metrics/recurrent_volume_v1/
+  candidate_metrics.csv
+  classical_comparison.csv
+  environment.txt
+  horizon_metrics.csv
+  pretest_model_card.json
+  pretest_sequence_manifest.json
+  registry_extension.json
+  selection_manifest.json
+  sequence_manifest.json
   summary.json
   summary.md
+  training_curves.csv
+
+artifacts/model_cards/recurrent_volume_v1/
+  volume_multi_horizon.json
+  volume_multi_horizon.md
+
+artifacts/models/recurrent_volume_v1/       # ignored, reproducible
+  best_checkpoint.pt
+  feature_manifest.json
+  target_scaler.json
+
+artifacts/predictions/recurrent_volume_v1/  # ignored, reproducible
+  predictions.parquet
 ```
 
-The prediction index references existing versioned prediction Parquets rather
-than duplicating roughly 1.08 million real prediction rows.
+Key canonical artifacts:
 
 | Artifact | Bytes | SHA-256 |
 |---|---:|---|
-| Registry JSON | 128,915 | `9b80859ba4b20999f7c31645e95474aa72bb6e8e5a082266e64f0cd144ae7138` |
-| Combined scoreboard | 17,629 | `0feaf46b8c1cffd1a574af6fe7414c393078180dcf2551befa055acd586018b7` |
-| Prediction index | 5,915 | `457383a72d2e6583a9af0911f331cf00ac920a078c75efbc97e47b27bd9a15fe` |
-| Generated report | 11,426 | `01a837d0c01bc7707669795c8e590855c53f663d8c9e9b5ea9ffa5ce482b0d9f` |
-
-The independent registry-config SHA-256 is
-`dc65cc1a7dc230c0b719ac5189131508d8a7f67f590f6e3eb93cec96ee120d0c`.
-The verified regression/classification summary hashes remain
-`519b91265fbec38370f0d2821a3cf08cc22058fc845828d5f175f90bf103a382`
-and
-`61a4d8a1e26e4297068bf2b7826945198c067a8981cbf593b08a1dbac539f6f5`.
+| Checkpoint | 64,125 | `c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd` |
+| Predictions | 4,414,323 | `ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82` |
+| Model-card JSON | 17,681 | `8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c` |
+| Selection manifest | 1,758 | `63c8a615bd73312942ac2569f64593dfbc86f883943e131b500a77dfc9240bfa` |
+| Comparison CSV | 484 | `aec0dd2feb36566cf12b51db4bd82b5f148501d07f2e832fab60be8315f35c20` |
 
 ## 6. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
 ```text
-.venv/Scripts/python.exe -m flowcast.cli build-classical-registry
-.venv/Scripts/python.exe -m pytest -q tests/unit/test_classical_registry.py tests/data_contracts/test_classical_registry_contract.py
+.venv/Scripts/python.exe -m pip install "torch==2.13.0"
+.venv/Scripts/python.exe -m flowcast.cli train-recurrent-volume
+.venv/Scripts/python.exe -m pytest -q tests/unit/test_recurrent_volume.py tests/data_contracts/test_recurrent_volume_contract.py
 .venv/Scripts/python.exe -m pytest -q
-.venv/Scripts/python.exe -m pip check
 .venv/Scripts/python.exe -m compileall -q src tests
-.venv/Scripts/python.exe -m flowcast.cli build-classical-registry --help
+.venv/Scripts/python.exe -m flowcast.cli train-recurrent-volume --help
+.venv/Scripts/python.exe -m pip check
 git diff --check
 ```
 
 Verified results:
 
-- Canonical registry build: passed in about 3 seconds.
-- Focused Step 14 unit/full-artifact contracts: 9 passed in 3.32 seconds.
-- Complete suite: 137 passed in 471.56 seconds.
-- The complete suite independently retrained the Step 12 and Step 13 model
-  families beneath temporary artifact roots and then rebuilt the registry.
-- Registry generation is byte-deterministic across repeated runs.
-- All 20 selected model files deserialize; public verified loading resolves
-  both regression and probability-classification entries.
-- Registry and upstream-summary byte tampering are rejected.
-- Dependency consistency, CLI help, byte compilation, whitespace, final
-  20-entry artifact verification, and read-only source/reference checks pass.
-- Every source file is below 400 lines; the largest is
-  `registry_outputs.py` at 395 physical lines.
+- Canonical Step 15 build: passed in 76.72 seconds.
+- Focused Step 15 unit/full-artifact contracts: 10 passed in 6.07 seconds.
+- Complete suite: 147 passed in 464.79 seconds.
+- The complete suite independently retrained the frozen classical families in
+  temporary artifact roots, verified every prior pipeline layer, and then
+  validated the canonical recurrent chain.
+- Checkpoint reconstruction reproduces all persisted validation predictions.
+- Deliberate checkpoint byte tampering is rejected before deserialization.
+- All 212,000 long-form validation/test prediction rows are finite and
+  horizon-traceable.
+- Exact classical origin, target timestamp, and actual-value mapping passes at
+  all horizons.
+- Dependency consistency, CLI help, byte compilation, and whitespace checks
+  pass.
+- Every source file remains below 400 physical lines.
 
 ## 7. Decisions and Constraints
 
-- A separate registry YAML is an artifact-boundary decision, not a new product
-  dependency. It prevents reporting-only configuration from invalidating
-  frozen model-training lineage.
-- The combined scoreboard does not rank unlike tasks against one another.
-  Regression remains RMSE-led, congestion remains Macro-F1-led, and accident
-  risk remains ROC-AUC-led.
-- Runtime and interpretability are stored as operating context only. They do
-  not override the already-frozen validation winner.
-- Model cards remain the detailed target/horizon governance record; registry
-  entries normalize and index them rather than replacing them.
-- `FlowCast-project_file/`, `data/raw/`, source data, test boundaries, model
-  binaries, source predictions, and dependency versions were not modified.
+- The recurrent YAML and registry extension are separate from the classical
+  registry contract. This prevents deep-model reporting from invalidating
+  frozen Step 10-14 hashes or rewriting the classical-only registry.
+- Validation mean RMSE selects the candidate and epoch. Test RMSE is reporting
+  evidence only.
+- The state dictionary is the primary PyTorch artifact; no opaque whole-model
+  object or pretrained weights are persisted.
+- Validation/test comparisons use the longest-candidate eligible-origin
+  intersection. This gives every candidate the same selection origins and
+  gives deep/classical models identical comparison rows.
+- The CPU-only PyTorch build satisfies the approved CPU acceptance baseline.
+  CUDA acceleration remains optional and was not represented as active.
 
 ## 8. Risks and Unresolved Work
 
-- Congestion and accident-risk goals remain unmet. Step 16 must diagnose
-  segment/time/weather/prevalence failure modes without concealing the baseline.
-- Very low accident prevalence produces weak PR-AUC and operating precision/F1.
-- Deep sequence modelling, confidence intervals, inference/report services,
+- The recurrent model trails the classical model by 0.0471 RMSE at 120 minutes,
+  so the formal all-horizon deep comparison goal is missed.
+- Congestion Macro-F1 and accident ROC-AUC targets remain unmet.
+- Step 16 must diagnose the 120-minute, congestion, and accident failure modes
+  without refitting on or concealing the sealed-test results.
+- Regression intervals, unified confidence tables, inference/report services,
   Streamlit views, upload/retraining controls, and final reproduction remain.
-- The Step 15 recurrent model must compare with the exact frozen classical
-  volume rows and RMSE values and must not earn a favourable comparison through
-  different test coverage.
-- Generated model binaries and prediction Parquets remain ignored by Git and
-  must be rebuilt with documented commands after a clean clone.
+- Generated checkpoint/scaler/prediction artifacts are ignored by Git and must
+  be rebuilt with the documented CLI after a clean clone.
 
 ## 9. Next Gate
 
-Proceed only to **Step 15 - Build and Train the Recurrent Model**. The bounded
+Proceed only to **Step 16 - Add Confidence and Error Analysis**. The bounded
 action and evidence gate are maintained in `NEXT_STEP.md`.

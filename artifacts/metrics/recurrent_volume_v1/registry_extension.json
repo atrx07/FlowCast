@@ -1,0 +1,159 @@
+{
+  "contract_version": "recurrent_registry_extension_v1",
+  "entries": [
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 64125,
+          "path": "artifacts/models/recurrent_volume_v1/best_checkpoint.pt",
+          "sha256": "c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd"
+        },
+        "model_card": {
+          "bytes": 17681,
+          "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.json",
+          "sha256": "8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c"
+        },
+        "predictions": {
+          "bytes": 4414323,
+          "path": "artifacts/predictions/recurrent_volume_v1/predictions.parquet",
+          "sha256": "ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82"
+        }
+      },
+      "family": "lstm",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "job_id": "volume_h1",
+      "model_version": "recurrent_volume_v1",
+      "primary_metric": "rmse",
+      "registry_key": "volume/h1/lstm/recurrent_volume_v1",
+      "shared_multi_horizon_checkpoint": true,
+      "target": "volume",
+      "test_metrics": {
+        "horizon_windows": 1,
+        "mae": 40.5448427652,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.2095931538,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9561272837,
+        "rmse": 60.1443300477,
+        "rows": 26500
+      }
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 64125,
+          "path": "artifacts/models/recurrent_volume_v1/best_checkpoint.pt",
+          "sha256": "c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd"
+        },
+        "model_card": {
+          "bytes": 17681,
+          "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.json",
+          "sha256": "8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c"
+        },
+        "predictions": {
+          "bytes": 4414323,
+          "path": "artifacts/predictions/recurrent_volume_v1/predictions.parquet",
+          "sha256": "ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82"
+        }
+      },
+      "family": "lstm",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "job_id": "volume_h2",
+      "model_version": "recurrent_volume_v1",
+      "primary_metric": "rmse",
+      "registry_key": "volume/h2/lstm/recurrent_volume_v1",
+      "shared_multi_horizon_checkpoint": true,
+      "target": "volume",
+      "test_metrics": {
+        "horizon_windows": 2,
+        "mae": 41.108597521,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.3877330505,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9551816865,
+        "rmse": 60.8154341757,
+        "rows": 26500
+      }
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 64125,
+          "path": "artifacts/models/recurrent_volume_v1/best_checkpoint.pt",
+          "sha256": "c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd"
+        },
+        "model_card": {
+          "bytes": 17681,
+          "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.json",
+          "sha256": "8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c"
+        },
+        "predictions": {
+          "bytes": 4414323,
+          "path": "artifacts/predictions/recurrent_volume_v1/predictions.parquet",
+          "sha256": "ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82"
+        }
+      },
+      "family": "lstm",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "job_id": "volume_h3",
+      "model_version": "recurrent_volume_v1",
+      "primary_metric": "rmse",
+      "registry_key": "volume/h3/lstm/recurrent_volume_v1",
+      "shared_multi_horizon_checkpoint": true,
+      "target": "volume",
+      "test_metrics": {
+        "horizon_windows": 3,
+        "mae": 41.6956081508,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 10.9788224194,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9546474765,
+        "rmse": 61.2014480977,
+        "rows": 26500
+      }
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 64125,
+          "path": "artifacts/models/recurrent_volume_v1/best_checkpoint.pt",
+          "sha256": "c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd"
+        },
+        "model_card": {
+          "bytes": 17681,
+          "path": "artifacts/model_cards/recurrent_volume_v1/volume_multi_horizon.json",
+          "sha256": "8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c"
+        },
+        "predictions": {
+          "bytes": 4414323,
+          "path": "artifacts/predictions/recurrent_volume_v1/predictions.parquet",
+          "sha256": "ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82"
+        }
+      },
+      "family": "lstm",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "job_id": "volume_h4",
+      "model_version": "recurrent_volume_v1",
+      "primary_metric": "rmse",
+      "registry_key": "volume/h4/lstm/recurrent_volume_v1",
+      "shared_multi_horizon_checkpoint": true,
+      "target": "volume",
+      "test_metrics": {
+        "horizon_windows": 4,
+        "mae": 42.5216443478,
+        "mape_nonzero_rows": 26500,
+        "mape_percent": 11.5348290586,
+        "mape_zero_actual_rows": 0,
+        "r_squared": 0.9536387829,
+        "rmse": 61.8965757989,
+        "rows": 26500
+      }
+    }
+  ],
+  "entry_count": 4,
+  "version": "recurrent_volume_v1"
+}

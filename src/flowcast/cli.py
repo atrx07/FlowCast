@@ -19,6 +19,7 @@ from flowcast.modelling.classification import run_classical_classification
 from flowcast.modelling.classical_regression import run_classical_regression
 from flowcast.modelling.pipeline import run_modeling_prep
 from flowcast.modelling.regression import run_scratch_linear
+from flowcast.modelling.recurrent import run_recurrent_volume
 from flowcast.modelling.registry import run_classical_registry
 from flowcast.settings import load_settings
 
@@ -174,6 +175,15 @@ def build_parser() -> argparse.ArgumentParser:
             "Versioned classical-registry artifact directory "
             "(default: classical_registry_v1)."
         ),
+    )
+    recurrent_volume = subparsers.add_parser(
+        "train-recurrent-volume",
+        help="Train and evaluate the multi-horizon recurrent volume model.",
+    )
+    recurrent_volume.add_argument(
+        "--version",
+        default=None,
+        help="Artifact version (default: recurrent_volume_v1).",
     )
     return parser
 
@@ -365,6 +375,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             result.summary["coverage"]["entry_count"],
             result.summary["coverage"]["prediction_rows"],
             result.summary["acceptance"],
+        )
+        return 0
+    if args.command == "train-recurrent-volume":
+        result = run_recurrent_volume(settings, version=args.version)
+        logger.info(
+            "Recurrent volume model complete: %s",
+            result.paths.summary_path,
+        )
+        logger.info(
+            "candidate=%s test_mean_rmse=%.4f deep_wins=%s/4",
+            result.summary["selection"]["selected_candidate_id"],
+            result.summary["metrics"]["test"]["mean_rmse"],
+            result.summary["acceptance"]["deep_beats_classical_horizons"],
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")

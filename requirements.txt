@@ -1,4 +1,4 @@
-# Direct dependencies active through Milestone M5 Step 11.
+# Direct dependencies active through Milestone M6 Step 15.
 numpy==2.3.3
 pandas==3.0.3
 pyarrow==25.0.0
@@ -12,3 +12,4 @@ joblib==1.5.2
 scikit-learn==1.9.0
 tqdm==4.67.1
 xgboost==3.2.0
+torch==2.13.0

@@ -1,0 +1,66 @@
+{
+  "common_validation_and_test_origin_policy": true,
+  "contract_version": "recurrent_sequence_manifest_v1",
+  "maximum_candidate_sequence_length": 24,
+  "selected_candidate_id": "lstm_s12_h32",
+  "test": {
+    "cadence_minutes": 30,
+    "cross_partition_sequences": 0,
+    "cross_road_sequences": 0,
+    "feature_count": 64,
+    "non_contiguous_sequences": 0,
+    "origin_end": "2025-05-31T21:30:00+05:30",
+    "origin_start": "2025-05-09T20:00:00+05:30",
+    "partition": "test",
+    "road_count": 25,
+    "sequence_count": 26500,
+    "sequence_length": 12,
+    "target_boundary_violations": 0,
+    "target_columns": [
+      "target_volume_h1",
+      "target_volume_h2",
+      "target_volume_h3",
+      "target_volume_h4"
+    ]
+  },
+  "train": {
+    "cadence_minutes": 30,
+    "cross_partition_sequences": 0,
+    "cross_road_sequences": 0,
+    "feature_count": 64,
+    "non_contiguous_sequences": 0,
+    "origin_end": "2025-04-16T14:30:00+05:30",
+    "origin_start": "2025-01-01T05:30:00+05:30",
+    "partition": "train",
+    "road_count": 25,
+    "sequence_count": 126475,
+    "sequence_length": 12,
+    "target_boundary_violations": 0,
+    "target_columns": [
+      "target_volume_h1",
+      "target_volume_h2",
+      "target_volume_h3",
+      "target_volume_h4"
+    ]
+  },
+  "validation": {
+    "cadence_minutes": 30,
+    "cross_partition_sequences": 0,
+    "cross_road_sequences": 0,
+    "feature_count": 64,
+    "non_contiguous_sequences": 0,
+    "origin_end": "2025-05-09T06:00:00+05:30",
+    "origin_start": "2025-04-17T04:30:00+05:30",
+    "partition": "validation",
+    "road_count": 25,
+    "sequence_count": 26500,
+    "sequence_length": 12,
+    "target_boundary_violations": 0,
+    "target_columns": [
+      "target_volume_h1",
+      "target_volume_h2",
+      "target_volume_h3",
+      "target_volume_h4"
+    ]
+  }
+}

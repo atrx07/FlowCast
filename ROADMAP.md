@@ -72,7 +72,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Complete - Step 08 gate passed with 181,200 origins and 20 masked targets |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
 | M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Complete - Step 14 verified 20 entries and 1,078,957 indexed predictions |
-| M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Next - Step 15 recurrent volume model |
+| M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | In progress - Step 15 verified; Step 16 confidence/error analysis next |
 | M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Not started |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
 
@@ -216,6 +216,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Rare accidents (~0.94%) | Misleading accuracy and unstable classifier | Class weights, PR-AUC, calibrated probability, threshold analysis |
 | Classifier acceptance goals missed | Congestion/risk forecasts are weaker than the formal target | Preserve sealed-test evidence; consolidate the honest baseline in Step 14 and perform segmented diagnosis in Step 16 without post-test tuning |
 | Deep model fails to beat XGBoost | Formal target missed | Tune within budget; report honestly; keep strong classical fallback |
+| Deep model trails classical at the 120-minute horizon | All-horizon comparison goal is missed despite wins at 30-90 minutes | Preserve the sealed-test result; diagnose horizon/segment/time failure modes in Step 16 without post-test tuning |
 | Reporting config invalidates frozen model hashes | Unnecessary retraining or stale lineage | Keep the Step 14 registry contract independent of frozen training config and recursively verify both chains |
 | Multi-horizon complexity | Too many model artifacts | Use generated horizon loops and shared interfaces/configuration |
 | Streamlit rerun retrains models | Slow and unsafe UI | Persist artifacts; explicit retraining service only |
@@ -234,7 +235,7 @@ A proposed change must be classified before implementation:
 
 ## 13. Current Roadmap Position
 
-Milestones M0 through M5 are complete and M6 is next. Step 10 froze the
+Milestones M0 through M5 are complete and M6 is in progress. Step 10 froze the
 shared chronological evaluation and preprocessing contract, and Step 11
 verified the required NumPy regression mathematics. Step 12 now provides 12
 direct volume/speed/travel-time models across horizons 1-4, complete
@@ -250,5 +251,12 @@ miss the formal goals and remain visible for later error analysis. Step 14 now
 adds a deterministic 20-entry combined registry, task-aware scoreboard,
 complete hash lineage, verified loading, selection rationales, and an in-place
 index of all 1,078,957 persisted validation/test predictions without
-retraining. Step 15 recurrent volume forecasting is next. See `STATUS.md` and
+retraining. Step 15 now adds a from-scratch, four-output PyTorch LSTM selected
+on common validation origins, with zero road/split/gap/target-boundary
+violations, persisted curves/checkpoint/model card, verified reload, and
+212,000 validation/test prediction rows. On 26,500 exact shared test origins
+per horizon it beats the frozen classical volume model at 30, 60, and 90
+minutes, while trailing by 0.0471 RMSE at 120 minutes. This misses the formal
+all-horizon comparison goal without invalidating the implementation gate.
+Step 16 confidence and error analysis is next. See `STATUS.md` and
 `NEXT_STEP.md` for the live state.
