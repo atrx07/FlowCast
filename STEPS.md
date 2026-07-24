@@ -539,9 +539,38 @@ Create one traceable selection and comparison layer.
 5. Generate model cards from metadata.
 6. Export dashboard-ready metrics and predictions.
 
+### Proven implementation
+
+- `config/registry.yaml` is deliberately independent of the frozen
+  `config/models.yaml`. Reporting/registry changes therefore do not invalidate
+  the Step 10/12/13 training lineage or trigger implicit retraining.
+- Load and recursively hash-verify both frozen source summaries, their
+  selection manifests, scoreboards, model/card files, prediction Parquets,
+  feature schema, processed lineage, and original training configuration.
+  Missing or stale inputs fail closed; there is no rebuild fallback.
+- Normalize exactly 20 entries in fixed target/horizon order. Keep RMSE,
+  Macro-F1, and ROC-AUC task-specific rather than creating a misleading
+  cross-task rank. Test scores remain reporting evidence only.
+- Derive each rationale from the already-frozen validation/CV selection.
+  Runtime and interpretability are recorded as context and cannot replace the
+  source winner.
+- Index the two existing prediction Parquets in place. Read only `job_id` and
+  `split` for mapping, reconcile counts against every model card, and require
+  all 1,078,957 rows and all 20 jobs to map exactly once.
+- Write deterministic `registry.json`, `scoreboard.csv`,
+  `prediction_index.json`, `summary.json`, and generated `summary.md` under
+  `artifacts/metrics/classical_registry_v1/`.
+- The verified loader recursively checks registry and source hashes before
+  resolving an entry through the Step 12/13 model loader. Contracts cover
+  repeat-byte determinism, all-model deserialization, public resolution, exact
+  metric/lineage preservation, and both registry/upstream tamper rejection.
+
 ### Exit gate
 - Every selected prediction maps to exactly one registry entry.
 - Scoreboard is machine-readable and human-readable.
+- Verified 2026-07-24: 20 unique entries, 1,078,957 indexed predictions, zero
+  selection changes, zero retraining/test-partition loads, and all focused
+  contracts passing.
 ---
 ## Step 15 - Build and Train the Recurrent Model
 ### Goal

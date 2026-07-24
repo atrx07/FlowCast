@@ -12,8 +12,8 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 24 July 2026. Milestones M0-M4 are complete and M5 is in
-progress. Steps 00-13 now
+Last verified on 24 July 2026. Milestones M0-M5 are complete and M6 is next.
+Steps 00-14 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -43,9 +43,14 @@ accident-threshold decisions were persisted before one final test load. The
 428,257 validation/test prediction rows contain finite normalized
 probabilities, and all eight selected models have verified model cards.
 Congestion hold-out Macro-F1 is 0.7468-0.7540 and accident ROC-AUC is
-0.5894-0.6237, so the formal classifier goals remain honestly unmet. All 128
-tests pass. Step 14 combined classical scoreboard/registry is the immediate
-gate; confidence, inference services, report export, deep learning, and the
+0.5894-0.6237, so the formal classifier goals remain honestly unmet. Step 14
+adds a deterministic, tamper-checked 20-entry classical registry and task-aware
+scoreboard while preserving every frozen choice and test result. Its indexed
+manifest maps all 1,078,957 existing validation/test prediction rows without
+copying or fabricating values, and verified loading resolves every registered
+model/card lineage. All 137 tests pass. Step 15 from-scratch recurrent volume
+forecasting is the
+immediate gate; confidence, inference services, report export, and the
 dashboard remain ahead.
 
 ## Delivery timeline
@@ -54,8 +59,8 @@ dashboard remain ahead.
 |---|---|---|
 | Before Week 1 | M0 governance and plan | Complete |
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
-| Week 2 | M5 classical machine learning | In progress - Steps 10-13 complete; Step 14 registry next |
-| Week 3 | M6 recurrent deep learning and confidence | Not started |
+| Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
+| Week 3 | M6 recurrent deep learning and confidence | Next - Step 15 recurrent model |
 | Week 4 | M7 dashboard, M8 reproducibility and delivery | Not started |
 
 ## Quick start
@@ -78,6 +83,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli train-scratch-linear
 .\.venv\Scripts\python.exe -m flowcast.cli train-classical-regression
 .\.venv\Scripts\python.exe -m flowcast.cli train-classical-classification
+.\.venv\Scripts\python.exe -m flowcast.cli build-classical-registry
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 

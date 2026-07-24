@@ -71,8 +71,8 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M2 - Cleaning and merge | Week 1 | Cleaned source tables and merged interim table | Complete - Step 06 gate passed with zero misses or row multiplication |
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Complete - Step 08 gate passed with 181,200 origins and 20 masked targets |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
-| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | In progress - Steps 10-13 complete; Step 14 registry next |
-| M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Not started |
+| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Complete - Step 14 verified 20 entries and 1,078,957 indexed predictions |
+| M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Next - Step 15 recurrent volume model |
 | M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Not started |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
 
@@ -216,6 +216,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Rare accidents (~0.94%) | Misleading accuracy and unstable classifier | Class weights, PR-AUC, calibrated probability, threshold analysis |
 | Classifier acceptance goals missed | Congestion/risk forecasts are weaker than the formal target | Preserve sealed-test evidence; consolidate the honest baseline in Step 14 and perform segmented diagnosis in Step 16 without post-test tuning |
 | Deep model fails to beat XGBoost | Formal target missed | Tune within budget; report honestly; keep strong classical fallback |
+| Reporting config invalidates frozen model hashes | Unnecessary retraining or stale lineage | Keep the Step 14 registry contract independent of frozen training config and recursively verify both chains |
 | Multi-horizon complexity | Too many model artifacts | Use generated horizon loops and shared interfaces/configuration |
 | Streamlit rerun retrains models | Slow and unsafe UI | Persist artifacts; explicit retraining service only |
 | Cross-platform environment issues | Reviewer cannot run project | Python module CLI, pathlib, pinned dependencies, CPU fallback |
@@ -233,7 +234,7 @@ A proposed change must be classified before implementation:
 
 ## 13. Current Roadmap Position
 
-Milestones M0 through M4 are complete and M5 is in progress. Step 10 froze the
+Milestones M0 through M5 are complete and M6 is next. Step 10 froze the
 shared chronological evaluation and preprocessing contract, and Step 11
 verified the required NumPy regression mathematics. Step 12 now provides 12
 direct volume/speed/travel-time models across horizons 1-4, complete
@@ -245,6 +246,9 @@ classifiers, all four required families, chronological probability-calibration
 assessment, validation-only accident thresholds, ordered persisted
 probabilities, model cards, and a pre-test freeze. The final congestion
 Macro-F1 range of 0.7468-0.7540 and accident ROC-AUC range of 0.5894-0.6237
-miss the formal goals and remain visible for later error analysis. Step 14
-classical scoreboard and registry consolidation is next. See `STATUS.md` and
+miss the formal goals and remain visible for later error analysis. Step 14 now
+adds a deterministic 20-entry combined registry, task-aware scoreboard,
+complete hash lineage, verified loading, selection rationales, and an in-place
+index of all 1,078,957 persisted validation/test predictions without
+retraining. Step 15 recurrent volume forecasting is next. See `STATUS.md` and
 `NEXT_STEP.md` for the live state.

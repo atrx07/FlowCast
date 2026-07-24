@@ -42,6 +42,25 @@ At the beginning of every work session or turn, the agent must:
 
 Do not begin from chat memory alone. The Markdown files and repository state are the working memory.
 
+### 3.1 Hardware Resource Disclosure
+
+Before starting work that will use the user's workstation, the agent must tell
+the user which hardware resources it expects to use and which it will not use.
+The notice must be specific enough for the user to free resources safely:
+
+- Identify CPU, GPU, NPU/accelerator, system RAM, VRAM, and disk activity as
+  applicable. Use the detected hardware names when they are known.
+- State the expected intensity and phase of use, distinguishing light
+  implementation or artifact work from heavy training, testing, rendering, or
+  data-processing work.
+- State explicitly when the GPU or another accelerator will not be used; do not
+  imply that CUDA, VRAM, or dedicated accelerators are active when the configured
+  workload is CPU-only.
+- Give a practical memory/resource recommendation before a heavy command when
+  reasonable, without claiming an exact peak that has not been measured.
+- If the planned hardware usage changes during the turn, notify the user before
+  beginning the newly resource-intensive phase.
+
 ## 4. Mandatory End-of-Turn Protocol
 
 After every implementation turn, even if the work is partial, the agent must:

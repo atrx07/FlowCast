@@ -1,0 +1,101 @@
+{
+  "acceptance": {
+    "accident": {
+      "all_horizons_met": false,
+      "evaluated_horizons": 4,
+      "met_horizons": 0
+    },
+    "congestion": {
+      "all_horizons_met": false,
+      "evaluated_horizons": 4,
+      "met_horizons": 0
+    },
+    "volume": {
+      "all_horizons_met": true,
+      "evaluated_horizons": 4,
+      "met_horizons": 4
+    }
+  },
+  "artifacts": {
+    "prediction_index": {
+      "bytes": 5915,
+      "path": "artifacts/metrics/classical_registry_v1/prediction_index.json",
+      "sha256": "457383a72d2e6583a9af0911f331cf00ac920a078c75efbc97e47b27bd9a15fe"
+    },
+    "registry": {
+      "bytes": 128915,
+      "path": "artifacts/metrics/classical_registry_v1/registry.json",
+      "sha256": "9b80859ba4b20999f7c31645e95474aa72bb6e8e5a082266e64f0cd144ae7138"
+    },
+    "report": {
+      "bytes": 11426,
+      "path": "artifacts/metrics/classical_registry_v1/summary.md",
+      "sha256": "01a837d0c01bc7707669795c8e590855c53f663d8c9e9b5ea9ffa5ce482b0d9f"
+    },
+    "scoreboard": {
+      "bytes": 17629,
+      "path": "artifacts/metrics/classical_registry_v1/scoreboard.csv",
+      "sha256": "0feaf46b8c1cffd1a574af6fe7414c393078180dcf2551befa055acd586018b7"
+    }
+  },
+  "checks": [
+    {
+      "name": "twenty_unique_registry_entries",
+      "passed": true
+    },
+    {
+      "name": "all_sources_hash_verified",
+      "passed": true
+    },
+    {
+      "name": "all_selections_frozen_before_test",
+      "passed": true
+    },
+    {
+      "name": "no_retraining_or_test_partition_load",
+      "passed": true
+    },
+    {
+      "name": "all_prediction_rows_mapped_once",
+      "passed": true
+    }
+  ],
+  "configuration": {
+    "bytes": 1372,
+    "path": "config/registry.yaml",
+    "sha256": "dc65cc1a7dc230c0b719ac5189131508d8a7f67f590f6e3eb93cec96ee120d0c"
+  },
+  "contract_version": "classical_registry_v1",
+  "coverage": {
+    "classification_entries": 8,
+    "entry_count": 20,
+    "horizon_count": 4,
+    "prediction_rows": 1078957,
+    "prediction_source_count": 2,
+    "regression_entries": 12,
+    "target_count": 5
+  },
+  "limitations": [
+    "This registry contains classical models only; deep models arrive in Step 15.",
+    "Confidence intervals and calibrated uncertainty arrive in Step 16.",
+    "Congestion and accident-risk acceptance targets are not currently met."
+  ],
+  "selection": {
+    "runtime_and_interpretability_override_winners": false,
+    "source": "frozen_validation_evidence",
+    "test_metrics_used_for_selection": false
+  },
+  "sources": {
+    "classification": {
+      "bytes": 40297,
+      "path": "artifacts/metrics/classical_classification_v1/summary.json",
+      "sha256": "61a4d8a1e26e4297068bf2b7826945198c067a8981cbf593b08a1dbac539f6f5"
+    },
+    "regression": {
+      "bytes": 25868,
+      "path": "artifacts/metrics/classical_regression_v1/summary.json",
+      "sha256": "519b91265fbec38370f0d2821a3cf08cc22058fc845828d5f175f90bf103a382"
+    }
+  },
+  "version": "classical_registry_v1"
+}

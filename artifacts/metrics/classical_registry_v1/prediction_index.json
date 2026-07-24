@@ -1,0 +1,210 @@
+{
+  "contract_version": "classical_prediction_index_v1",
+  "job_count": 20,
+  "mapping": "indexed_source_manifest",
+  "prediction_rows": 1078957,
+  "registry_version": "classical_registry_v1",
+  "source_count": 2,
+  "sources": {
+    "classification": {
+      "artifact": {
+        "bytes": 8808475,
+        "path": "artifacts/predictions/classical_classification_v1/selected_predictions.parquet",
+        "sha256": "304160c8331db6a63a77c942d2fdaf415f5100d154b4e5c8467dd1f63a30263e"
+      },
+      "jobs": [
+        {
+          "job_id": "accident_h1",
+          "registry_key": "accident/h1/svm/classical_classification_v1",
+          "rows": {
+            "test": 26456,
+            "total": 52911,
+            "validation": 26455
+          }
+        },
+        {
+          "job_id": "accident_h2",
+          "registry_key": "accident/h2/svm/classical_classification_v1",
+          "rows": {
+            "test": 26432,
+            "total": 52863,
+            "validation": 26431
+          }
+        },
+        {
+          "job_id": "accident_h3",
+          "registry_key": "accident/h3/svm/classical_classification_v1",
+          "rows": {
+            "test": 26409,
+            "total": 52816,
+            "validation": 26407
+          }
+        },
+        {
+          "job_id": "accident_h4",
+          "registry_key": "accident/h4/svm/classical_classification_v1",
+          "rows": {
+            "test": 26384,
+            "total": 52767,
+            "validation": 26383
+          }
+        },
+        {
+          "job_id": "congestion_h1",
+          "registry_key": "congestion/h1/random_forest/classical_classification_v1",
+          "rows": {
+            "test": 27150,
+            "total": 54300,
+            "validation": 27150
+          }
+        },
+        {
+          "job_id": "congestion_h2",
+          "registry_key": "congestion/h2/xgboost/classical_classification_v1",
+          "rows": {
+            "test": 27125,
+            "total": 54250,
+            "validation": 27125
+          }
+        },
+        {
+          "job_id": "congestion_h3",
+          "registry_key": "congestion/h3/xgboost/classical_classification_v1",
+          "rows": {
+            "test": 27100,
+            "total": 54200,
+            "validation": 27100
+          }
+        },
+        {
+          "job_id": "congestion_h4",
+          "registry_key": "congestion/h4/random_forest/classical_classification_v1",
+          "rows": {
+            "test": 27075,
+            "total": 54150,
+            "validation": 27075
+          }
+        }
+      ],
+      "rows": 428257
+    },
+    "regression": {
+      "artifact": {
+        "bytes": 11878768,
+        "path": "artifacts/predictions/classical_regression_v1/selected_predictions.parquet",
+        "sha256": "a1788b55e0c4570df9cd684033b8dc902450165a3539490b5901d0a2949fc9f8"
+      },
+      "jobs": [
+        {
+          "job_id": "speed_h1",
+          "registry_key": "speed/h1/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27150,
+            "total": 54300,
+            "validation": 27150
+          }
+        },
+        {
+          "job_id": "speed_h2",
+          "registry_key": "speed/h2/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27125,
+            "total": 54250,
+            "validation": 27125
+          }
+        },
+        {
+          "job_id": "speed_h3",
+          "registry_key": "speed/h3/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27100,
+            "total": 54200,
+            "validation": 27100
+          }
+        },
+        {
+          "job_id": "speed_h4",
+          "registry_key": "speed/h4/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27075,
+            "total": 54150,
+            "validation": 27075
+          }
+        },
+        {
+          "job_id": "travel_time_h1",
+          "registry_key": "travel_time/h1/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27150,
+            "total": 54300,
+            "validation": 27150
+          }
+        },
+        {
+          "job_id": "travel_time_h2",
+          "registry_key": "travel_time/h2/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27125,
+            "total": 54250,
+            "validation": 27125
+          }
+        },
+        {
+          "job_id": "travel_time_h3",
+          "registry_key": "travel_time/h3/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27100,
+            "total": 54200,
+            "validation": 27100
+          }
+        },
+        {
+          "job_id": "travel_time_h4",
+          "registry_key": "travel_time/h4/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27075,
+            "total": 54150,
+            "validation": 27075
+          }
+        },
+        {
+          "job_id": "volume_h1",
+          "registry_key": "volume/h1/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27150,
+            "total": 54300,
+            "validation": 27150
+          }
+        },
+        {
+          "job_id": "volume_h2",
+          "registry_key": "volume/h2/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27125,
+            "total": 54250,
+            "validation": 27125
+          }
+        },
+        {
+          "job_id": "volume_h3",
+          "registry_key": "volume/h3/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27100,
+            "total": 54200,
+            "validation": 27100
+          }
+        },
+        {
+          "job_id": "volume_h4",
+          "registry_key": "volume/h4/random_forest/classical_regression_v1",
+          "rows": {
+            "test": 27075,
+            "total": 54150,
+            "validation": 27075
+          }
+        }
+      ],
+      "rows": 650700
+    }
+  }
+}

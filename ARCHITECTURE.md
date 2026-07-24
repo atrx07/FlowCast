@@ -91,7 +91,8 @@ flowcast-repository/
 │   ├── data_contracts.yaml
 │   ├── cleaning.yaml
 │   ├── features.yaml
-│   └── models.yaml
+│   ├── models.yaml
+│   └── registry.yaml
 ├── data/
 │   ├── raw/                        # immutable CSV copies
 │   ├── interim/                    # validated/cleaned source-level outputs
@@ -262,6 +263,11 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Step 13 congestion/accident targets and class order, four classifier
   families, bounded two-candidate search spaces, chronological sigmoid
   calibration assessment, accident-threshold selection, and pre-test freeze.
+- `config/registry.yaml` independently defines the Step 14 frozen source
+  versions, target/horizon order, task-aware metrics, acceptance rules,
+  prediction-index policy, and deterministic key template. Keeping registry
+  settings separate prevents reporting changes from invalidating frozen
+  training hashes.
 - Later steps add recurrent training and early-stopping settings without
   weakening the frozen split contract.
 
@@ -624,13 +630,27 @@ common base retains trailing origins instead of globally dropping them.
 
 Each registry entry contains:
 
-- serialized estimator/pipeline.
-- feature manifest/hash.
-- split boundaries.
-- hyperparameters and seed.
-- validation/test metrics.
-- calibration/threshold artifact where relevant.
-- model card.
+- serialized estimator/pipeline record and SHA-256.
+- model-card and source-prediction records and SHA-256 values.
+- feature manifest, processed-data, preprocessing, and selection lineage.
+- train/validation/test boundaries and eligible row counts.
+- hyperparameters, seed, task-aware primary metric, and direction.
+- frozen CV/validation evidence plus validation/test metrics.
+- calibration/class order/threshold metadata where relevant.
+- runtime, interpretability context, rationale, acceptance state, and
+  limitations.
+
+The canonical Step 14 output under
+`artifacts/metrics/classical_registry_v1/` contains `registry.json`,
+`scoreboard.csv`, `prediction_index.json`, `summary.json`, and generated
+`summary.md`. The prediction index maps the two existing source Parquets in
+place instead of duplicating values.
+
+Registry construction never loads a source test partition or retrains a model;
+it consumes frozen artifacts only. The verified loader recursively checks the
+independent registry configuration and outputs, both source summaries, their
+configuration/input/artifact chains, and every model/card before an entry
+resolves through its source loader.
 
 ### 10.5 Accident-risk classifier
 - Binary label: future `accident_count > 0`.
@@ -776,6 +796,10 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
   class order, probability normalization, threshold/calibration evidence,
   model-card completeness, probability equality after reload, and tamper
   rejection.
+- exact 20-entry classical-registry coverage, task-aware metric schemas,
+  frozen-source equality, complete lineage, deterministic generation,
+  one-to-one prediction indexing, all-model reloadability, and
+  registry/upstream tamper rejection.
 
 ### Integration
 - raw -> interim.

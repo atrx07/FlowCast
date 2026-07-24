@@ -2,84 +2,96 @@
 
 ## Immediate Objective
 
-Execute **Step 14 - Build the Classical Scoreboard and Registry**. Consolidate
-the frozen Step 12 regressors and Step 13 classifiers into one verified,
-dashboard-ready classical-model registry without retraining, changing a
-selection, or opening test data again.
+Execute **Step 15 - Build and Train the Recurrent Model**. Build a from-scratch
+PyTorch LSTM or GRU that forecasts traffic volume at 30, 60, 90, and 120
+minutes, using time-ordered, road-isolated sequences and the same frozen
+hold-out contract as the classical volume models.
 
-Do not begin recurrent/deep learning, confidence/error analysis, inference
-services, report export, or dashboard work. The registry must preserve the
-honest Step 12 and Step 13 results, including the unmet classifier acceptance
-goals.
+Do not begin confidence/error analysis, inference services, report export, or
+dashboard work. Do not change the classical winners or use the test split for
+architecture, sequence-length, epoch, or hyperparameter selection.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 14 and the proven Step 10/12/13 procedures.
-3. Registry, persistence, evaluation, lineage, artifact, naming, and
+2. `STEPS.md` - Step 15 plus the proven Steps 08, 10, 12, and 14 procedures.
+3. Deep-model, sequence, split, registry, persistence, hardware, and
    reproducibility sections of `PROJECT.md`, `ROADMAP.md`, and
    `ARCHITECTURE.md`.
-4. The original PRD sections covering model comparison, model persistence,
-   task metrics, SVM, dashboard performance views, and real-output rules.
-5. Both canonical selection manifests, scoreboards, prediction manifests,
-   model cards, feature schema, processed-target manifest, current Git diff,
-   and relevant tests.
+4. The original PRD requirements for LSTM/GRU training from scratch,
+   multi-horizon volume output, curves, early stopping, comparison, and
+   persistence.
+5. Step 10 feature/split manifests, Step 12 classical volume cards and
+   predictions, Step 14 registry, current Git diff, and relevant tests.
+
+## Hardware Notice Before Acting
+
+Before implementation or execution, obey the hardware-resource disclosure rule
+in `AGENTS.md`. Identify whether Step 15 will use the Intel Core Ultra 9 CPU,
+RTX 5070 Laptop GPU/CUDA, Intel NPU, system RAM, VRAM, and disk. Verify the
+installed PyTorch/CUDA capability before promising GPU use. Notify the user
+again before the first resource-heavy sequence build, tuning run, or full test
+run if usage changes.
 
 ## Single Best Next Action
 
-Build the reusable classical registry and complete Step 14:
+Build and verify the primary recurrent volume forecaster:
 
-1. Define a versioned registry contract and paths in configuration. The
-   registry must represent all 20 selected classical jobs: volume, speed,
-   travel time, congestion, and accident risk across horizons 1-4.
-2. Hash-verify the complete Step 12 and Step 13 summaries, selection manifests,
-   scoreboards, model/card artifacts, predictions, Step 10 feature schema, and
-   processed-data lineage before consolidation. Do not rebuild a model as an
-   implicit recovery path.
-3. Normalize task/horizon/model/split metrics into one machine-readable
-   scoreboard while preserving each task's formal primary metric, supporting
-   metrics, runtime, validation evidence, test evidence, class order,
-   calibration decision, and accident threshold where applicable.
-4. Create exactly one registry entry per selected target/horizon. Each entry
-   must identify its model/card, preprocessing and feature versions, data and
-   selection hashes, training/validation/test windows, parameters, seed,
-   primary metric, limitations, and prediction source.
-5. Add explicit selection rationale derived from the already-frozen validation
-   evidence. Runtime and interpretability may provide context but must not
-   retroactively replace any Step 12 or Step 13 winner.
-6. Export dashboard-ready combined predictions or an indexed manifest that
-   references the existing versioned prediction artifacts without duplicating
-   or fabricating values. Every persisted selected prediction must map to
-   exactly one registry entry.
-7. Generate canonical JSON/CSV and Markdown registry/scoreboard reports, plus a
-   verified loader that rejects missing, stale, or tampered upstream artifacts.
-8. Add unit and full-data contracts for 20-job coverage, unique registry keys,
-   task-aware metric schemas, lineage completeness, exact prediction mapping,
-   deterministic generation, verified model/card resolution, and tamper
-   rejection. Add a CLI command for registry construction.
+1. Add a versioned recurrent-model YAML contract without changing the hashes of
+   frozen classical training configuration. Record sequence features/length,
+   architecture candidates, seed, optimizer, learning-rate schedule, batch
+   size, epoch budget, early-stopping rule, and device policy.
+2. Construct fixed-length sequences within each `road_id`, in timestamp order,
+   using only origin-time-known features. A sequence may not cross roads, split
+   boundaries, time gaps, or a target boundary.
+3. Fit any learned feature/target scaling on training rows only and persist the
+   scaler, feature order, split/data hashes, and sequence eligibility manifest.
+4. Implement a PyTorch Dataset/DataLoader and a one- or two-layer LSTM or GRU
+   with dropout and a four-value volume head. Use seeded initialization and no
+   pretrained weights.
+5. Tune a small predeclared set of sequence/architecture candidates using
+   training and validation only. Use Adam, validation-led early stopping,
+   learning-rate reduction, and best-checkpoint restoration.
+6. Persist candidate evidence, train/validation curves, best epoch,
+   checkpoint, configuration, scaler, feature manifest, runtime/device
+   metadata, and a complete model card before test access.
+7. Load the test split once for final evaluation. Produce per-horizon RMSE,
+   MAE, MAPE, and R-squared on rows that map exactly to the corresponding
+   frozen classical volume predictions.
+8. Generate a head-to-head classical/deep comparison that proves row identity
+   per horizon and states honestly whether the recurrent model beats the best
+   classical test RMSE at every required horizon.
+9. Add a verified checkpoint loader and unit/full-data contracts for road/split
+   isolation, gap policy, train-only scaling, shapes, seed reproducibility,
+   early stopping, best-weight restoration, exact row mapping, metric
+   correctness, reload equality, and tamper rejection.
+10. Add a CLI command, generated JSON/CSV/Markdown reports, and only then extend
+    the registry with the verified deep-model entry or entries.
 
 ## Acceptance Gate
 
-Step 14 is complete only when:
+Step 15 is complete only when:
 
-- Exactly 20 selected classical target/horizon jobs have unique registry
-  entries and complete model/card/data/feature/split lineage.
-- Regression and classification metrics are normalized without losing their
-  task-specific meanings; no classifier is ranked by accuracy and no regression
-  model is ranked by a classification metric.
-- Existing Step 12 and Step 13 selections, calibration decisions, thresholds,
-  predictions, and test results are unchanged.
-- Every selected validation/test prediction maps to exactly one registry entry,
-  and every registry entry resolves to a verified reloadable artifact.
-- The machine-readable registry and scoreboard render into generated Markdown
-  and are suitable for later dashboard consumption.
+- Sequence windows never cross roads, chronological partitions, target
+  boundaries, or disallowed time gaps.
+- The recurrent network is built from scratch and outputs all four volume
+  horizons with no pretrained weights.
+- Architecture selection, early stopping, and checkpoint choice use no test
+  information.
+- Training/validation curves, best epoch, config, scaler, feature manifest,
+  checkpoint, predictions, metrics, and model card are persisted with hashes.
+- Reloaded best-checkpoint inference reproduces persisted predictions.
+- Each deep test prediction maps to the exact comparable frozen classical
+  volume row for its horizon.
+- The benchmark reports honestly whether deep test RMSE beats the classical
+  baseline; unfavourable results remain visible.
 - Focused tests, the full suite, CLI/import smoke, dependency check,
   compilation, whitespace assurance, source-size checks, and artifact
   verification pass.
-- `STATUS.md`, `NEXT_STEP.md`, `ROADMAP.md`, `ARCHITECTURE.md`, `STEPS.md`, and
-  the README reflect verified Step 14 results before commit/push.
+- Required documentation and README progress are current before commit/push.
 
 ## Current Blockers
 
-None. The unmet Step 13 classifier performance goals are an explicit model-risk
-finding, not a blocker to honest registry consolidation.
+None. CUDA availability and memory capacity must be measured before selecting a
+training device; CPU fallback is allowed by the architecture and technology
+contract.

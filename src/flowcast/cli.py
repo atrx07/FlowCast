@@ -19,6 +19,7 @@ from flowcast.modelling.classification import run_classical_classification
 from flowcast.modelling.classical_regression import run_classical_regression
 from flowcast.modelling.pipeline import run_modeling_prep
 from flowcast.modelling.regression import run_scratch_linear
+from flowcast.modelling.registry import run_classical_registry
 from flowcast.settings import load_settings
 
 
@@ -160,6 +161,18 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Versioned classification artifact directory "
             "(default: classical_classification_v1)."
+        ),
+    )
+    classical_registry = subparsers.add_parser(
+        "build-classical-registry",
+        help="Verify and combine all frozen classical models and scoreboards.",
+    )
+    classical_registry.add_argument(
+        "--version",
+        default=None,
+        help=(
+            "Versioned classical-registry artifact directory "
+            "(default: classical_registry_v1)."
         ),
     )
     return parser
@@ -339,6 +352,19 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ]
                 for record in scoreboard
             },
+        )
+        return 0
+    if args.command == "build-classical-registry":
+        result = run_classical_registry(settings, version=args.version)
+        logger.info(
+            "Classical registry complete: %s",
+            result.paths.summary_path,
+        )
+        logger.info(
+            "entries=%s prediction_rows=%s acceptance=%s",
+            result.summary["coverage"]["entry_count"],
+            result.summary["coverage"]["prediction_rows"],
+            result.summary["acceptance"],
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")
