@@ -2,82 +2,92 @@
 
 ## Immediate Objective
 
-Execute **Step 16 - Add Confidence and Error Analysis**. Attach
-validation-calibrated uncertainty to the persisted regression and
-classification outputs, then explain where the frozen models fail by road,
-time, weather, class/prevalence, and forecast horizon.
+Execute **Step 17 - Build the Inference and Reporting Services**. Create one
+stable, validated service boundary that loads the frozen artifacts, produces
+all required target/horizon forecasts without retraining, attaches Step 16
+confidence and lineage, persists batch output, and exports a real-data report.
 
-Do not begin inference services, report export, or Streamlit work. Do not
-change the frozen Step 12-15 model selections, thresholds, calibrators,
-architectures, sequence lengths, test partitions, or predictions to improve
-visible test results.
+Do not begin Streamlit pages, upload handling, or retraining controls. Do not
+change the Step 10-16 model selections, thresholds, calibrators, recurrent
+architecture, test partitions, confidence widths, source predictions, or
+reported metrics.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 16 plus the proven Steps 10, 12, 13, 14, and 15 procedures.
-3. Confidence, evaluation, registry, reporting, and lineage sections of
-   `PROJECT.md`, `ROADMAP.md`, and `ARCHITECTURE.md`.
-4. The original PRD requirements for quantified confidence, error analysis,
-   prediction transparency, and honest hold-out reporting.
-5. Step 12/13 classical cards and predictions, the Step 14 registry, Step 15
-   recurrent card/predictions/comparison, the current Git diff, and relevant
-   tests.
+2. `STEPS.md` - Step 17 plus the proven Steps 10 and 12-16 procedures.
+3. Registry, recurrent, confidence, inference, reporting, lineage, performance,
+   and dashboard boundaries in `PROJECT.md`, `ROADMAP.md`, and
+   `ARCHITECTURE.md`.
+4. The original PRD requirements for prediction inputs/outputs, confidence,
+   model/data traceability, report generation, response time, and CPU support.
+5. The Step 14 registry, Step 15 recurrent registry extension/model card, Step
+   16 summary/calibrations/loaders, the current Git diff, and relevant tests.
 
 ## Hardware Notice Before Acting
 
 Before execution, obey the workstation-resource disclosure rule in
-`AGENTS.md`. Step 16 should normally use the Intel Core Ultra 9 CPU, moderate
-system RAM, and disk I/O for grouping/calibration/report artifacts. PyTorch
-`2.13.0+cu130` now verifies the RTX 5070 Laptop GPU, but Step 16 is primarily
-tabular aggregation and should remain on CPU unless a measured tensor workload
-justifies CUDA. The GPU/VRAM and Intel NPU should not be claimed as used when
-they are idle; the NPU remains outside the approved v1 path.
+`AGENTS.md`. Step 17 is primarily model loading, feature preparation, small
+batch inference, schema validation, and report rendering. It should normally
+use the Intel Core Ultra 9 CPU, moderate system RAM, and light-to-moderate disk
+I/O. The RTX 5070 Laptop GPU/VRAM should remain idle for ordinary full-corridor
+inference unless a measured recurrent batch materially benefits from CUDA; the
+public service must still pass forced-CPU tests. The Intel NPU remains outside
+the approved v1 path.
 
 ## Single Best Next Action
 
-Build and verify one confidence/error-analysis layer over frozen predictions:
+Build and verify one inference/report service over the frozen artifacts:
 
-1. Add an independent versioned confidence/error-analysis YAML contract so no
-   Step 10-15 source hashes or selections change.
-2. For volume, speed, and travel time, fit split-conformal or documented
-   empirical residual intervals on validation residuals only, separately by
-   target and horizon where coverage supports it.
-3. Apply the frozen interval widths to validation/test predictions and report
-   empirical coverage, average width, under/over-coverage, and zero leakage.
-4. Apply the same comparable external interval method to recurrent volume
-   predictions. Keep deep/classical comparison on identical origin rows.
-5. For congestion, expose calibrated probabilities, maximum probability, and
-   entropy; report reliability/calibration and uncertainty by class/horizon.
-6. For accident risk, preserve the frozen validation-selected threshold,
-   probability, calibration choice, and prevalence. Derive transparent risk
-   bands from validation only and report PR-AUC/precision/recall limitations.
-7. Break errors down by road, hour/peak period, weekday/weekend, weather,
-   congestion severity, incident prevalence, and horizon using minimum-support
-   rules fixed before test aggregation.
-8. Diagnose the missed congestion and accident goals and the recurrent
-   120-minute RMSE deficit without refitting or hiding unfavourable slices.
-9. Persist dashboard-ready confidence/error Parquets plus JSON/CSV/Markdown
-   summaries with complete model/data/prediction hashes.
-10. Add verified loaders, CLI support, unit/full-artifact contracts, and
-    tamper rejection.
+1. Add an independent versioned inference/report YAML contract naming active
+   artifact versions, supported request fields, output schema, report formats,
+   runtime target, and device policy.
+2. Define typed request/result contracts for road IDs, origin timestamp,
+   horizons 1-4, optional batch scope, model/data/confidence versions, and
+   validation errors.
+3. Freeze active model routing without test-led selection. The recurrent model
+   beats classical volume on validation at all four horizons; use that
+   validation-only evidence if it becomes the active volume route, retain
+   classical volume as the explicit fallback/comparator, and use the Step 14
+   selected models for speed, travel time, congestion, and accident.
+4. Build latest-origin feature preparation from the verified processed
+   contract. Recurrent requests must prove 12 contiguous road-local half-hour
+   rows; no request may cross road, cadence, or data boundaries.
+5. Load every model through verified public loaders. Normal inference must
+   never fit preprocessing, calibrators, thresholds, confidence widths, or
+   model weights.
+6. Generate volume, speed, travel time, congestion class/probabilities,
+   accident probability/risk band, and confidence for every requested horizon,
+   with origin/target timestamps and complete data/model/config lineage.
+7. Apply Step 16 conformal widths and classification/risk semantics unchanged.
+   Validate the output schema and physical/probability bounds before
+   persistence.
+8. Add deterministic batch Parquet plus JSON manifest output, and
+   human-readable insights derived only from real aggregates/predictions.
+9. Export at least CSV plus self-contained HTML (or an already approved
+   equivalent) with no fabricated metrics or analytics.
+10. Add CLI prediction/report commands, full-corridor CPU timing, verified
+    loaders, unit/full-artifact contracts, repeatability checks, and tamper
+    rejection.
 
 ## Acceptance Gate
 
-Step 16 is complete only when:
+Step 17 is complete only when:
 
-- Every required forecast output has a documented confidence/uncertainty field
-  derived without test fitting.
-- Regression interval calibration uses validation residuals only and coverage/
-  width are measured on the frozen test predictions.
-- Classification uncertainty derives from the persisted ordered probabilities;
-  no threshold or calibrator changes after test visibility.
-- All subgroup tables reconcile exactly to their source prediction rows and
-  enforce their documented minimum-support policy.
-- The recurrent 120-minute deficit and weak congestion/accident outcomes remain
-  visible with evidence-backed diagnoses.
-- Artifacts are machine-readable, dashboard-ready, traceable, reloadable, and
-  tamper checked.
+- One validated request returns all five required forecast targets at all four
+  horizons plus interval/probability confidence, risk band, origin/target
+  timestamps, and exact version lineage.
+- Active routing is frozen from validation/config evidence and test metrics are
+  reporting-only.
+- Model loading and prediction occur without any retraining or learned-statistic
+  fitting.
+- Invalid roads, origins, horizons, missing sequence history, stale/tampered
+  artifacts, and malformed requests fail clearly.
+- Repeated seeded CPU inference is stable and persisted batch rows reconcile to
+  the request manifest.
+- CSV/HTML report content traces to real persisted inputs and predictions.
+- Full-corridor inference is timed against the 30-second requirement and the
+  measured result is reported honestly.
 - Focused tests, the full suite, CLI/import smoke, dependency check,
   compilation, whitespace assurance, source-size checks, and artifact
   verification pass.
@@ -85,5 +95,6 @@ Step 16 is complete only when:
 
 ## Current Blockers
 
-None. The low accident prevalence is a modelling limitation, not a reason to
-change the frozen test protocol.
+None. The unmet classifier targets and recurrent 120-minute test deficit are
+known model limitations that must remain visible in inference/report outputs;
+they do not authorize post-test retuning.

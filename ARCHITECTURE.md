@@ -55,8 +55,9 @@ python -m flowcast.cli prepare-modeling
 python -m flowcast.cli train-scratch-linear
 python -m flowcast.cli train-classical-regression
 python -m flowcast.cli train-classical-classification
+python -m flowcast.cli build-classical-registry
 python -m flowcast.cli train-recurrent-volume
-python -m flowcast.cli evaluate
+python -m flowcast.cli analyze-confidence
 python -m flowcast.cli predict --horizons 1 2 3 4
 python -m flowcast.cli build-reports
 python -m flowcast.cli run-all
@@ -273,6 +274,10 @@ This is a target structure, not permission to create empty files unnecessarily. 
   settings, learning-rate schedule, early stopping, device policy, validation
   selection rule, and exact-row classical comparison. Keeping it independent
   prevents recurrent work from invalidating the frozen Step 10-14 lineage.
+- `config/confidence.yaml` independently defines the Step 16 validation-only
+  interval method, probability diagnostics, accident risk-band multipliers,
+  reliability bins, subgroup dimensions, and minimum-support policy. It names
+  every frozen upstream version and cannot alter a model-selection hash.
 
 ## 6. Data Contracts
 ### 6.1 Raw traffic contract
@@ -524,6 +529,26 @@ Key: `road_id + timestamp`.
   validation/test predictions live under `recurrent_volume_v1`. Verified
   loading checks every recorded dependency before reconstructing the network.
 
+### 6.16 Confidence and error-analysis artifact boundary
+
+- `analyze-confidence` recursively verifies the processed-data, classical
+  registry/regression/classification, and recurrent summary chains before
+  reading their frozen validation/test prediction Parquets.
+- `flowcast/evaluation/confidence_metrics.py` owns finite-sample conformal
+  calibration, interval application, context joins, probability validation,
+  entropy, confidence bands, reliability bins, and aggregate coverage.
+- `confidence_slices.py` owns minimum-support regression/classification slices;
+  `confidence_pairing.py` owns exact-row recurrent/classical comparison;
+  `confidence_report.py` owns deterministic diagnoses and Markdown.
+- Dashboard-ready row-level Parquets live under
+  `artifacts/predictions/confidence_error_v1/`. Calibration, coverage,
+  reliability, risk-band, slice, confusion, paired-comparison, JSON, and
+  Markdown evidence lives under `artifacts/metrics/confidence_error_v1/`.
+- The public confidence loader recursively re-verifies upstream lineage and
+  every recorded output hash before returning the three row-level tables.
+- The confidence layer is immutable-model evaluation: it cannot refit, select,
+  recalibrate, rethreshold, or replace a Step 12-15 prediction.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -719,17 +744,25 @@ architecture change.
 
 ## 11. Confidence Architecture
 ### Regression
-Preferred minimum:
-
-- Use validation residuals for split-conformal or empirical residual intervals by target/horizon.
-- Report interval bounds and empirical coverage.
-- Deep models may additionally use MC dropout, but conformal/residual calibration remains the comparable external layer.
+- The implemented method is finite-sample split conformal over absolute
+  validation residuals, separately by model version, target, and horizon.
+- Quantile rank is `ceil((n + 1) * confidence_level)`, capped at `n`, using the
+  higher order statistic. Test residuals never fit interval width.
+- The same comparable external layer covers classical volume/speed/travel-time
+  and recurrent volume. Row-level lower/upper bounds, coverage, and width are
+  persisted; lower bounds are clipped at zero for physical outputs.
 
 ### Classification
-- Return class probabilities.
-- Calibrate selected probabilities when needed.
-- Confidence may be displayed as maximum probability plus entropy/uncertainty.
-- Accident-risk output is probability plus the chosen operating threshold and risk band.
+- Persisted ordered probabilities remain the source of truth.
+- Congestion and accident rows expose maximum probability, entropy, normalized
+  entropy, and a configured confidence band.
+- Fixed ten-bin reliability tables compare congestion maximum probability with
+  correctness and accident probability with observed events.
+- Accident risk output preserves the frozen validation-selected operating
+  threshold. Low/elevated/high/critical bands use configured threshold
+  multiples and never retune on test.
+- Subgroup metrics enforce row and rare-positive support thresholds. Low-support
+  rows remain visible with counts and blank metrics.
 
 ## 12. Inference Architecture
 `Predictor` is the single public inference interface.

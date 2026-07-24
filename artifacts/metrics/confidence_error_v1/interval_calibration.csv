@@ -1,0 +1,17 @@
+model_version,target,horizon_windows,horizon_minutes,calibration_split,calibration_rows,confidence_level,alpha,finite_sample_rank,absolute_residual_quantile,quantile_method
+classical_regression_v1,speed,1,30,validation,27150,0.9,0.1,24436,5.86149211142,finite_sample_higher
+classical_regression_v1,speed,2,60,validation,27125,0.9,0.1,24414,5.92560038848,finite_sample_higher
+classical_regression_v1,speed,3,90,validation,27100,0.9,0.1,24391,6.10740646365,finite_sample_higher
+classical_regression_v1,speed,4,120,validation,27075,0.9,0.1,24369,6.08204350703,finite_sample_higher
+classical_regression_v1,travel_time,1,30,validation,27150,0.9,0.1,24436,0.996978476695,finite_sample_higher
+classical_regression_v1,travel_time,2,60,validation,27125,0.9,0.1,24414,1.00068764332,finite_sample_higher
+classical_regression_v1,travel_time,3,90,validation,27100,0.9,0.1,24391,0.994287747027,finite_sample_higher
+classical_regression_v1,travel_time,4,120,validation,27075,0.9,0.1,24369,0.97538855225,finite_sample_higher
+classical_regression_v1,volume,1,30,validation,27150,0.9,0.1,24436,99.3442496513,finite_sample_higher
+classical_regression_v1,volume,2,60,validation,27125,0.9,0.1,24414,98.7284255192,finite_sample_higher
+classical_regression_v1,volume,3,90,validation,27100,0.9,0.1,24391,104.819491345,finite_sample_higher
+classical_regression_v1,volume,4,120,validation,27075,0.9,0.1,24369,99.5501232831,finite_sample_higher
+recurrent_volume_v1,volume,1,30,validation,26500,0.9,0.1,23851,92.7930084244,finite_sample_higher
+recurrent_volume_v1,volume,2,60,validation,26500,0.9,0.1,23851,93.5662096926,finite_sample_higher
+recurrent_volume_v1,volume,3,90,validation,26500,0.9,0.1,23851,93.2079379674,finite_sample_higher
+recurrent_volume_v1,volume,4,120,validation,26500,0.9,0.1,23851,95.1029283632,finite_sample_higher

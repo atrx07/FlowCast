@@ -91,7 +91,15 @@ def multiclass_metrics(
         "macro_precision": round(float(precision.mean()), 10),
         "macro_recall": round(float(recall.mean()), 10),
         "macro_f1": round(
-            float(f1_score(truth, estimates, labels=labels, average="macro")),
+            float(
+                f1_score(
+                    truth,
+                    estimates,
+                    labels=labels,
+                    average="macro",
+                    zero_division=0,
+                )
+            ),
             10,
         ),
         "confusion_matrix": confusion_matrix(
@@ -122,7 +130,9 @@ def binary_ranking_metrics(actual: Any, scores: Any) -> dict[str, float | int]:
     if truth.ndim != 1 or ranking.shape != truth.shape or not truth.size:
         raise ValueError("Binary ranking metrics require aligned non-empty vectors")
     if not np.isfinite(ranking).all() or set(np.unique(truth)) != {0, 1}:
-        raise ValueError("Binary ranking metrics require finite scores and both classes")
+        raise ValueError(
+            "Binary ranking metrics require finite scores and both classes"
+        )
     return {
         "rows": int(len(truth)),
         "positive_rows": int(truth.sum()),

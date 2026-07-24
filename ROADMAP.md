@@ -72,8 +72,8 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Complete - Step 08 gate passed with 181,200 origins and 20 masked targets |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
 | M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Complete - Step 14 verified 20 entries and 1,078,957 indexed predictions |
-| M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | In progress - Step 15 verified; Step 16 confidence/error analysis next |
-| M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Not started |
+| M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Complete - Steps 15-16 verified with confidence/error artifacts |
+| M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | In progress - Step 17 inference/reporting service next |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
 
 ## 5. Week 1 - Data Engineering and EDA
@@ -217,9 +217,9 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Leakage from lags/rolling/scalers | Inflated metrics and invalid project | Shift-before-roll tests; fit learned preprocessing on train only |
 | Missing full sensor windows | Biased sequences and broken lags | Reindex per segment; preserve missingness flags; apply explicit gap policy |
 | Rare accidents (~0.94%) | Misleading accuracy and unstable classifier | Class weights, PR-AUC, calibrated probability, threshold analysis |
-| Classifier acceptance goals missed | Congestion/risk forecasts are weaker than the formal target | Preserve sealed-test evidence; consolidate the honest baseline in Step 14 and perform segmented diagnosis in Step 16 without post-test tuning |
+| Classifier acceptance goals missed | Congestion/risk forecasts are weaker than the formal target | Step 16 preserves sealed-test evidence, probability reliability, confusion/slice diagnostics, and rare-event support flags; carry these limitations into inference and dashboard views |
 | Deep model fails to beat XGBoost | Formal target missed | Tune within budget; report honestly; keep strong classical fallback |
-| Deep model trails classical at the 120-minute horizon | All-horizon comparison goal is missed despite wins at 30-90 minutes | Preserve the sealed-test result; diagnose horizon/segment/time failure modes in Step 16 without post-test tuning |
+| Deep model trails classical at the 120-minute horizon | All-horizon comparison goal is missed despite wins at 30-90 minutes | Step 16 preserves exact-row evidence and identifies the largest deficit in late-night 120-minute slices; retain the classical fallback and expose the limitation |
 | Reporting config invalidates frozen model hashes | Unnecessary retraining or stale lineage | Keep the Step 14 registry contract independent of frozen training config and recursively verify both chains |
 | Multi-horizon complexity | Too many model artifacts | Use generated horizon loops and shared interfaces/configuration |
 | Streamlit rerun retrains models | Slow and unsafe UI | Persist artifacts; explicit retraining service only |
@@ -240,7 +240,7 @@ A proposed change must be classified before implementation:
 
 ## 13. Current Roadmap Position
 
-Milestones M0 through M5 are complete and M6 is in progress. Step 10 froze the
+Milestones M0 through M6 are complete and M7 is in progress. Step 10 froze the
 shared chronological evaluation and preprocessing contract, and Step 11
 verified the required NumPy regression mathematics. Step 12 now provides 12
 direct volume/speed/travel-time models across horizons 1-4, complete
@@ -263,5 +263,11 @@ violations, persisted curves/checkpoint/model card, verified reload, and
 per horizon it beats the frozen classical volume model at 30, 60, and 90
 minutes, while trailing by 0.0471 RMSE at 120 minutes. This misses the formal
 all-horizon comparison goal without invalidating the implementation gate.
-Step 16 confidence and error analysis is next. See `STATUS.md` and
-`NEXT_STEP.md` for the live state.
+Step 16 now adds 16 validation-only finite-sample conformal calibrations,
+862,700 regression-confidence rows, 428,257 classification-confidence rows,
+212,000 exact paired volume rows, fixed-bin reliability, threshold-relative
+accident risk bands, and 3,408 minimum-support error slices. Test interval
+coverage ranges from 0.8924 to 0.9055 around the nominal 0.90 level. The weak
+classifier goals and the recurrent 120-minute deficit remain explicit rather
+than triggering post-test changes. Step 17 inference and reporting services
+are next. See `STATUS.md` and `NEXT_STEP.md` for the live state.

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from flowcast.analysis.pipeline import run_eda
+from flowcast.cli_model_commands import register_model_parsers, run_model_command
 from flowcast.data.audit import run_raw_audit
 from flowcast.data.clean_context import run_context_cleaning
 from flowcast.data.merge_pipeline import run_source_merge
@@ -15,12 +16,6 @@ from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.features.pipeline import run_feature_engineering
 from flowcast.features.processed_pipeline import run_processed_data
 from flowcast.logging_config import configure_logging
-from flowcast.modelling.classification import run_classical_classification
-from flowcast.modelling.classical_regression import run_classical_regression
-from flowcast.modelling.pipeline import run_modeling_prep
-from flowcast.modelling.regression import run_scratch_linear
-from flowcast.modelling.recurrent import run_recurrent_volume
-from flowcast.modelling.registry import run_classical_registry
 from flowcast.settings import load_settings
 
 
@@ -116,75 +111,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Versioned EDA artifact directory (default: eda_v1).",
     )
-    prepare_modeling = subparsers.add_parser(
-        "prepare-modeling",
-        help="Freeze chronological splits and fit training-only preprocessors.",
-    )
-    prepare_modeling.add_argument(
-        "--version",
-        default=None,
-        help=(
-            "Versioned split/preprocessing artifact directory "
-            "(default: split_preprocessing_v1)."
-        ),
-    )
-    scratch_linear = subparsers.add_parser(
-        "train-scratch-linear",
-        help="Prove NumPy gradient descent against sklearn on frozen data.",
-    )
-    scratch_linear.add_argument(
-        "--version",
-        default=None,
-        help=(
-            "Versioned scratch-linear artifact directory "
-            "(default: scratch_linear_v1)."
-        ),
-    )
-    classical_regression = subparsers.add_parser(
-        "train-classical-regression",
-        help="Tune, freeze, and evaluate all classical regression jobs.",
-    )
-    classical_regression.add_argument(
-        "--version",
-        default=None,
-        help=(
-            "Versioned classical-regression artifact directory "
-            "(default: classical_regression_v1)."
-        ),
-    )
-    classical_classification = subparsers.add_parser(
-        "train-classical-classification",
-        help="Tune, calibrate, freeze, and evaluate all classifier jobs.",
-    )
-    classical_classification.add_argument(
-        "--version",
-        default=None,
-        help=(
-            "Versioned classification artifact directory "
-            "(default: classical_classification_v1)."
-        ),
-    )
-    classical_registry = subparsers.add_parser(
-        "build-classical-registry",
-        help="Verify and combine all frozen classical models and scoreboards.",
-    )
-    classical_registry.add_argument(
-        "--version",
-        default=None,
-        help=(
-            "Versioned classical-registry artifact directory "
-            "(default: classical_registry_v1)."
-        ),
-    )
-    recurrent_volume = subparsers.add_parser(
-        "train-recurrent-volume",
-        help="Train and evaluate the multi-horizon recurrent volume model.",
-    )
-    recurrent_volume.add_argument(
-        "--version",
-        default=None,
-        help="Artifact version (default: recurrent_volume_v1).",
-    )
+    register_model_parsers(subparsers)
     return parser
 
 
@@ -291,105 +218,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             len(result.figure_paths),
         )
         return 0
-    if args.command == "prepare-modeling":
-        result = run_modeling_prep(settings, version=args.version)
-        partitions = result.summary["split"]["partitions"]
-        logger.info("Modeling preparation complete: %s", result.summary_path)
-        logger.info("Feature schema: %s", result.schema_path)
-        logger.info(
-            "train=%s validation=%s test=%s features=%s preprocessors=%s",
-            partitions["train"]["row_count"],
-            partitions["validation"]["row_count"],
-            partitions["test"]["row_count"],
-            result.summary["preprocessing"]["feature_count"],
-            len(result.preprocessor_paths),
-        )
-        return 0
-    if args.command == "train-scratch-linear":
-        result = run_scratch_linear(settings, version=args.version)
-        metrics = result.summary["metrics"]
-        logger.info("Scratch linear proof complete: %s", result.summary_path)
-        logger.info("Generated proof report: %s", result.report_path)
-        logger.info(
-            "train=%s validation=%s iterations=%s scratch_rmse=%.4f sklearn_rmse=%.4f",
-            result.summary["training"]["train_rows"],
-            result.summary["training"]["validation_rows"],
-            result.summary["training"]["iterations_completed"],
-            metrics["scratch"]["rmse"],
-            metrics["sklearn"]["rmse"],
-        )
-        return 0
-    if args.command == "train-classical-regression":
-        result = run_classical_regression(settings, version=args.version)
-        scoreboard = result.summary["scoreboard"]
-        volume = [record for record in scoreboard if record["target"] == "volume"]
-        logger.info(
-            "Classical regression complete: %s",
-            result.paths.summary_path,
-        )
-        logger.info(
-            "jobs=%s selected_models=%s prediction_rows=%s",
-            result.summary["coverage"]["job_count"],
-            result.summary["coverage"]["selected_model_count"],
-            result.summary["coverage"]["prediction_rows"],
-        )
-        logger.info(
-            "volume_test_rmse_by_horizon=%s",
-            {
-                record["horizon_minutes"]: record["test"]["rmse"]
-                for record in volume
-            },
-        )
-        return 0
-    if args.command == "train-classical-classification":
-        result = run_classical_classification(settings, version=args.version)
-        scoreboard = result.summary["scoreboard"]
-        logger.info(
-            "Classical classification complete: %s",
-            result.paths.summary_path,
-        )
-        logger.info(
-            "jobs=%s selected_models=%s prediction_rows=%s",
-            result.summary["coverage"]["job_count"],
-            result.summary["coverage"]["selected_model_count"],
-            result.summary["coverage"]["prediction_rows"],
-        )
-        logger.info(
-            "test_primary_metrics=%s",
-            {
-                record["job_id"]: record["test"][
-                    "macro_f1" if record["task"] == "congestion" else "roc_auc"
-                ]
-                for record in scoreboard
-            },
-        )
-        return 0
-    if args.command == "build-classical-registry":
-        result = run_classical_registry(settings, version=args.version)
-        logger.info(
-            "Classical registry complete: %s",
-            result.paths.summary_path,
-        )
-        logger.info(
-            "entries=%s prediction_rows=%s acceptance=%s",
-            result.summary["coverage"]["entry_count"],
-            result.summary["coverage"]["prediction_rows"],
-            result.summary["acceptance"],
-        )
-        return 0
-    if args.command == "train-recurrent-volume":
-        result = run_recurrent_volume(settings, version=args.version)
-        logger.info(
-            "Recurrent volume model complete: %s",
-            result.paths.summary_path,
-        )
-        logger.info(
-            "candidate=%s test_mean_rmse=%.4f deep_wins=%s/4",
-            result.summary["selection"]["selected_candidate_id"],
-            result.summary["metrics"]["test"]["mean_rmse"],
-            result.summary["acceptance"]["deep_beats_classical_horizons"],
-        )
-        return 0
+    model_result = run_model_command(args, settings, logger)
+    if model_result is not None:
+        return model_result
     raise RuntimeError(f"Unhandled command: {args.command}")
 
 

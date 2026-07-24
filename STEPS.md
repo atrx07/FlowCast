@@ -650,10 +650,42 @@ Attach trustworthy uncertainty information and explain failure modes.
 6. Compare deep and classical volume errors on identical rows.
 7. Export dashboard-ready confidence and error tables.
 
+### Proven implementation (verified 2026-07-24)
+
+- `config/confidence.yaml` freezes a standalone `confidence_error_v1`
+  contract without changing the Step 10-15 training, model, threshold,
+  calibrator, split, or prediction artifacts.
+- `flowcast analyze-confidence` recursively verifies the processed-data,
+  classical registry/regression/classification, and recurrent summary chains
+  before reading predictions.
+- Finite-sample split-conformal absolute-residual widths are fitted on
+  validation only for 16 model/target/horizon groups, then applied unchanged
+  to validation and test. Non-negative lower bounds, coverage, width, bias,
+  residual quantiles, RMSE, MAE, MAPE, and R-squared are persisted.
+- Frozen classifier probabilities are validated before maximum probability,
+  entropy, normalized entropy, confidence bands, ten-bin reliability, and
+  expected calibration error are calculated. Accident risk bands are
+  transparent multiples of the frozen validation-selected threshold.
+- Error slices cover road, origin hour, weekday, weekday/weekend, peak period,
+  weather, actual congestion, and horizon. Unsupported rows remain visible
+  with counts, `sufficient_support=false`, and blank metrics.
+- Deep and classical volume predictions are inner-paired on exact
+  road/origin/target-timestamp/split/horizon keys; all 212,000 recurrent rows
+  reconcile to one classical row and the actual values match.
+- Canonical outputs include 862,700 regression-confidence rows, 428,257
+  classification-confidence rows, 212,000 paired rows, 3,408 error slices,
+  interval/reliability/risk/confusion CSVs, JSON/Markdown summaries, complete
+  hashes, a verified loader, deterministic rebuild, and tamper rejection.
+- Test interval coverage across the 16 model/target/horizon groups ranges from
+  0.8924 to 0.9055 around the nominal 0.90 level. Congestion and accident goals
+  remain unmet, and the recurrent 120-minute deficit remains visible.
+
 ### Exit gate
 - Every forecast output has confidence/uncertainty.
 - Coverage/calibration evidence exists.
 - Limitations are recorded honestly.
+- Verified 2026-07-24: all Step 16 artifact, leakage, reconciliation,
+  determinism, support, reload, and tamper gates pass.
 ---
 ## Step 17 - Build the Inference and Reporting Services
 ### Goal

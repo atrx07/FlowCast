@@ -1,0 +1,48 @@
+confidence_analysis:
+  contract_version: confidence_error_v1
+  version: confidence_error_v1
+  upstream:
+    processed_version: processed_targets_v1
+    regression_version: classical_regression_v1
+    classification_version: classical_classification_v1
+    registry_version: classical_registry_v1
+    recurrent_version: recurrent_volume_v1
+
+  regression:
+    method: split_conformal_absolute_residual
+    calibration_split: validation
+    application_splits:
+      - validation
+      - test
+    confidence_level: 0.90
+    quantile_method: finite_sample_higher
+    clip_lower_at_zero: true
+
+  classification:
+    probability_tolerance: 1.0e-6
+    reliability_bins: 10
+    confidence_bands:
+      medium_minimum: 0.55
+      high_minimum: 0.80
+
+  accident_risk:
+    source: validation_selected_operating_threshold
+    threshold_multipliers:
+      elevated: 0.50
+      high: 1.00
+      critical: 2.00
+
+  slices:
+    dimensions:
+      - road_id
+      - origin_hour
+      - weekday
+      - weekday_type
+      - peak_status
+      - weather_condition
+      - actual_congestion
+    minimum_rows:
+      regression: 100
+      congestion: 100
+      accident: 100
+    minimum_accident_positives: 5

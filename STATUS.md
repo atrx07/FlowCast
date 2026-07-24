@@ -4,10 +4,10 @@
 
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-24
-- **Current milestone:** M6 - Deep learning and confidence (in progress)
-- **Current step:** Steps 00-15 complete; Step 16 next
-- **Overall state:** Recurrent multi-horizon volume model verified; confidence
-  and error analysis is the next gate
+- **Current milestone:** M7 - Dashboard and service layer (in progress)
+- **Current step:** Steps 00-16 complete; Step 17 next
+- **Overall state:** Confidence/error evidence is verified and dashboard-ready;
+  inference and reporting services are the next gate
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
@@ -16,233 +16,203 @@ FlowCast has a reproducible Python 3.11 pipeline from immutable raw inputs
 through validation, cleaning, merge, leakage-safe features, four-horizon
 targets, EDA, frozen chronological evaluation, training-only preprocessing,
 NumPy regression proof, complete classical regression/classification, a
-combined classical registry, and a from-scratch recurrent volume forecaster.
+combined classical registry, a from-scratch recurrent volume forecaster, and
+validation-calibrated confidence/error analysis.
 
-Step 15 consumes the exact frozen Step 10 recurrent preprocessing contract and
-does not change the Step 10-14 configuration hashes, model choices, test
-boundaries, or persisted classical predictions. It persists selection and the
-best state-dictionary checkpoint before the single explicit test load.
+Step 16 consumes only the frozen Step 08 and Step 12-15 datasets, summaries,
+registries, model cards, and prediction tables. It does not alter a model,
+candidate, threshold, calibrator, architecture, sequence length, split, source
+prediction, or upstream hash.
 
 `FlowCast-project_file/`, `data/raw/`, the delivered CSV/DOCX sources, and all
-frozen classical source artifacts remain unchanged.
+frozen Step 10-15 source artifacts remain unchanged.
 
-## 2. Step 15 Implementation
+## 2. Step 16 Implementation
 
-- Added independent `config/recurrent.yaml` with the
-  `recurrent_volume_v1` contract, two bounded LSTM candidates, target columns
-  h1-h4, sequence/cadence isolation, Adam, training-only per-horizon target
-  scaling, learning-rate reduction, early stopping, device policy, validation
-  selection, and exact-row classical comparison.
-- Added lazy PyTorch datasets over transformed partitions; sequences cannot
-  cross roads, chronological partitions, 30-minute gaps, or target boundaries.
-- Restricted candidate validation to the exact origins eligible for the
-  longest configured sequence so sequence length cannot win through different
-  validation coverage.
-- Added a unidirectional LSTM/GRU implementation with dropout and a four-value
-  volume head. All weights are seeded and initialized from scratch.
-- Added candidate training, gradient clipping, scheduler, early stopping,
-  best-state restoration, deterministic inference, and CPU/CUDA policy
-  resolution.
-- Post-Step-15 CUDA hardening adds GPU name, total VRAM, peak allocated VRAM,
-  CUDA/PyTorch version, selected policy, and explicit CPU-fallback evidence to
-  future recurrent run summaries. Unit coverage now protects explicit CPU,
-  unavailable-CUDA auto fallback, and guarded CUDA failure.
-- Persisted candidate metrics, epoch curves, feature/scaler manifests,
-  pre-test sequence/card/selection evidence, state dictionary, validation/test
-  predictions, metrics, exact-row comparison, JSON/Markdown model card,
-  environment snapshot, report, and a four-entry recurrent registry extension.
-- Added `flowcast train-recurrent-volume`.
-- Added unit/full-artifact contracts for config coverage, sequence isolation,
-  target boundaries, training-only scaling, shapes/seeding, exact comparison,
-  freeze order, metric/artifact coverage, reload equality, and tamper
-  rejection.
+- Added independent `config/confidence.yaml` with the
+  `confidence_error_v1` contract, exact upstream versions, validation-only
+  split-conformal calibration, fixed reliability bins, confidence/risk bands,
+  subgroup dimensions, and minimum-support rules.
+- Added modular confidence configuration, verified input loading, artifact
+  loading, interval/probability metrics, supported error slices, exact-row
+  deep/classical pairing, diagnostics, reporting, and orchestration under
+  `flowcast.evaluation`.
+- Regression intervals use the finite-sample higher absolute-residual
+  quantile at `ceil((n + 1) * 0.90)` for each model/target/horizon validation
+  group. Test residuals never fit the width.
+- Classification rows preserve frozen ordered probabilities and add maximum
+  probability, entropy, normalized entropy, and confidence band.
+- Accident rows preserve the validation-selected operating threshold and add
+  low/elevated/high/critical bands at 0.5x/1x/2x threshold boundaries. Empty
+  bands remain present in the aggregate table.
+- Error analysis covers road, origin hour, weekday, weekday/weekend, peak
+  period, weather, actual congestion, and horizon. Unsupported slices remain
+  visible with counts, `sufficient_support=false`, and blank metrics.
+- Added `flowcast analyze-confidence`. Modeling/evaluation command
+  registration and dispatch now live in `cli_model_commands.py`, keeping the
+  root CLI small without changing existing command behavior.
+- Added unit/full-artifact contracts for validation-only fitting, probability
+  and risk-band semantics, minimum support, exact pairing, row reconciliation,
+  determinism, recursive loading, and tamper rejection.
+- Corrected the EDA notebook smoke test to use isolated temporary
+  artifacts. With CUDA packages installed, its previous canonical rerun
+  changed only the EDA environment snapshot and invalidated frozen downstream
+  hashes; the isolated smoke now passes while preserving the canonical EDA
+  SHA-256.
 
-## 3. Sequence, Training, and Resource Evidence
+## 3. Canonical Confidence and Error Evidence
 
-- Selected candidate: `lstm_s12_h32`.
-- Recurrent type: unidirectional LSTM; sequence length: 12 windows.
-- Transformed inputs: 64 from the frozen 62-feature origin schema.
-- Best epoch: 8; stopped epoch: 11 through validation-led early stopping.
-- Training sequences: 126,475 across 25 roads.
-- Validation sequences: 26,500 across 25 roads.
-- Test sequences: 26,500 across 25 roads.
-- Cross-road sequences: 0.
-- Cross-partition sequences: 0.
-- Non-contiguous sequences: 0.
-- Target-boundary violations: 0.
-- Candidate fit time: 69.19 seconds; total canonical run: 76.72 seconds.
-- Frozen Step 15 training framework: PyTorch `2.13.0+cpu`.
-- Frozen Step 15 execution device: Intel Core Ultra 9 CPU, 8 PyTorch threads.
-- RTX 5070 Laptop GPU/VRAM used for the frozen Step 15 run: no; CUDA was
-  unavailable in that recorded environment.
+- Canonical CPU run: 18.35 seconds.
+- Regression confidence rows: 862,700.
+- Classification confidence rows: 428,257.
+- Exact recurrent/classical paired volume rows: 212,000.
+- Conformal calibration groups: 16.
+- Reliability rows: 160 (ten bins x task/horizon/split).
+- Accident risk-band rows: 32, including configured zero-count bands.
+- Error slices: 3,408 total; 3,394 meet support and 14 remain visible as
+  unsupported.
+- RTX 5070 Laptop GPU/VRAM used: no. Step 16 is tabular/statistical and stayed
+  on the Intel Core Ultra 9 CPU.
 - Intel NPU used: no.
 
-Post-Step-15 environment update, verified 2026-07-24:
+### Regression test intervals
 
-- Installed framework: PyTorch `2.13.0+cu130` from the official PyTorch CUDA
-  13.0 wheel index.
-- NVIDIA driver `610.74` exposes CUDA UMD compatibility 13.3.
-- `torch.cuda.is_available()` is true for the NVIDIA GeForce RTX 5070 Laptop
-  GPU with compute capability 12.0 and 8,151 MiB VRAM.
-- CUDA LSTM forward/backward smoke: passed with output shape `[32, 4]`, cuDNN
-  9.2, 64.19 MiB allocated VRAM, and 0.213 seconds measured kernel/test time.
-- Forced-CPU LSTM forward/backward smoke: passed with finite output shape
-  `[8, 4]`.
-- The existing Step 15 checkpoint, predictions, and hold-out metrics were not
-  retrained or rewritten; their original CPU environment evidence remains
-  immutable.
+The nominal coverage is 0.90. Across the 16 model/target/horizon test groups:
 
-## 4. Frozen Hold-Out Results
+- Minimum empirical coverage: 0.8924 (recurrent volume, 90 minutes).
+- Maximum empirical coverage: 0.9055 (classical travel time, 90 minutes).
+- Nine groups are slightly below nominal and seven are at/above nominal.
+- Recurrent volume mean interval widths are 185.45, 187.00, 186.37, and
+  190.19 vehicles for 30-120 minutes.
+- Classical volume mean interval widths are 198.39, 197.19, 209.37, and
+  198.78 vehicles.
 
-The recurrent model was evaluated once after candidate/checkpoint freeze.
-Each comparison uses the exact same 26,500 road/timestamp origins and actual
-values as the corresponding frozen classical prediction.
+The observed range is close to nominal, but remains hold-out evidence rather
+than a guarantee under future distribution shift.
 
-| Horizon | Deep RMSE | Classical RMSE | Delta deep-classical | Deep wins | Deep MAPE |
-|---:|---:|---:|---:|---|---:|
-| 30 min | 60.1443 | 63.2354 | -3.0910 | Yes | 10.210% |
-| 60 min | 60.8154 | 62.6833 | -1.8678 | Yes | 10.388% |
-| 90 min | 61.2014 | 65.0565 | -3.8551 | Yes | 10.979% |
-| 120 min | 61.8966 | 61.8495 | +0.0471 | No | 11.535% |
+### Classification calibration and failure modes
 
-- Mean deep test RMSE: 61.0144.
-- The volume MAPE target remains met at all four horizons.
-- Deep RMSE beats classical at 3 of 4 horizons.
-- The formal all-horizon deep-vs-classical target is therefore not met.
-- No post-test architecture, sequence-length, epoch, or prediction change was
-  made to chase the 120-minute result.
+- Congestion test Macro-F1 remains 0.7540, 0.7503, 0.7493, and 0.7468.
+- Congestion expected calibration error is 0.0029 at 30 minutes and
+  0.0515-0.0602 at 60-120 minutes.
+- The largest overall off-diagonal congestion confusion is actual Free-flow
+  predicted Moderate at 60 minutes (1,263 rows).
+- Accident ROC-AUC remains 0.6209, 0.6237, 0.5980, and 0.5894; PR-AUC remains
+  0.0209, 0.0182, 0.0161, and 0.0165 against roughly 0.98% prevalence.
+- Accident probability expected calibration error is low
+  (0.00087-0.00124), but low calibration error under extreme imbalance does
+  not compensate for weak ranking and precision.
+- Where populated, higher configured accident risk bands show higher observed
+  event rates. Very small high/critical groups remain visibly count-qualified.
 
-## 5. Produced Artifacts
+### Exact deep/classical diagnosis
+
+- The recurrent model retains test RMSE wins at 30, 60, and 90 minutes and
+  trails classical by 0.0471 overall at 120 minutes.
+- On validation-only paired evidence, recurrent RMSE is lower at all four
+  horizons, so a future active-volume policy can be frozen without consulting
+  test outcomes.
+- The largest supported test deficit is at origin hour 22 for the 120-minute
+  horizon: recurrent minus classical RMSE is +10.0931 across 1,100 exact rows.
+- Other large deficits cluster around origin hours 23 and 0. These are
+  descriptive associations, not causal conclusions.
+
+## 4. Produced Artifacts
 
 ```text
-artifacts/metrics/recurrent_volume_v1/
-  candidate_metrics.csv
-  classical_comparison.csv
-  environment.txt
-  horizon_metrics.csv
-  pretest_model_card.json
-  pretest_sequence_manifest.json
-  registry_extension.json
-  selection_manifest.json
-  sequence_manifest.json
+config/confidence.yaml
+
+artifacts/metrics/confidence_error_v1/
+  accident_risk_bands.csv
+  classification_reliability.csv
+  confusion_matrices.csv
+  error_slices.csv
+  interval_calibration.csv
+  paired_volume_slices.csv
+  regression_coverage.csv
   summary.json
   summary.md
-  training_curves.csv
 
-artifacts/model_cards/recurrent_volume_v1/
-  volume_multi_horizon.json
-  volume_multi_horizon.md
-
-artifacts/models/recurrent_volume_v1/       # ignored, reproducible
-  best_checkpoint.pt
-  feature_manifest.json
-  target_scaler.json
-
-artifacts/predictions/recurrent_volume_v1/  # ignored, reproducible
-  predictions.parquet
+artifacts/predictions/confidence_error_v1/  # ignored, reproducible
+  classification_confidence.parquet
+  paired_volume_comparison.parquet
+  regression_confidence.parquet
 ```
 
 Key canonical artifacts:
 
 | Artifact | Bytes | SHA-256 |
 |---|---:|---|
-| Checkpoint | 64,125 | `c23ed0580af9ea39a68dfda60b79011e2d32f4564f9303235655fe7bdb5b90dd` |
-| Predictions | 4,414,323 | `ba38dcf66bc793e3a5a2abcbbc98cfe9ce01432afc91625e9fd906e5d9917e82` |
-| Model-card JSON | 17,681 | `8022c70873e072167faccc48da70da16b1c7f55bd7df81fb57af5d614ff84f4c` |
-| Selection manifest | 1,758 | `63c8a615bd73312942ac2569f64593dfbc86f883943e131b500a77dfc9240bfa` |
-| Comparison CSV | 484 | `aec0dd2feb36566cf12b51db4bd82b5f148501d07f2e832fab60be8315f35c20` |
+| Regression confidence Parquet | 44,636,053 | `73c410c1e1fc9a5313477a9a7104c9bf00abc998b7c50f7fbbe548111f396b06` |
+| Classification confidence Parquet | 18,794,358 | `0d665712d7af3da719f7ed9804583dcf69b91e8e5b3941b9f06d899ee90e3693` |
+| Paired volume Parquet | 18,114,789 | `8fc6403324e172f83da72382028ddc58a8a858c1949378f36dbbf1642bf739de` |
+| Error slices CSV | 792,354 | `5fe1ae82559c019e751fe3807b870df5df17665eb725e939d8bd0b53df756262` |
+| Interval calibration CSV | 1,811 | `cfa11e025a46e55868d2419187beeabc4ad4262c345662f8a62add838d983d73` |
 
-## 6. Validation and Assurance Evidence
+## 5. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
 ```text
-.venv/Scripts/python.exe -m pip install "torch==2.13.0"
-.venv/Scripts/python.exe -m flowcast.cli train-recurrent-volume
-.venv/Scripts/python.exe -m pytest -q tests/unit/test_recurrent_volume.py tests/data_contracts/test_recurrent_volume_contract.py
+.venv/Scripts/python.exe -m flowcast.cli analyze-confidence
+.venv/Scripts/python.exe -m pytest -q tests/unit/test_confidence_analysis.py tests/data_contracts/test_confidence_analysis_contract.py
 .venv/Scripts/python.exe -m pytest -q
 .venv/Scripts/python.exe -m compileall -q src tests
-.venv/Scripts/python.exe -m flowcast.cli train-recurrent-volume --help
+.venv/Scripts/python.exe -m flowcast.cli analyze-confidence --help
 .venv/Scripts/python.exe -m pip check
 git diff --check
 ```
 
-Post-Step-15 CUDA enablement:
-
-```text
-.venv/Scripts/python.exe -m pip install --force-reinstall "torch==2.13.0+cu130" --index-url https://download.pytorch.org/whl/cu130
-.venv/Scripts/python.exe -c "<CUDA LSTM forward/backward smoke>"
-.venv/Scripts/python.exe -c "<forced-CPU LSTM forward/backward smoke>"
-.venv/Scripts/python.exe -m pip check
-nvidia-smi
-```
-
-CUDA enablement verification results:
-
-- Optional `requirements-cuda.txt` reinstall path resolves the already installed
-  official `torch==2.13.0+cu130` build.
-- Focused recurrent unit/full-artifact contracts after CUDA enablement:
-  12 passed.
-- Existing recurrent checkpoint loading and persisted-prediction equality pass
-  under the CUDA-capable environment without retraining.
-- `pip check`, source/test byte compilation, `git diff --check`, and the
-  under-400-line source-size assurance pass.
-
 Verified results:
 
-- Canonical Step 15 build: passed in 76.72 seconds.
-- Focused Step 15 unit/full-artifact contracts: 10 passed in 6.07 seconds.
-- Complete suite: 147 passed in 464.79 seconds.
-- The complete suite independently retrained the frozen classical families in
-  temporary artifact roots, verified every prior pipeline layer, and then
-  validated the canonical recurrent chain.
-- Checkpoint reconstruction reproduces all persisted validation predictions.
-- Deliberate checkpoint byte tampering is rejected before deserialization.
-- All 212,000 long-form validation/test prediction rows are finite and
-  horizon-traceable.
-- Exact classical origin, target timestamp, and actual-value mapping passes at
-  all horizons.
-- Dependency consistency, CLI help, byte compilation, and whitespace checks
-  pass.
+- Canonical Step 16 build: passed in 18.35 seconds.
+- Focused Step 16 unit/full-artifact contracts: 10 passed in 19.04 seconds.
+- Complete repository suite: 159 passed in 513.90 seconds with pytest exit
+  code 0.
+- The complete suite retrained bounded classical families in temporary roots,
+  verified every prior pipeline layer, reran Step 16 determinism/tamper
+  contracts, and executed the isolated EDA notebook without changing its
+  canonical summary hash.
+- A repeated canonical build reproduces every tracked committed metric/report
+  byte exactly.
+- Deliberate output-byte tampering is rejected before a confidence table loads.
+- All three row-level Parquets reconcile to their frozen prediction sources.
+- Every recurrent volume prediction maps to one exact classical row with the
+  same actual value.
+- All interval bounds are ordered and all classifier uncertainty values are
+  finite.
+- Dependency consistency, CLI help, source/test byte compilation, whitespace,
+  and source-size assurance pass.
 - Every source file remains below 400 physical lines.
 
-## 7. Decisions and Constraints
+## 6. Decisions and Constraints
 
-- The recurrent YAML and registry extension are separate from the classical
-  registry contract. This prevents deep-model reporting from invalidating
-  frozen Step 10-14 hashes or rewriting the classical-only registry.
-- Validation mean RMSE selects the candidate and epoch. Test RMSE is reporting
-  evidence only.
-- The state dictionary is the primary PyTorch artifact; no opaque whole-model
-  object or pretrained weights are persisted.
-- Validation/test comparisons use the longest-candidate eligible-origin
-  intersection. This gives every candidate the same selection origins and
-  gives deep/classical models identical comparison rows.
-- The CPU-only PyTorch build satisfies the approved CPU acceptance baseline.
-  The current local environment now adds the approved CUDA wheel for
-  workload-aware acceleration, while CPU execution remains mandatory and was
-  reverified after installation.
-- Full recurrent/deep candidate training should normally use the verified RTX
-  5070 when accelerator overhead is justified. Unit tests, small training
-  probes, tabular confidence/error analysis, and lightweight inference should
-  normally stay on CPU.
-- The portable dependency remains `torch==2.13.0`; the optional local NVIDIA
-  distribution is pinned separately as `torch==2.13.0+cu130` in
-  `requirements-cuda.txt`.
+- Confidence configuration is separate from frozen training and registry
+  configuration. Reporting changes cannot invalidate model-selection hashes.
+- Regression interval widths are target/horizon/model specific, validation
+  fitted, and then immutable. There is no test-driven interval widening.
+- Recurrent and classical volume use the same external interval method so their
+  uncertainty is comparable.
+- Risk-band labels are relative rankings around each frozen accident operating
+  threshold; they are not calibrated claims of absolute real-world danger.
+- Unsupported groups are retained instead of silently dropped or reported with
+  unstable metrics.
+- The current PyTorch environment remains `2.13.0+cu130` with a verified RTX
+  5070 path, but CPU fallback is mandatory. Step 16 correctly stayed on CPU.
 
-## 8. Risks and Unresolved Work
+## 7. Risks and Unresolved Work
 
-- The recurrent model trails the classical model by 0.0471 RMSE at 120 minutes,
-  so the formal all-horizon deep comparison goal is missed.
-- Congestion Macro-F1 and accident ROC-AUC targets remain unmet.
-- Step 16 must diagnose the 120-minute, congestion, and accident failure modes
-  without refitting on or concealing the sealed-test results.
-- Regression intervals, unified confidence tables, inference/report services,
-  Streamlit views, upload/retraining controls, and final reproduction remain.
-- Generated checkpoint/scaler/prediction artifacts are ignored by Git and must
-  be rebuilt with the documented CLI after a clean clone.
+- Congestion Macro-F1 and accident ROC-AUC formal targets remain unmet.
+- Low accident prevalence makes subgroup ranking estimates volatile even with
+  minimum-positive rules.
+- The recurrent model still trails classical at the 120-minute test horizon,
+  especially in late-night slices.
+- Inference/report services, Streamlit views, upload/retraining controls, and
+  final clean reproduction remain.
+- Generated model and row-level prediction artifacts are ignored by Git and
+  must be rebuilt with documented CLI commands after a clean clone.
 
-## 9. Next Gate
+## 8. Next Gate
 
-Proceed only to **Step 16 - Add Confidence and Error Analysis**. The bounded
-action and evidence gate are maintained in `NEXT_STEP.md`.
+Proceed only to **Step 17 - Build the Inference and Reporting Services**. The
+bounded action and evidence gate are maintained in `NEXT_STEP.md`.

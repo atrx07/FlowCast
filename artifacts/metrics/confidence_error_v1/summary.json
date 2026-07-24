@@ -1,0 +1,351 @@
+{
+  "artifacts": {
+    "accident_risk_bands": {
+      "bytes": 3807,
+      "path": "artifacts/metrics/confidence_error_v1/accident_risk_bands.csv",
+      "sha256": "568f4c873aa51bb318598803fc89fffda150c0011a9c774786a429a33ab104d6"
+    },
+    "classification_confidence_predictions": {
+      "bytes": 18794358,
+      "path": "artifacts/predictions/confidence_error_v1/classification_confidence.parquet",
+      "sha256": "0d665712d7af3da719f7ed9804583dcf69b91e8e5b3941b9f06d899ee90e3693"
+    },
+    "classification_reliability": {
+      "bytes": 20849,
+      "path": "artifacts/metrics/confidence_error_v1/classification_reliability.csv",
+      "sha256": "d05f46639cd113f9578eacea33dbc6b61227c577ea31f1ec37f09f0bce351661"
+    },
+    "confusion_matrices": {
+      "bytes": 696920,
+      "path": "artifacts/metrics/confidence_error_v1/confusion_matrices.csv",
+      "sha256": "ef5e5217e635c85c6590d140832e4b3f3bac425b7cf90becc13188f2311c5331"
+    },
+    "error_slices": {
+      "bytes": 792354,
+      "path": "artifacts/metrics/confidence_error_v1/error_slices.csv",
+      "sha256": "5fe1ae82559c019e751fe3807b870df5df17665eb725e939d8bd0b53df756262"
+    },
+    "interval_calibration": {
+      "bytes": 1811,
+      "path": "artifacts/metrics/confidence_error_v1/interval_calibration.csv",
+      "sha256": "cfa11e025a46e55868d2419187beeabc4ad4262c345662f8a62add838d983d73"
+    },
+    "paired_volume_predictions": {
+      "bytes": 18114789,
+      "path": "artifacts/predictions/confidence_error_v1/paired_volume_comparison.parquet",
+      "sha256": "8fc6403324e172f83da72382028ddc58a8a858c1949378f36dbbf1642bf739de"
+    },
+    "paired_volume_slices": {
+      "bytes": 78975,
+      "path": "artifacts/metrics/confidence_error_v1/paired_volume_slices.csv",
+      "sha256": "5ca97e53ec33fc60278a11a16710bdfe0cb05042a6f1d64ce476a2076deb71ae"
+    },
+    "regression_confidence_predictions": {
+      "bytes": 44636053,
+      "path": "artifacts/predictions/confidence_error_v1/regression_confidence.parquet",
+      "sha256": "73c410c1e1fc9a5313477a9a7104c9bf00abc998b7c50f7fbbe548111f396b06"
+    },
+    "regression_coverage": {
+      "bytes": 5781,
+      "path": "artifacts/metrics/confidence_error_v1/regression_coverage.csv",
+      "sha256": "e2998f4594826841c0ea74bf921c2c8909c94787c6b5ddd2bb82c9f12632d461"
+    },
+    "report": {
+      "bytes": 3614,
+      "path": "artifacts/metrics/confidence_error_v1/summary.md",
+      "sha256": "3c2f9b4e850b436004d315462de8643821bc1bf1e55d54354c049bed684bf479"
+    }
+  },
+  "checks": {
+    "all_context_rows_mapped": true,
+    "all_intervals_ordered": true,
+    "all_probabilities_finite": true,
+    "calibration_uses_validation_only": true,
+    "classification_rows_reconciled": true,
+    "frozen_source_predictions_unchanged": true,
+    "paired_rows_equal_recurrent_rows": true,
+    "regression_rows_reconciled": true
+  },
+  "configuration": {
+    "bytes": 1184,
+    "path": "config/confidence.yaml",
+    "sha256": "81373ba74a249c40f5d9cba7f11491e3143b93c8988d1dc00fd3b9155a686657"
+  },
+  "contract_version": "confidence_error_v1",
+  "coverage": {
+    "classification_prediction_rows": 428257,
+    "conformal_group_count": 16,
+    "error_slice_row_count": 3408,
+    "paired_volume_rows": 212000,
+    "regression_prediction_rows": 862700,
+    "reliability_row_count": 160,
+    "risk_band_row_count": 32,
+    "supported_error_slice_rows": 3394
+  },
+  "diagnostics": {
+    "accident": {
+      "expected_calibration_error_by_horizon": {
+        "1": 0.0012427747483085925,
+        "2": 0.0008658379588389279,
+        "3": 0.0009875235307971134,
+        "4": 0.0011528075637703208
+      },
+      "risk_band_observed_rates": [
+        {
+          "horizon_minutes": 30,
+          "observed_event_rate": 0.0067842605156037995,
+          "risk_band": "low",
+          "rows": 3685
+        },
+        {
+          "horizon_minutes": 30,
+          "observed_event_rate": 0.008904044709671308,
+          "risk_band": "elevated",
+          "rows": 21114
+        },
+        {
+          "horizon_minutes": 30,
+          "observed_event_rate": 0.027339003645200487,
+          "risk_band": "high",
+          "rows": 1646
+        },
+        {
+          "horizon_minutes": 30,
+          "observed_event_rate": 0.09090909090909091,
+          "risk_band": "critical",
+          "rows": 11
+        },
+        {
+          "horizon_minutes": 60,
+          "observed_event_rate": 0.007036997547712975,
+          "risk_band": "low",
+          "rows": 18758
+        },
+        {
+          "horizon_minutes": 60,
+          "observed_event_rate": 0.015712529034021042,
+          "risk_band": "elevated",
+          "rows": 7319
+        },
+        {
+          "horizon_minutes": 60,
+          "observed_event_rate": 0.030985915492957747,
+          "risk_band": "high",
+          "rows": 355
+        },
+        {
+          "horizon_minutes": 90,
+          "observed_event_rate": 0.005154639175257732,
+          "risk_band": "low",
+          "rows": 970
+        },
+        {
+          "horizon_minutes": 90,
+          "observed_event_rate": 0.00965561635017702,
+          "risk_band": "elevated",
+          "rows": 24856
+        },
+        {
+          "horizon_minutes": 90,
+          "observed_event_rate": 0.022298456260720412,
+          "risk_band": "high",
+          "rows": 583
+        },
+        {
+          "horizon_minutes": 120,
+          "observed_event_rate": 0.00879644853666557,
+          "risk_band": "elevated",
+          "rows": 24328
+        },
+        {
+          "horizon_minutes": 120,
+          "observed_event_rate": 0.021400778210116732,
+          "risk_band": "high",
+          "rows": 2056
+        }
+      ],
+      "test_pr_auc_by_horizon": {
+        "1": 0.0209136745,
+        "2": 0.0181825705,
+        "3": 0.0161055744,
+        "4": 0.0165066277
+      },
+      "test_prevalence_by_horizon": {
+        "1": 0.0097898397,
+        "2": 0.0097608959,
+        "3": 0.0097693968,
+        "4": 0.0097786537
+      },
+      "test_roc_auc_by_horizon": {
+        "1": 0.6209075489,
+        "2": 0.6236733832,
+        "3": 0.5980192851,
+        "4": 0.5894100267
+      }
+    },
+    "congestion": {
+      "dominant_off_diagonal_confusion": {
+        "actual_label": "Free-flow",
+        "horizon_windows": 2,
+        "predicted_label": "Moderate",
+        "rows": 1263
+      },
+      "expected_calibration_error_by_horizon": {
+        "1": 0.0028863407506180506,
+        "2": 0.05386028010905614,
+        "3": 0.0514892826140485,
+        "4": 0.06023797487768234
+      },
+      "test_macro_f1_by_horizon": {
+        "1": 0.7539697309,
+        "2": 0.7502815026,
+        "3": 0.7492509117,
+        "4": 0.7467869858
+      }
+    },
+    "paired_volume": {
+      "deep_rmse_win_horizons": 3,
+      "rmse_delta_deep_minus_classical_by_horizon": {
+        "1": -3.091030832599998,
+        "2": -1.867819146500004,
+        "3": -3.8550972355999917,
+        "4": 0.04706161270000564
+      },
+      "test_horizon_count": 4,
+      "worst_supported_test_slices": [
+        {
+          "dimension": "origin_hour",
+          "horizon_minutes": 120,
+          "rmse_delta_deep_minus_classical": 10.0930871341,
+          "rows": 1100,
+          "slice_value": "22"
+        },
+        {
+          "dimension": "origin_hour",
+          "horizon_minutes": 60,
+          "rmse_delta_deep_minus_classical": 8.628629840399999,
+          "rows": 1100,
+          "slice_value": "23"
+        },
+        {
+          "dimension": "origin_hour",
+          "horizon_minutes": 120,
+          "rmse_delta_deep_minus_classical": 6.852612916000002,
+          "rows": 1100,
+          "slice_value": "23"
+        },
+        {
+          "dimension": "origin_hour",
+          "horizon_minutes": 120,
+          "rmse_delta_deep_minus_classical": 5.448936061600001,
+          "rows": 1100,
+          "slice_value": "0"
+        },
+        {
+          "dimension": "origin_hour",
+          "horizon_minutes": 30,
+          "rmse_delta_deep_minus_classical": 5.007662693399997,
+          "rows": 1100,
+          "slice_value": "23"
+        }
+      ]
+    },
+    "regression_intervals": {
+      "below_nominal_group_count": 9,
+      "maximum_test_coverage": 0.9054981549815498,
+      "minimum_test_coverage": 0.892377358490566,
+      "nominal_coverage": 0.9,
+      "test_group_count": 16
+    }
+  },
+  "limitations": [
+    "Intervals assume future residual behavior resembles validation data.",
+    "Classification confidence describes frozen model probabilities and does not establish causal reliability under distribution shift.",
+    "Rare accident events limit subgroup estimates; unsupported rows are retained without computed performance metrics.",
+    "The recurrent model trails the classical volume model at 120 minutes."
+  ],
+  "methodology": {
+    "accident_risk": {
+      "source": "validation_selected_operating_threshold",
+      "threshold_multipliers": {
+        "critical": 2.0,
+        "elevated": 0.5,
+        "high": 1.0
+      }
+    },
+    "classification": {
+      "confidence_bands": {
+        "high_minimum": 0.8,
+        "medium_minimum": 0.55
+      },
+      "probability_tolerance": 1e-06,
+      "reliability_bins": 10
+    },
+    "regression": {
+      "application_splits": [
+        "validation",
+        "test"
+      ],
+      "calibration_split": "validation",
+      "clip_lower_at_zero": true,
+      "confidence_level": 0.9,
+      "method": "split_conformal_absolute_residual",
+      "quantile_method": "finite_sample_higher"
+    },
+    "slices": {
+      "dimensions": [
+        "road_id",
+        "origin_hour",
+        "weekday",
+        "weekday_type",
+        "peak_status",
+        "weather_condition",
+        "actual_congestion"
+      ],
+      "minimum_accident_positives": 5,
+      "minimum_rows": {
+        "accident": 100,
+        "congestion": 100,
+        "regression": 100
+      }
+    }
+  },
+  "upstream": {
+    "classical_registry_summary": {
+      "bytes": 2966,
+      "path": "artifacts/metrics/classical_registry_v1/summary.json",
+      "sha256": "b64ddfb87e6abe0868d9e6782b177d661d937cea29e858c290650c2c56bc8e6a"
+    },
+    "classical_regression_summary": {
+      "bytes": 25868,
+      "path": "artifacts/metrics/classical_regression_v1/summary.json",
+      "sha256": "519b91265fbec38370f0d2821a3cf08cc22058fc845828d5f175f90bf103a382"
+    },
+    "classification_summary": {
+      "bytes": 40297,
+      "path": "artifacts/metrics/classical_classification_v1/summary.json",
+      "sha256": "61a4d8a1e26e4297068bf2b7826945198c067a8981cbf593b08a1dbac539f6f5"
+    },
+    "processed_dataset": {
+      "bytes": 21813624,
+      "path": "data/processed/processed_targets_v1/dataset.parquet",
+      "sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4"
+    },
+    "processed_manifest": {
+      "bytes": 31747,
+      "path": "artifacts/features/processed_targets_v1/manifest.json",
+      "sha256": "5dd66dd78d95c842bf7c56a18634a067b33c65b2923914dbb66eb68f626c02ec"
+    },
+    "processed_summary": {
+      "bytes": 6140,
+      "path": "artifacts/quality/processed_targets_v1/summary.json",
+      "sha256": "4c9be6b64e73c1a56daa8b8f47f8662cd260c07c70a11fdd0c114dcd27986c3c"
+    },
+    "recurrent_summary": {
+      "bytes": 16849,
+      "path": "artifacts/metrics/recurrent_volume_v1/summary.json",
+      "sha256": "5e99716b8bea7c8a99abb8ba82a7a73c0de0507a83f5c72182958aa2c38730bb"
+    }
+  },
+  "version": "confidence_error_v1"
+}

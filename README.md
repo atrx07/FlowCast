@@ -12,8 +12,8 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 24 July 2026. Milestones M0-M5 are complete and M6 is in
-progress. Steps 00-15 now
+Last verified on 24 July 2026. Milestones M0-M6 are complete and M7 is in
+progress. Steps 00-16 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -58,9 +58,19 @@ model at the first three horizons and trails by 0.0471 RMSE at 120 minutes, so
 the formal all-horizon goal remains honestly unmet. Its state dictionary,
 training curves, model card, environment snapshot, 212,000 persisted
 predictions, and four-entry registry extension pass verified reload and
-tamper-rejection tests. The complete assurance suite now passes all 147 tests.
-Step 16 confidence and error analysis is the immediate
-gate; inference services, report export, and the dashboard remain ahead.
+tamper-rejection tests. Step 16 adds validation-only 90% split-conformal
+intervals for every classical regression output and recurrent volume,
+maximum-probability/entropy confidence for classifiers, fixed-bin reliability,
+frozen-threshold accident risk bands, and minimum-support error slices by road,
+time, weekday, peak period, weather, congestion, and horizon. Its dashboard-ready
+outputs contain 862,700 regression rows, 428,257 classification rows, and
+212,000 exact deep/classical paired rows. Test interval coverage across the 16
+groups is 0.8924-0.9055; the weak classifier goals and 120-minute recurrent
+deficit remain visible. The complete assurance suite passes all 159 tests,
+including deterministic rebuild, tamper rejection, and an isolated notebook
+smoke that preserves canonical hashes. Step 17 inference and report services
+are the immediate gate; the Streamlit surface and final reproduction remain
+ahead.
 
 ## Delivery timeline
 
@@ -69,8 +79,8 @@ gate; inference services, report export, and the dashboard remain ahead.
 | Before Week 1 | M0 governance and plan | Complete |
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
 | Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
-| Week 3 | M6 recurrent deep learning and confidence | In progress - Step 15 verified; Step 16 next |
-| Week 4 | M7 dashboard, M8 reproducibility and delivery | Not started |
+| Week 3 | M6 recurrent deep learning and confidence | Complete - Steps 15-16 verified |
+| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 17 next |
 
 ## Quick start
 
@@ -94,6 +104,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli train-classical-classification
 .\.venv\Scripts\python.exe -m flowcast.cli build-classical-registry
 .\.venv\Scripts\python.exe -m flowcast.cli train-recurrent-volume
+.\.venv\Scripts\python.exe -m flowcast.cli analyze-confidence
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
