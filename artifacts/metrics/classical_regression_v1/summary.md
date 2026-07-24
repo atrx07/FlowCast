@@ -34,9 +34,9 @@
 
 ## Runtime
 
-- CV fit time: 20.700s; CV prediction time: 10.906s.
-- Full-training family fit time: 64.099s; validation prediction time: 2.714s.
-- Frozen test prediction time: 0.851s.
+- CV fit time: 20.681s; CV prediction time: 10.938s.
+- Full-training family fit time: 64.411s; validation prediction time: 2.832s.
+- Frozen test prediction time: 0.827s.
 
 ## Limitations
 

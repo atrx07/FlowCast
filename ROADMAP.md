@@ -71,7 +71,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M2 - Cleaning and merge | Week 1 | Cleaned source tables and merged interim table | Complete - Step 06 gate passed with zero misses or row multiplication |
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Complete - Step 08 gate passed with 181,200 origins and 20 masked targets |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
-| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | In progress - Steps 10-12 complete; Step 13 next |
+| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | In progress - Steps 10-13 complete; Step 14 registry next |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Not started |
 | M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Not started |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
@@ -214,6 +214,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Leakage from lags/rolling/scalers | Inflated metrics and invalid project | Shift-before-roll tests; fit learned preprocessing on train only |
 | Missing full sensor windows | Biased sequences and broken lags | Reindex per segment; preserve missingness flags; apply explicit gap policy |
 | Rare accidents (~0.94%) | Misleading accuracy and unstable classifier | Class weights, PR-AUC, calibrated probability, threshold analysis |
+| Classifier acceptance goals missed | Congestion/risk forecasts are weaker than the formal target | Preserve sealed-test evidence; consolidate the honest baseline in Step 14 and perform segmented diagnosis in Step 16 without post-test tuning |
 | Deep model fails to beat XGBoost | Formal target missed | Tune within budget; report honestly; keep strong classical fallback |
 | Multi-horizon complexity | Too many model artifacts | Use generated horizon loops and shared interfaces/configuration |
 | Streamlit rerun retrains models | Slow and unsafe UI | Persist artifacts; explicit retraining service only |
@@ -239,5 +240,11 @@ direct volume/speed/travel-time models across horizons 1-4, complete
 Linear/Tree/Forest/XGBoost evidence, a pre-test selection freeze, persisted
 predictions and model cards, and honest final hold-out metrics. Random Forest
 won all 12 validation comparisons, and all four volume horizons met the formal
-hold-out MAPE target. Step 13 congestion and accident-risk classification is
-next. See `STATUS.md` and `NEXT_STEP.md` for the live state.
+hold-out MAPE target. Step 13 now adds eight direct congestion/accident
+classifiers, all four required families, chronological probability-calibration
+assessment, validation-only accident thresholds, ordered persisted
+probabilities, model cards, and a pre-test freeze. The final congestion
+Macro-F1 range of 0.7468-0.7540 and accident ROC-AUC range of 0.5894-0.6237
+miss the formal goals and remain visible for later error analysis. Step 14
+classical scoreboard and registry consolidation is next. See `STATUS.md` and
+`NEXT_STEP.md` for the live state.

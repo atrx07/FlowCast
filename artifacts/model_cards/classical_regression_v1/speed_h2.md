@@ -41,7 +41,7 @@
 
 - Processed data SHA-256: `f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4`.
 - Feature schema SHA-256: `204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453`.
-- Selection manifest SHA-256: `84c153160c105f73cf49f9e133e9ade982101d355c40f3d51f1567df082828f1`.
+- Selection manifest SHA-256: `792df7995558360c99f28f13eb71e8fed182ada164c10582577cd05d5b9e3fd4`.
 - Pipeline: `artifacts/models/classical_regression_v1/speed_h2.joblib`.
 - Predictions: `artifacts/predictions/classical_regression_v1/selected_predictions.parquet`.
 

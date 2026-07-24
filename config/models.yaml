@@ -168,3 +168,112 @@ classical_regression:
             min_child_weight: 3
             subsample: 1.0
             colsample_bytree: 1.0
+
+classical_classification:
+  contract_version: classical_classification_v1
+  version: classical_classification_v1
+  tasks:
+    - congestion
+    - accident
+  horizons: [1, 2, 3, 4]
+  class_order:
+    congestion:
+      - Free-flow
+      - Moderate
+      - Heavy
+      - Severe
+    accident:
+      - no_accident
+      - accident
+  primary_metrics:
+    congestion: macro_f1
+    accident: roc_auc
+  cross_validation:
+    fold_count: 5
+    training_timestamp_budget: 96
+    sampling: evenly_spaced_timestamps
+    require_all_folds: true
+  selection:
+    hyperparameter_stage:
+      congestion: mean_cv_macro_f1_within_family
+      accident: mean_cv_roc_auc_within_family
+    family_stage:
+      congestion: validation_macro_f1
+      accident: validation_roc_auc
+    tie_breakers:
+      - family
+      - candidate_id
+    freeze_before_test: true
+  probability:
+    calibration:
+      method: sigmoid
+      validation_fit_fraction: 0.50
+      assessment_metric: brier_score
+      minimum_improvement: 0.0001
+  accident_threshold:
+    selection_metric: f1
+    candidate_quantiles: 201
+    include_default_threshold: 0.50
+    tie_breakers:
+      - recall
+      - precision
+      - lower_threshold
+  estimators:
+    decision_tree:
+      preprocessing_family: tree
+      candidates:
+        - candidate_id: tree_balanced
+          parameters:
+            max_depth: 10
+            min_samples_leaf: 12
+        - candidate_id: tree_deep
+          parameters:
+            max_depth: 16
+            min_samples_leaf: 6
+    random_forest:
+      preprocessing_family: tree
+      candidates:
+        - candidate_id: forest_balanced
+          parameters:
+            n_estimators: 24
+            max_depth: 12
+            min_samples_leaf: 6
+            max_features: 0.7
+        - candidate_id: forest_deep
+          parameters:
+            n_estimators: 48
+            max_depth: 18
+            min_samples_leaf: 3
+            max_features: 0.9
+    xgboost:
+      preprocessing_family: tree
+      candidates:
+        - candidate_id: xgb_balanced
+          parameters:
+            n_estimators: 40
+            max_depth: 4
+            learning_rate: 0.10
+            min_child_weight: 5
+            subsample: 1.0
+            colsample_bytree: 1.0
+        - candidate_id: xgb_deep
+          parameters:
+            n_estimators: 64
+            max_depth: 6
+            learning_rate: 0.06
+            min_child_weight: 3
+            subsample: 1.0
+            colsample_bytree: 1.0
+    svm:
+      preprocessing_family: svm
+      candidates:
+        - candidate_id: svm_regularized
+          parameters:
+            C: 0.1
+            max_iter: 5000
+            tol: 0.001
+        - candidate_id: svm_default
+          parameters:
+            C: 1.0
+            max_iter: 5000
+            tol: 0.001

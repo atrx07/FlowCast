@@ -9,6 +9,9 @@ import pandas as pd
 import yaml
 
 from flowcast.settings import Settings
+from flowcast.modelling.classification_config import (
+    validate_classical_classification,
+)
 
 
 PARTITIONS = ("train", "validation", "test")
@@ -292,4 +295,5 @@ def load_model_config(settings: Settings) -> dict[str, Any]:
     _validate_preprocessing(config)
     _validate_scratch_linear(config)
     _validate_classical_regression(config)
+    validate_classical_classification(config)
     return config

@@ -489,6 +489,39 @@ Predict future congestion classes and accident-risk probabilities.
 5. Report precision, recall, F1, ROC-AUC, PR-AUC, and confusion matrix on test.
 6. Never use accuracy as the headline result.
 
+### Proven Step 13 procedure
+
+- `config/models.yaml` defines congestion and accident risk across horizons
+  1-4, the fixed class order, Decision Tree/Random Forest/XGBoost/scaled SVM,
+  eight bounded candidates, five folds, a 96-timestamp fold budget, sigmoid
+  calibration policy, and validation-only accident-threshold selection.
+- `flowcast train-classical-classification` hash-verifies Step 10 and generates
+  all eight jobs from the processed target manifest. Every candidate uses all
+  five expanding folds; preprocessing and balancing weights are relearned from
+  each fold's sampled training rows only.
+- Mean CV Macro-F1 selects congestion hyperparameters and mean CV ROC-AUC
+  selects accident hyperparameters. Each family winner then fits every eligible
+  training row, and the matching full-validation primary metric selects the
+  family.
+- The validation period is split chronologically: the earlier half fits a
+  sigmoid calibrator, while the later half assesses Brier improvement and
+  selects the accident threshold by F1 with recall/precision visible. LinearSVC
+  calibration is required for probabilities; native-probability models are
+  calibrated only when the configured Brier gate passes.
+- All eight selected estimators, ordered probability contracts, calibration
+  decisions, four thresholds, and the hashed selection manifest are persisted
+  before one explicit `purpose="final_evaluation"` test load. Nothing is refit
+  or changed after that load.
+- Canonical metrics, validation/test predictions, per-class metrics, confusion
+  matrices, calibration/threshold tables, importance, hashes, generated
+  Markdown, and JSON/Markdown cards live under
+  `classical_classification_v1`.
+- Full-data contracts prove 320 successful fold evaluations, 32 family/job
+  validation comparisons, 428,257 ordered-probability prediction rows, freeze
+  ordering, reload equality, and tamper rejection. Honest hold-out results did
+  not meet the formal goals: congestion Macro-F1 is 0.7468-0.7540 and accident
+  ROC-AUC is 0.5894-0.6237.
+
 ### Exit gate
 - Class probabilities are available for confidence/risk ranking.
 - Threshold and calibration decisions are persisted.

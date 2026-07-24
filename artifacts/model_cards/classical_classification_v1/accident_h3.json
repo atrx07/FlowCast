@@ -1,0 +1,241 @@
+{
+  "artifacts": {
+    "model": {
+      "bytes": 4502,
+      "path": "artifacts/models/classical_classification_v1/accident_h3.joblib",
+      "sha256": "ae756d7d46c0e26b163a2c33dc02b8ccd8ee6fb953d1fddfd9d51be1b2600f5a"
+    },
+    "predictions": {
+      "bytes": 8808475,
+      "path": "artifacts/predictions/classical_classification_v1/selected_predictions.parquet",
+      "sha256": "304160c8331db6a63a77c942d2fdaf415f5100d154b4e5c8467dd1f63a30263e"
+    }
+  },
+  "contract_version": "flowcast_classification_model_card_v1",
+  "data": {
+    "test_end": "2025-05-31T22:00:00+05:30",
+    "test_rows": 26409,
+    "test_start": "2025-05-09T08:30:00+05:30",
+    "train_end": "2025-04-16T15:00:00+05:30",
+    "train_rows": 123668,
+    "train_start": "2025-01-01T00:00:00+05:30",
+    "training_weight_evidence": {
+      "balanced_class_weights": {
+        "accident": 53.4896193772,
+        "no_accident": 0.5047179052
+      },
+      "class_counts": {
+        "accident": 1156,
+        "no_accident": 122512
+      },
+      "rows": 123668
+    },
+    "validation_end": "2025-05-09T06:30:00+05:30",
+    "validation_rows": 26407,
+    "validation_start": "2025-04-16T17:00:00+05:30"
+  },
+  "features": {
+    "input_feature_count": 62,
+    "input_features": [
+      "traffic_volume",
+      "avg_speed",
+      "occupancy",
+      "signal_timing",
+      "road_capacity",
+      "temperature",
+      "rainfall",
+      "visibility",
+      "share_2w",
+      "share_car",
+      "share_lcv",
+      "share_hcv",
+      "public_holiday",
+      "event_flag",
+      "roadwork_flag",
+      "_inserted_window",
+      "traffic_volume_original_missing",
+      "traffic_volume_physical_invalid",
+      "avg_speed_original_missing",
+      "avg_speed_physical_invalid",
+      "temperature_was_missing",
+      "visibility_was_missing",
+      "vehicle_shares_normalized",
+      "hour_of_day",
+      "hour_sin",
+      "hour_cos",
+      "day_of_week",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "is_weekend",
+      "is_morning_peak",
+      "is_evening_peak",
+      "is_peak",
+      "volume_lag_1",
+      "volume_lag_2",
+      "volume_lag_48",
+      "volume_rolling_mean_4",
+      "volume_rolling_std_4",
+      "volume_rolling_mean_8",
+      "volume_rolling_std_8",
+      "speed_lag_1",
+      "speed_lag_2",
+      "speed_lag_48",
+      "speed_rolling_mean_4",
+      "speed_rolling_std_4",
+      "speed_rolling_mean_8",
+      "speed_rolling_std_8",
+      "history_available",
+      "half_hour_capacity",
+      "volume_capacity_ratio",
+      "capacity_headroom",
+      "is_rain",
+      "is_low_visibility",
+      "weather_is_clear",
+      "weather_is_cloudy",
+      "weather_is_overcast",
+      "weather_is_rain",
+      "weather_is_fog",
+      "temperature_band",
+      "holiday_peak",
+      "days_to_nearest_event",
+      "event_within_proximity"
+    ],
+    "output_feature_count": 64,
+    "preprocessing_family": "svm",
+    "preprocessing_version": "split_preprocessing_v1"
+  },
+  "job_id": "accident_h3",
+  "limitations": [
+    "This direct classifier is specific to one target and horizon.",
+    "CV uses a deterministic timestamp budget; the final family fit uses all eligible training rows.",
+    "Calibration is fit on earlier validation rows and assessed on later validation rows before test access.",
+    "Future weather is not available; weather inputs are observed at origin."
+  ],
+  "lineage": {
+    "feature_schema_sha256": "204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453",
+    "processed_sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4",
+    "selection_sha256": "af78be183276cd5d48c9d5eb63148457ebb641395693f8ec25925abf2255f835"
+  },
+  "metrics": {
+    "test": {
+      "accuracy": 0.9691393086,
+      "brier_score": 0.0193274498,
+      "confusion_matrix": [
+        [
+          25581,
+          570
+        ],
+        [
+          245,
+          13
+        ]
+      ],
+      "f1": 0.0309155767,
+      "log_loss": 0.0544532958,
+      "negative_rows": 26151,
+      "positive_rate": 0.0097693968,
+      "positive_rows": 258,
+      "pr_auc": 0.0161055744,
+      "precision": 0.0222984563,
+      "predicted_positive_rows": 583,
+      "prediction_seconds": 0.063135,
+      "recall": 0.0503875969,
+      "roc_auc": 0.5980192851,
+      "rows": 26409,
+      "threshold": 0.0132201281
+    },
+    "validation": {
+      "accuracy": 0.9759533457,
+      "brier_score": 0.0177074235,
+      "confusion_matrix": [
+        [
+          25766,
+          405
+        ],
+        [
+          230,
+          6
+        ]
+      ],
+      "f1": 0.0185471406,
+      "log_loss": 0.0508580028,
+      "negative_rows": 26171,
+      "positive_rate": 0.0089370243,
+      "positive_rows": 236,
+      "pr_auc": 0.0111957064,
+      "precision": 0.0145985401,
+      "predicted_positive_rows": 411,
+      "recall": 0.0254237288,
+      "roc_auc": 0.5602821469,
+      "rows": 26407,
+      "threshold": 0.0132201281
+    }
+  },
+  "model_version": "classical_classification_v1",
+  "probability": {
+    "calibration": {
+      "applied": true,
+      "assessment_end": "2025-05-09T06:30:00+05:30",
+      "assessment_metric": "brier_score",
+      "assessment_rows": 13208,
+      "assessment_start": "2025-04-28T00:00:00+05:30",
+      "brier_improvement": null,
+      "calibrated_quality": {
+        "brier_score": 0.0184423762,
+        "log_loss": 0.0525729139
+      },
+      "fit_end": "2025-04-27T23:30:00+05:30",
+      "fit_rows": 13199,
+      "fit_start": "2025-04-16T17:00:00+05:30",
+      "method": "sigmoid",
+      "minimum_improvement": 0.0001,
+      "raw_probability_available": false,
+      "raw_quality": null,
+      "reason": "required_for_probability_output",
+      "threshold_selection": {
+        "f1": 0.0309278351,
+        "precision": 0.0226415094,
+        "predicted_positive_rows": 265,
+        "recall": 0.0487804878,
+        "source": "chronologically_later_validation_assessment",
+        "threshold": 0.0132201281
+      }
+    },
+    "class_order": [
+      "no_accident",
+      "accident"
+    ],
+    "operating_threshold": 0.0132201281
+  },
+  "seed": 42,
+  "selection": {
+    "candidate_id": "svm_default",
+    "family": "svm",
+    "mean_cv_roc_auc": 0.4833379964,
+    "parameters": {
+      "C": 1.0,
+      "max_iter": 5000,
+      "tol": 0.001
+    },
+    "parameters_json": "{\n  \"C\": 1.0,\n  \"max_iter\": 5000,\n  \"tol\": 0.001\n}",
+    "primary_metric": "roc_auc",
+    "validation_before_calibration": {
+      "negative_rows": 26171,
+      "positive_rate": 0.0089370243,
+      "positive_rows": 236,
+      "pr_auc": 0.0111957064,
+      "roc_auc": 0.5602821469,
+      "rows": 26407
+    }
+  },
+  "target": {
+    "class_order": [
+      "no_accident",
+      "accident"
+    ],
+    "column": "target_accident_h3",
+    "horizon_minutes": 90,
+    "horizon_windows": 3,
+    "task": "accident"
+  }
+}

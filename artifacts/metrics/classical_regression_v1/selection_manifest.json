@@ -6,9 +6,9 @@
       "sha256": "c2740c43017fa7fa802d08cb84967490c81d64968fece669ca42af0f62fa08ad"
     },
     "models": {
-      "bytes": 4270,
+      "bytes": 7051,
       "path": "config/models.yaml",
-      "sha256": "6c8ab1d59ab026c731ba63fab3839dce761f7327b94fc79c0c21572581483e44"
+      "sha256": "69cd51cc753ee7b5a178cc4c620a39bd0cf20f58bb6be280eebf8b9867676714"
     },
     "seed": 42
   },
@@ -32,7 +32,7 @@
     "summary": {
       "bytes": 76872,
       "path": "artifacts/features/split_preprocessing_v1/summary.json",
-      "sha256": "6dd5cada2c86aac398562483911290d881399e97156219d53ab26ad1e3304c97"
+      "sha256": "1e2194c52d8442c72cbb3b402e38ab5d4570938437006af85c3a5a311769e011"
     }
   },
   "job_count": 12,
@@ -66,12 +66,12 @@
       "train_rows": 126825,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.126796,
+        "fit_seconds": 2.200992,
         "mae": 41.2147894069,
         "mape_nonzero_rows": 27150,
         "mape_percent": 9.9766787652,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.066939,
+        "prediction_seconds": 0.066941,
         "r_squared": 0.9517806646,
         "rmse": 61.192570471,
         "rows": 27150
@@ -108,12 +108,12 @@
       "train_rows": 126800,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.082366,
+        "fit_seconds": 2.167509,
         "mae": 41.115935706,
         "mape_nonzero_rows": 27125,
         "mape_percent": 10.0936886813,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.07191,
+        "prediction_seconds": 0.068367,
         "r_squared": 0.951776362,
         "rmse": 61.1235555945,
         "rows": 27125
@@ -150,12 +150,12 @@
       "train_rows": 126775,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 1.406168,
+        "fit_seconds": 1.365721,
         "mae": 44.2078891315,
         "mape_nonzero_rows": 27100,
         "mape_percent": 11.1107227124,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.068483,
+        "prediction_seconds": 0.069324,
         "r_squared": 0.9442008321,
         "rmse": 65.6564903895,
         "rows": 27100
@@ -192,12 +192,12 @@
       "train_rows": 126750,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.112411,
+        "fit_seconds": 2.11979,
         "mae": 41.2371421908,
         "mape_nonzero_rows": 27075,
         "mape_percent": 10.5554606729,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.069832,
+        "prediction_seconds": 0.069171,
         "r_squared": 0.9523784344,
         "rmse": 60.5923775842,
         "rows": 27075
@@ -234,12 +234,12 @@
       "train_rows": 126825,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.113655,
+        "fit_seconds": 2.128806,
         "mae": 2.8127505806,
         "mape_nonzero_rows": 27150,
         "mape_percent": 8.8385146432,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.068673,
+        "prediction_seconds": 0.067845,
         "r_squared": 0.8928018272,
         "rmse": 3.7229821969,
         "rows": 27150
@@ -276,12 +276,12 @@
       "train_rows": 126800,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.101445,
+        "fit_seconds": 2.143683,
         "mae": 2.8335186851,
         "mape_nonzero_rows": 27125,
         "mape_percent": 8.8629248669,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.068775,
+        "prediction_seconds": 0.070241,
         "r_squared": 0.8903613758,
         "rmse": 3.7590777742,
         "rows": 27125
@@ -318,12 +318,12 @@
       "train_rows": 126775,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 1.431473,
+        "fit_seconds": 1.379089,
         "mae": 2.9143107317,
         "mape_nonzero_rows": 27100,
         "mape_percent": 9.0850935217,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.071599,
+        "prediction_seconds": 0.068725,
         "r_squared": 0.8843770566,
         "rmse": 3.8544108763,
         "rows": 27100
@@ -360,12 +360,12 @@
       "train_rows": 126750,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 1.407967,
+        "fit_seconds": 1.383769,
         "mae": 2.9119783211,
         "mape_nonzero_rows": 27075,
         "mape_percent": 9.0620157884,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.067301,
+        "prediction_seconds": 0.065733,
         "r_squared": 0.8848580965,
         "rmse": 3.8418605814,
         "rows": 27075
@@ -402,12 +402,12 @@
       "train_rows": 126825,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.22995,
+        "fit_seconds": 2.227814,
         "mae": 0.4405902833,
         "mape_nonzero_rows": 27150,
         "mape_percent": 9.5145271974,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.070559,
+        "prediction_seconds": 0.070133,
         "r_squared": 0.7796204661,
         "rmse": 1.1004809536,
         "rows": 27150
@@ -444,12 +444,12 @@
       "train_rows": 126800,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.149745,
+        "fit_seconds": 2.125649,
         "mae": 0.4365356943,
         "mape_nonzero_rows": 27125,
         "mape_percent": 9.579594156,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.078865,
+        "prediction_seconds": 0.077605,
         "r_squared": 0.7852796097,
         "rmse": 1.0853351419,
         "rows": 27125
@@ -486,12 +486,12 @@
       "train_rows": 126775,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.120534,
+        "fit_seconds": 2.150449,
         "mae": 0.4356693844,
         "mape_nonzero_rows": 27100,
         "mape_percent": 9.6989379678,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.070117,
+        "prediction_seconds": 0.070239,
         "r_squared": 0.783648096,
         "rmse": 1.0870033994,
         "rows": 27100
@@ -528,12 +528,12 @@
       "train_rows": 126750,
       "train_start": "2025-01-01T00:00:00+05:30",
       "validation": {
-        "fit_seconds": 2.161758,
+        "fit_seconds": 2.263468,
         "mae": 0.4312424022,
         "mape_nonzero_rows": 27075,
         "mape_percent": 9.5005054154,
         "mape_zero_actual_rows": 0,
-        "prediction_seconds": 0.068963,
+        "prediction_seconds": 0.070092,
         "r_squared": 0.7850302527,
         "rmse": 1.0822502765,
         "rows": 27075

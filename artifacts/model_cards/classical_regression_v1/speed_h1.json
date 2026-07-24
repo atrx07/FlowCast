@@ -6,9 +6,9 @@
       "sha256": "15296e95624de1b2980aab0b12cb8f126c7a9ea27895e25963d108b71667299e"
     },
     "predictions": {
-      "bytes": 11879451,
+      "bytes": 11878768,
       "path": "artifacts/predictions/classical_regression_v1/selected_predictions.parquet",
-      "sha256": "ce53fda7ebaae58b5f198d3c323fd4001d6456eee849e92670c6b5c959cebc26"
+      "sha256": "a1788b55e0c4570df9cd684033b8dc902450165a3539490b5901d0a2949fc9f8"
     }
   },
   "contract_version": "flowcast_model_card_v1",
@@ -103,7 +103,7 @@
   "lineage": {
     "feature_schema_sha256": "204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453",
     "processed_sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4",
-    "selection_sha256": "84c153160c105f73cf49f9e133e9ade982101d355c40f3d51f1567df082828f1"
+    "selection_sha256": "792df7995558360c99f28f13eb71e8fed182ada164c10582577cd05d5b9e3fd4"
   },
   "metrics": {
     "test": {
@@ -111,18 +111,18 @@
       "mape_nonzero_rows": 27150,
       "mape_percent": 9.0286201567,
       "mape_zero_actual_rows": 0,
-      "prediction_seconds": 0.074895,
+      "prediction_seconds": 0.070667,
       "r_squared": 0.8980231916,
       "rmse": 3.7399844314,
       "rows": 27150
     },
     "validation": {
-      "fit_seconds": 2.113655,
+      "fit_seconds": 2.128806,
       "mae": 2.8127505806,
       "mape_nonzero_rows": 27150,
       "mape_percent": 8.8385146432,
       "mape_zero_actual_rows": 0,
-      "prediction_seconds": 0.068673,
+      "prediction_seconds": 0.067845,
       "r_squared": 0.8928018272,
       "rmse": 3.7229821969,
       "rows": 27150

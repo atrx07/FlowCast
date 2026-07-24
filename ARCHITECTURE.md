@@ -54,6 +54,7 @@ python -m flowcast.cli eda
 python -m flowcast.cli prepare-modeling
 python -m flowcast.cli train-scratch-linear
 python -m flowcast.cli train-classical-regression
+python -m flowcast.cli train-classical-classification
 python -m flowcast.cli train-deep
 python -m flowcast.cli evaluate
 python -m flowcast.cli predict --horizons 1 2 3 4
@@ -258,8 +259,11 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Step 12 direct-regression targets/horizons, four required estimator families,
   bounded two-candidate search spaces, deterministic CV timestamp budget,
   validation selection rule, and pre-test freeze rule.
-- Later steps add classification grids, calibration, recurrent training, and
-  early-stopping settings without weakening the frozen split contract.
+- Step 13 congestion/accident targets and class order, four classifier
+  families, bounded two-candidate search spaces, chronological sigmoid
+  calibration assessment, accident-threshold selection, and pre-test freeze.
+- Later steps add recurrent training and early-stopping settings without
+  weakening the frozen split contract.
 
 ## 6. Data Contracts
 ### 6.1 Raw traffic contract
@@ -462,6 +466,34 @@ Key: `road_id + timestamp`.
   single test-access evidence. Reloading verifies the complete chain before
   returning a selected pipeline.
 
+### 6.14 Classical classification artifact boundary
+
+- `train-classical-classification` generates eight direct jobs from the
+  processed target manifest: four-class congestion and binary accident risk at
+  horizons 1-4.
+- Decision Tree, Random Forest, XGBoost, and scaled linear SVM candidates use
+  all five frozen horizon-gapped folds. Each fold fits fresh preprocessing and
+  derives balancing weights from only that fold's sampled training labels.
+- Mean CV Macro-F1 selects congestion hyperparameters; mean CV ROC-AUC selects
+  accident hyperparameters. The corresponding full-validation metric selects
+  one family per target/horizon.
+- Each selected training-fitted model uses the earlier half of validation to
+  fit a sigmoid calibrator and the later half to assess Brier improvement. SVM
+  calibration is mandatory because LinearSVC has no native probabilities;
+  other families retain raw probabilities unless the configured Brier
+  improvement gate passes.
+- Accident operating thresholds maximize F1 on only the later validation
+  assessment slice, with recall, precision, and lower threshold as deterministic
+  tie-breakers.
+- All eight probability classifiers, calibration decisions, four accident
+  thresholds, and `selection_manifest.json` are persisted before one explicit
+  `final_evaluation` test load. No estimator, threshold, calibrator, or feature
+  changes after that load.
+- Canonical fold/candidate/family/final scoreboards, ordered probabilities,
+  per-class metrics, confusion matrices, threshold tables, calibration
+  evidence, feature importance, hashes, JSON/Markdown model cards, and a
+  verified Joblib loader live under `classical_classification_v1`.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -569,7 +601,23 @@ common base retains trailing origins instead of globally dropping them.
 - Selected pipelines include their fitted preprocessor and expose coefficients
   or tree feature importance through a common persisted table.
 
-### 10.3 Classical registry key
+### 10.3 Classical classification selection
+
+- Congestion and accident risk use direct horizon-specific classifiers and the
+  exact 62-feature Step 10 schema.
+- Eight configured candidates cover Decision Tree, Random Forest, XGBoost, and
+  scaled LinearSVC across all five expanding folds.
+- Congestion uses the fixed numeric/report order Free-flow, Moderate, Heavy,
+  Severe and selects by Macro-F1. Accident selects by ROC-AUC, with PR-AUC and
+  operating-point precision/recall/F1 always visible.
+- Tree/XGBoost probabilities are checked for finiteness, bounds, fixed class
+  order, and row normalization. Selected SVM decision scores are converted to
+  probabilities by the validation-fitted sigmoid calibrator.
+- A chronological validation sub-split separates calibration fitting from
+  calibration assessment and accident threshold selection. The final test is
+  prediction-only.
+
+### 10.4 Classical registry key
 ```text
 {target}/{horizon}/{model_name}/{version}
 ```
@@ -584,14 +632,14 @@ Each registry entry contains:
 - calibration/threshold artifact where relevant.
 - model card.
 
-### 10.4 Accident-risk classifier
+### 10.5 Accident-risk classifier
 - Binary label: future `accident_count > 0`.
 - Use class weights or XGBoost `scale_pos_weight` derived from training only.
 - Do not select by accuracy.
 - Tune threshold on validation data according to operational trade-off and report precision/recall.
 - Calibrate probability when the selected model requires it.
 
-### 10.5 Recurrent volume model
+### 10.6 Recurrent volume model
 Preferred v1 design:
 
 ```text
@@ -712,6 +760,8 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 - model-family preprocessing and training-only learned statistics.
 - scratch gradient calculation.
 - metric functions.
+- ordered multiclass/binary probability metrics and validation-only threshold
+  selection.
 
 ### Data-contract
 - required columns and dtypes.
@@ -722,6 +772,10 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
 - deterministic EDA artifacts, hashes, figure dimensions, and tamper rejection.
 - chronological split order, horizon boundary isolation, CV containment,
   deterministic preprocessing artifacts, reloadability, and tamper rejection.
+- complete classifier family/fold coverage, pre-test decision freeze, fixed
+  class order, probability normalization, threshold/calibration evidence,
+  model-card completeness, probability equality after reload, and tamper
+  rejection.
 
 ### Integration
 - raw -> interim.

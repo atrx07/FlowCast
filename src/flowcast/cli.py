@@ -15,6 +15,7 @@ from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.features.pipeline import run_feature_engineering
 from flowcast.features.processed_pipeline import run_processed_data
 from flowcast.logging_config import configure_logging
+from flowcast.modelling.classification import run_classical_classification
 from flowcast.modelling.classical_regression import run_classical_regression
 from flowcast.modelling.pipeline import run_modeling_prep
 from flowcast.modelling.regression import run_scratch_linear
@@ -147,6 +148,18 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Versioned classical-regression artifact directory "
             "(default: classical_regression_v1)."
+        ),
+    )
+    classical_classification = subparsers.add_parser(
+        "train-classical-classification",
+        help="Tune, calibrate, freeze, and evaluate all classifier jobs.",
+    )
+    classical_classification.add_argument(
+        "--version",
+        default=None,
+        help=(
+            "Versioned classification artifact directory "
+            "(default: classical_classification_v1)."
         ),
     )
     return parser
@@ -302,6 +315,29 @@ def main(argv: Sequence[str] | None = None) -> int:
             {
                 record["horizon_minutes"]: record["test"]["rmse"]
                 for record in volume
+            },
+        )
+        return 0
+    if args.command == "train-classical-classification":
+        result = run_classical_classification(settings, version=args.version)
+        scoreboard = result.summary["scoreboard"]
+        logger.info(
+            "Classical classification complete: %s",
+            result.paths.summary_path,
+        )
+        logger.info(
+            "jobs=%s selected_models=%s prediction_rows=%s",
+            result.summary["coverage"]["job_count"],
+            result.summary["coverage"]["selected_model_count"],
+            result.summary["coverage"]["prediction_rows"],
+        )
+        logger.info(
+            "test_primary_metrics=%s",
+            {
+                record["job_id"]: record["test"][
+                    "macro_f1" if record["task"] == "congestion" else "roc_auc"
+                ]
+                for record in scoreboard
             },
         )
         return 0
