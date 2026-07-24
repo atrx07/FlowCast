@@ -12,7 +12,7 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 24 July 2026. Milestones M0-M6 are complete and M7 is in
+Last verified on 25 July 2026. Milestones M0-M6 are complete and M7 is in
 progress. Steps 00-16 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
@@ -66,11 +66,11 @@ time, weekday, peak period, weather, congestion, and horizon. Its dashboard-read
 outputs contain 862,700 regression rows, 428,257 classification rows, and
 212,000 exact deep/classical paired rows. Test interval coverage across the 16
 groups is 0.8924-0.9055; the weak classifier goals and 120-minute recurrent
-deficit remain visible. The complete assurance suite passes all 159 tests,
-including deterministic rebuild, tamper rejection, and an isolated notebook
-smoke that preserves canonical hashes. Step 17 inference and report services
-are the immediate gate; the Streamlit surface and final reproduction remain
-ahead.
+deficit remain visible. The complete assurance suite passes all 164 tests,
+including deterministic rebuild, tamper rejection, an isolated notebook smoke,
+an exact-exit pytest runner, and a session guard that restores and rejects
+tracked-file mutation. Step 17 inference and report services are the immediate
+gate; the Streamlit surface and final reproduction remain ahead.
 
 ## Delivery timeline
 
@@ -105,8 +105,14 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli build-classical-registry
 .\.venv\Scripts\python.exe -m flowcast.cli train-recurrent-volume
 .\.venv\Scripts\python.exe -m flowcast.cli analyze-confidence
-.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe scripts\run_tests.py -q
 ```
+
+The test runner prints `FLOWCAST_PYTEST_EXIT=0` only for a successful suite and
+faithfully returns pytest's status. Tests that generate outputs use temporary
+roots; a session guard restores and fails any tracked repository mutation. This
+prevents notebook or environment-snapshot smoke tests from invalidating frozen
+artifact hashes.
 
 On a compatible NVIDIA Windows/Linux workstation, install the optional official
 CUDA wheel after the portable environment:

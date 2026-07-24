@@ -3,6 +3,12 @@
 Execute steps in order unless `NEXT_STEP.md` explicitly points to a justified branch. Before a step, read its goal, tasks, outputs, checks, and exit gate. After the step, update `STATUS.md` and `NEXT_STEP.md` with evidence.
 
 Do not start modelling before the data and leakage gates are satisfied. Do not start dashboard polish before persisted outputs exist.
+
+Run tests through `python scripts/run_tests.py ...`; success requires
+`FLOWCAST_PYTEST_EXIT=0`. Every test or notebook that writes artifacts must use
+temporary writable roots. The session repository guard restores and fails any
+tracked-file mutation, so canonical evidence cannot be silently changed by a
+smoke or determinism check.
 ---
 ## Step 00 - Confirm References and Governance
 ### Goal
@@ -331,7 +337,9 @@ Explain the data and justify modelling decisions.
   extension, the Pillow renderer is the approved deterministic PNG fallback.
 - Contract tests verify real full-data findings, safe correlation candidates,
   PNG dimensions, deterministic hashes, and tamper rejection; the notebook
-  smoke test executes every cell through a fresh kernel.
+  smoke test executes every cell through a fresh kernel using copied inputs and
+  temporary processed/artifact/quarantine/log roots. It cannot rewrite the
+  canonical EDA environment snapshot or summary.
 ---
 ## Step 10 - Freeze Splits and Preprocessing
 ### Goal
@@ -747,7 +755,7 @@ Prove that another reviewer can reproduce and audit FlowCast.
 
 ### Final checks
 ```bash
-pytest -q
+python scripts/run_tests.py -q
 python -m flowcast.cli run-all
 streamlit run dashboard/app.py
 ```

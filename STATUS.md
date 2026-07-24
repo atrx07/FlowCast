@@ -3,11 +3,11 @@
 ## Status Metadata
 
 - **Project:** FlowCast v1.0
-- **Last updated:** 2026-07-24
+- **Last updated:** 2026-07-25
 - **Current milestone:** M7 - Dashboard and service layer (in progress)
 - **Current step:** Steps 00-16 complete; Step 17 next
-- **Overall state:** Confidence/error evidence is verified and dashboard-ready;
-  inference and reporting services are the next gate
+- **Overall state:** Confidence/error evidence and build-safety safeguards are
+  verified; inference and reporting services are the next gate
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
@@ -156,8 +156,9 @@ Executed with project-local CPython 3.11.9:
 ```text
 .venv/Scripts/python.exe -m flowcast.cli analyze-confidence
 .venv/Scripts/python.exe -m pytest -q tests/unit/test_confidence_analysis.py tests/data_contracts/test_confidence_analysis_contract.py
-.venv/Scripts/python.exe -m pytest -q
-.venv/Scripts/python.exe -m compileall -q src tests
+.venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_build_safety.py tests/smoke/test_eda_notebook.py
+.venv/Scripts/python.exe scripts/run_tests.py -q
+.venv/Scripts/python.exe -m compileall -q src tests scripts
 .venv/Scripts/python.exe -m flowcast.cli analyze-confidence --help
 .venv/Scripts/python.exe -m pip check
 git diff --check
@@ -167,12 +168,14 @@ Verified results:
 
 - Canonical Step 16 build: passed in 18.35 seconds.
 - Focused Step 16 unit/full-artifact contracts: 10 passed in 19.04 seconds.
-- Complete repository suite: 159 passed in 513.90 seconds with pytest exit
-  code 0.
+- Focused build-safety plus isolated-notebook regression: 6 passed in 6.79
+  seconds with `FLOWCAST_PYTEST_EXIT=0`.
+- Complete repository suite after hardening: 164 passed in 497.45 seconds with
+  `FLOWCAST_PYTEST_EXIT=0`.
 - The complete suite retrained bounded classical families in temporary roots,
   verified every prior pipeline layer, reran Step 16 determinism/tamper
-  contracts, and executed the isolated EDA notebook without changing its
-  canonical summary hash.
+  contracts, executed the isolated EDA notebook, and completed the
+  session-wide repository comparison without a tracked-file mutation.
 - A repeated canonical build reproduces every tracked committed metric/report
   byte exactly.
 - Deliberate output-byte tampering is rejected before a confidence table loads.
@@ -185,7 +188,33 @@ Verified results:
   and source-size assurance pass.
 - Every source file remains below 400 physical lines.
 
-## 6. Decisions and Constraints
+## 6. Build-Reliability Hardening and Known Challenges
+
+- The Step 16 full-suite rerun exposed a pre-existing smoke-test isolation
+  defect: the EDA notebook executed with canonical output paths. Installing
+  CUDA legitimately changed the environment snapshot, which changed the EDA
+  summary hash; downstream recursive verification then failed closed. No model
+  or source data was corrupted.
+- The notebook smoke now copies its required inputs and redirects processed,
+  artifact, quarantine, log, IPython, and Jupyter writable paths to temporary
+  directories.
+- `tests/conftest.py` now snapshots the exact current bytes of every Git-tracked
+  file at session start. Any test-side modification, deletion, or creation of a
+  tracked path is restored and fails the suite with the offending path. The
+  snapshot preserves pre-existing user edits instead of assuming `HEAD`.
+- `scripts/run_tests.py` now calls pytest directly, returns its exact status,
+  and prints `FLOWCAST_PYTEST_EXIT=<code>` plus elapsed time. This prevents a
+  PowerShell timing wrapper from being accepted as test evidence when it hides
+  child output or status.
+- The first focused runner check correctly surfaced
+  `FLOWCAST_PYTEST_EXIT=2` for a script-import packaging mistake. The reusable
+  logic was moved under `flowcast.testing`; the repeated focused and complete
+  runs both returned zero.
+- These failure modes remain documented in `AGENTS.md`, `TECH_STACK.md`,
+  `ARCHITECTURE.md`, `STEPS.md`, `ROADMAP.md`, and `README.md` so future build
+  steps inherit the prevention rules.
+
+## 7. Decisions and Constraints
 
 - Confidence configuration is separate from frozen training and registry
   configuration. Reporting changes cannot invalidate model-selection hashes.
@@ -200,7 +229,7 @@ Verified results:
 - The current PyTorch environment remains `2.13.0+cu130` with a verified RTX
   5070 path, but CPU fallback is mandatory. Step 16 correctly stayed on CPU.
 
-## 7. Risks and Unresolved Work
+## 8. Risks and Unresolved Work
 
 - Congestion Macro-F1 and accident ROC-AUC formal targets remain unmet.
 - Low accident prevalence makes subgroup ranking estimates volatile even with
@@ -211,8 +240,11 @@ Verified results:
   final clean reproduction remain.
 - Generated model and row-level prediction artifacts are ignored by Git and
   must be rebuilt with documented CLI commands after a clean clone.
+- The repository guard protects tracked files. Hash-verified generated
+  artifacts remain protected by recursive loader validation and must continue
+  to be written only under temporary roots in automated tests.
 
-## 8. Next Gate
+## 9. Next Gate
 
 Proceed only to **Step 17 - Build the Inference and Reporting Services**. The
 bounded action and evidence gate are maintained in `NEXT_STEP.md`.

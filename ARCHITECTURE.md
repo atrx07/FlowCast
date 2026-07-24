@@ -839,6 +839,21 @@ Each pipeline run receives a `run_id` and records:
 Critical failures stop the pipeline. Recoverable row-level problems enter quarantine. No exception should be converted into a silent empty result.
 
 ## 16. Testing Architecture
+### Build safety
+
+- `scripts/run_tests.py` is the canonical pytest entry point. It calls pytest
+  in-process, returns the exact pytest status, and prints an explicit
+  `FLOWCAST_PYTEST_EXIT` marker so a timing shell cannot be mistaken for a
+  passing test run.
+- `tests/conftest.py` snapshots every Git-tracked file at session start. At
+  teardown it restores any changed/deleted tracked file to its exact pre-test
+  bytes and fails with the offending paths. Existing dirty user files are
+  preserved as captured; the guard does not assume `HEAD` is the desired state.
+- Tests that invoke writers, including notebook execution, must replace all
+  writable settings with test-owned temporary roots. Canonical artifacts are
+  read-only test inputs; determinism is verified by comparing isolated output
+  rather than regenerating frozen evidence in place.
+
 ### Unit
 - datetime parsing.
 - weather normalization.

@@ -322,6 +322,23 @@ Every completed step needs evidence appropriate to its layer:
 
 Record commands and outcomes in `STATUS.md`. A statement such as “works” without a command, artifact, metric, or manual verification is not evidence.
 
+### 14.1 Test Isolation and Exit-Code Safety
+
+- Any test, notebook smoke, benchmark, or reproduction probe that can write
+  data, figures, reports, logs, models, metrics, or environment snapshots must
+  redirect every writable path to a test-owned temporary directory. Tests may
+  read canonical artifacts but must never regenerate them in place.
+- The session-wide repository guard in `tests/conftest.py` is mandatory. It
+  snapshots the current bytes of all Git-tracked files, including pre-existing
+  user edits, restores any file changed by tests, and fails the session with
+  the offending paths.
+- Run pytest through `python scripts/run_tests.py ...`. The runner returns
+  pytest's exact process status and prints `FLOWCAST_PYTEST_EXIT=<code>` plus
+  elapsed seconds. Do not use `Measure-Command` or another shell wrapper that
+  suppresses child output or makes the child exit status ambiguous.
+- A test result is successful only when pytest reports no failures/errors and
+  `FLOWCAST_PYTEST_EXIT=0`. Timing output alone is never test evidence.
+
 ## 15. Artifact and Naming Rules
 
 - Use timestamped or versioned artifact directories, not overwritten anonymous files.

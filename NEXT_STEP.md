@@ -23,6 +23,8 @@ reported metrics.
    model/data traceability, report generation, response time, and CPU support.
 5. The Step 14 registry, Step 15 recurrent registry extension/model card, Step
    16 summary/calibrations/loaders, the current Git diff, and relevant tests.
+6. The build-safety contract in `AGENTS.md` section 14.1 and the known
+   challenge evidence in `STATUS.md`.
 
 ## Hardware Notice Before Acting
 
@@ -69,6 +71,9 @@ Build and verify one inference/report service over the frozen artifacts:
 10. Add CLI prediction/report commands, full-corridor CPU timing, verified
     loaders, unit/full-artifact contracts, repeatability checks, and tamper
     rejection.
+11. Run every test through `scripts/run_tests.py`; writers must use temporary
+    roots, and the session must finish with `FLOWCAST_PYTEST_EXIT=0` and no
+    repository-mutation failure.
 
 ## Acceptance Gate
 
@@ -91,6 +96,8 @@ Step 17 is complete only when:
 - Focused tests, the full suite, CLI/import smoke, dependency check,
   compilation, whitespace assurance, source-size checks, and artifact
   verification pass.
+- Tests leave all canonical tracked files byte-identical; the repository guard
+  must report no mutation.
 - Required documentation and README progress are current before commit/push.
 
 ## Current Blockers

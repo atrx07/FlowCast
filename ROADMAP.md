@@ -221,6 +221,8 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | Deep model fails to beat XGBoost | Formal target missed | Tune within budget; report honestly; keep strong classical fallback |
 | Deep model trails classical at the 120-minute horizon | All-horizon comparison goal is missed despite wins at 30-90 minutes | Step 16 preserves exact-row evidence and identifies the largest deficit in late-night 120-minute slices; retain the classical fallback and expose the limitation |
 | Reporting config invalidates frozen model hashes | Unnecessary retraining or stale lineage | Keep the Step 14 registry contract independent of frozen training config and recursively verify both chains |
+| A smoke test rewrites canonical artifacts | Environment changes can invalidate hashes and cascade into unrelated failures | Require temporary writable roots, keep the EDA notebook smoke isolated, and restore/fail any tracked-file mutation with the session repository guard |
+| A shell timing wrapper hides pytest status | A failed suite can be misreported as successful or remain unverified | Use `scripts/run_tests.py`, require both pytest success and `FLOWCAST_PYTEST_EXIT=0`, and treat timing-only output as no evidence |
 | Multi-horizon complexity | Too many model artifacts | Use generated horizon loops and shared interfaces/configuration |
 | Streamlit rerun retrains models | Slow and unsafe UI | Persist artifacts; explicit retraining service only |
 | Cross-platform environment issues | Reviewer cannot run project | Python module CLI, pathlib, pinned dependencies, CPU fallback |

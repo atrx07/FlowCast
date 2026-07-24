@@ -20,6 +20,7 @@ introduced outside this contract without documenting the need here and updating
 | Environment | Standard-library `venv` + `pip` | Repository-local `.venv`; never committed |
 | Packaging | `pyproject.toml` with setuptools | PEP 517/518, `src/` package layout |
 | Dependency record | `pyproject.toml` + `requirements.txt` | Direct dependencies pinned exactly after compatibility verification; `requirements-cuda.txt` is the optional NVIDIA wheel override |
+| Test entry point | `scripts/run_tests.py` + pytest | Cross-platform runner preserves pytest's exact exit code; session guard restores and rejects tracked-file mutation |
 | Configuration | YAML plus environment variables | YAML is versioned; secrets are never committed |
 | Timezone | IANA `Asia/Kolkata` | Raw strings preserved; canonical timestamps use the configured timezone policy |
 | Global seed | Integer `42` | Used across Python, NumPy, scikit-learn, XGBoost, and PyTorch |
@@ -137,6 +138,9 @@ delivery. Pre-releases and yanked releases are prohibited.
 - CUDA batch sizes must stay bounded for the current 8,151 MiB VRAM capacity;
   CPU thread counts and DataLoader workers remain configurable.
 - Dashboard pages read persisted artifacts and never retrain on an ordinary rerun.
+- Automated tests write only to temporary roots. A session-wide tracked-file
+  snapshot guard restores and fails on canonical repository mutation, and the
+  standard test runner emits an explicit machine-readable pytest exit marker.
 - Retraining is explicit, confirmed, and may be synchronous for v1.
 - Near-real-time means batch refresh/latest persisted or uploaded data; there is no
   streaming ingestion in v1.
