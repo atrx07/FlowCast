@@ -2,83 +2,86 @@
 
 ## Immediate Objective
 
-Execute **Step 12 - Train Classical Regression Models**. Build one
-configuration-driven, time-safe training and evaluation pipeline for traffic
-volume, average speed, and travel time at 30, 60, 90, and 120 minutes using
-scikit-learn Linear Regression, Decision Tree, Random Forest, and XGBoost.
+Execute **Step 13 - Train Congestion and Accident Classifiers**. Build one
+configuration-driven, time-safe classification pipeline for four-class
+congestion and binary accident risk at 30, 60, 90, and 120 minutes.
 
-Do not begin congestion/accident classification, deep learning, confidence,
-inference services, or dashboard work. Keep final test sealed throughout
-hyperparameter search and validation comparison; open it exactly once only
-after the winning family/configuration for each target/horizon is frozen.
+Required families are Decision Tree, Random Forest, XGBoost, and a scaled SVM
+baseline. Do not begin the combined Step 14 registry, deep learning,
+confidence/error analysis, inference services, or dashboard work. Step 12 has
+final regression test evidence, but no classifier may inspect test labels or
+metrics until every Step 13 family, hyperparameter, accident threshold, and
+calibration decision is frozen from training/CV/validation evidence.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 12 and the proven Step 10/11 procedures.
-3. Classical regression, evaluation, registry, artifact, split, metric, and
+2. `STEPS.md` - Step 13 and the proven Step 10/12 procedures.
+3. Classification, imbalance, calibration, evaluation, artifact, registry, and
    reproducibility sections of `PROJECT.md`, `ROADMAP.md`, and
    `ARCHITECTURE.md`.
-4. The original PRD sections covering regression targets, required model
-   families, time-series cross-validation, model comparison, persistence, and
-   RMSE/MAE/MAPE/R-squared.
-5. `config/models.yaml`, Step 10 schema/folds/summary, Step 11 metrics and
-   limitations, processed target manifest, current Git diff, and relevant tests.
+4. The original PRD sections covering congestion/accident targets, SVM,
+   time-series CV, model comparison, persistence, Macro-F1, ROC-AUC, and
+   probability outputs.
+5. The data dictionary accident/congestion definitions, processed target
+   manifest, Step 10 split/class-weight evidence, Step 12 freeze pattern,
+   current Git diff, and relevant tests.
 
 ## Single Best Next Action
 
-Build the reusable classical-regression engine and complete Step 12:
+Build the reusable classical-classification engine and complete Step 13:
 
-1. Extend `config/models.yaml` with bounded, reviewable hyperparameter search
-   spaces, search budgets, selection rules, model/artifact version, and seed for
-   Linear Regression, Decision Tree, Random Forest, and XGBoost.
-2. Hash-verify the frozen Step 10 inputs and load only training/validation for
-   tuning. Generate target/horizon jobs from the processed manifest instead of
-   copying code across 12 regression tasks.
-3. Reuse the approved linear/tree preprocessors and five horizon-gapped
-   expanding CV folds. Fit preprocessing/statistics on training only and ensure
-   every fold respects target availability and same-partition boundaries.
-4. Evaluate bounded candidate configurations by validation/CV RMSE, with MAE,
-   MAPE, R-squared, runtime, and fit/prediction failures visible. Never tune by
-   final-test performance.
-5. Freeze and persist the selected family and hyperparameters separately for
-   each of volume, speed, and travel time at horizons 1-4, including a rationale
-   and exact validation evidence.
-6. Only after all 12 choices are immutable, use explicit
-   `purpose="final_evaluation"` access once to calculate final test metrics and
-   persisted predictions for the frozen models.
-7. Persist reloadable estimator/preprocessor artifacts, candidate and selected
-   metrics, predictions, feature importance where supported, input/output
-   hashes, split/feature/preprocessor versions, seeds, library versions, and
-   complete model cards.
-8. Add unit, time-series-CV, availability/leakage, reproducibility, metric,
-   artifact-reload, prediction-equality, tamper, and full-data contract tests.
-9. Provide a CLI training command and generated machine-readable plus Markdown
-   regression scoreboard suitable for the later Step 14 registry.
+1. Extend `config/models.yaml` with bounded classifier grids, search budgets,
+   probability/calibration policy, accident threshold rule, class ordering,
+   artifact version, and seed.
+2. Generate eight target/horizon jobs from the processed manifest: congestion
+   and accident risk at horizons 1-4. Reuse the exact 62-feature schema,
+   horizon-safe eligibility masks, and five frozen expanding CV folds.
+3. Fit preprocessing and any class weights only on each fold's training rows.
+   Use tree preprocessing for Decision Tree/Random Forest/XGBoost and scaled
+   SVM preprocessing for the SVM baseline.
+4. Select congestion candidates by mean CV Macro-F1, then validation Macro-F1.
+   Persist accuracy, macro precision/recall/F1, per-class metrics, class order,
+   confusion matrices, runtime, and probability availability.
+5. Select accident candidates by mean CV ROC-AUC, then validation ROC-AUC with
+   PR-AUC, precision, recall, F1, confusion matrix, and class imbalance visible.
+   Choose the operating threshold from validation probabilities only and record
+   threshold analysis. Assess probability calibration and apply it only when
+   validation evidence justifies it.
+6. Persist all eight frozen classifier choices, accident thresholds, and any
+   calibration decisions before one Step 13-scoped
+   `purpose="final_evaluation"` test load. Do not refit or change decisions
+   after viewing test results.
+7. Persist reloadable pipelines, probabilities/predictions, CV and validation
+   evidence, final metrics, confusion matrices, threshold/calibration tables,
+   hashes, lineage, feature importance where supported, and JSON plus Markdown
+   model cards.
+8. Add unit, leakage, imbalance, class-order, metric, threshold, probability,
+   deterministic training, artifact reload, prediction/probability equality,
+   tamper, and full-data contracts. Add a CLI training command and generated
+   machine-readable plus Markdown classification scoreboard.
 
 ## Acceptance Gate
 
-Step 12 is complete only when:
+Step 13 is complete only when:
 
-- All three regression targets and all four horizons have required Linear
-  Regression, Decision Tree, Random Forest, and XGBoost evidence or a precisely
-  documented technical failure.
-- Candidate tuning is restricted to training/CV/validation and every selected
-  target/horizon choice is frozen before any test access.
-- Test is opened exactly once for final evaluation of frozen choices; no test
-  result feeds hyperparameters, feature selection, or family selection.
-- RMSE, MAE, MAPE, and R-squared are finite, consistently calculated from
-  persisted predictions, and include row/denominator evidence.
-- Reloaded artifacts reproduce stored predictions within documented tolerance.
-- Every selected target/horizon model has complete lineage and a model card.
-- Training/search budgets remain practical on the 16 GB CPU acceptance
-  workstation and any candidate failure is explicit rather than silently
-  skipped.
-- Focused tests, full tests, CLI smoke, dependency check, compilation,
-  whitespace assurance, source-size checks, and deterministic artifact checks
-  pass.
+- All eight classification jobs have Decision Tree, Random Forest, XGBoost, and
+  SVM evidence or a precise technical failure.
+- Every CV fold and learned preprocessing/weighting statistic is training-only,
+  time ordered, horizon safe, and target-availability safe.
+- Congestion selection uses Macro-F1 and reports the fixed order Free-flow,
+  Moderate, Heavy, Severe with per-class metrics and confusion matrices.
+- Accident selection uses ROC-AUC, reports PR-AUC and operating-point metrics,
+  and freezes a validation-selected threshold before test access.
+- Persisted probabilities are finite, normalized, correctly ordered, and
+  reproduce after model reload.
+- Step 13 test evaluation occurs only after all classifier decisions are
+  frozen; no test result changes a model, threshold, calibration, or feature.
+- Every selected classifier has complete lineage and a model card.
+- Focused tests, the full suite, CLI smoke, dependency check, compilation,
+  whitespace assurance, source-size checks, and artifact verification pass.
 - `STATUS.md`, `NEXT_STEP.md`, `ROADMAP.md`, `ARCHITECTURE.md`, `STEPS.md`, and
-  the README timeline reflect verified Step 12 results before commit/push.
+  the README reflect verified Step 13 results before commit/push.
 
 ## Current Blockers
 

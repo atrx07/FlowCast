@@ -15,6 +15,7 @@ from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.features.pipeline import run_feature_engineering
 from flowcast.features.processed_pipeline import run_processed_data
 from flowcast.logging_config import configure_logging
+from flowcast.modelling.classical_regression import run_classical_regression
 from flowcast.modelling.pipeline import run_modeling_prep
 from flowcast.modelling.regression import run_scratch_linear
 from flowcast.settings import load_settings
@@ -134,6 +135,18 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Versioned scratch-linear artifact directory "
             "(default: scratch_linear_v1)."
+        ),
+    )
+    classical_regression = subparsers.add_parser(
+        "train-classical-regression",
+        help="Tune, freeze, and evaluate all classical regression jobs.",
+    )
+    classical_regression.add_argument(
+        "--version",
+        default=None,
+        help=(
+            "Versioned classical-regression artifact directory "
+            "(default: classical_regression_v1)."
         ),
     )
     return parser
@@ -268,6 +281,28 @@ def main(argv: Sequence[str] | None = None) -> int:
             result.summary["training"]["iterations_completed"],
             metrics["scratch"]["rmse"],
             metrics["sklearn"]["rmse"],
+        )
+        return 0
+    if args.command == "train-classical-regression":
+        result = run_classical_regression(settings, version=args.version)
+        scoreboard = result.summary["scoreboard"]
+        volume = [record for record in scoreboard if record["target"] == "volume"]
+        logger.info(
+            "Classical regression complete: %s",
+            result.paths.summary_path,
+        )
+        logger.info(
+            "jobs=%s selected_models=%s prediction_rows=%s",
+            result.summary["coverage"]["job_count"],
+            result.summary["coverage"]["selected_model_count"],
+            result.summary["coverage"]["prediction_rows"],
+        )
+        logger.info(
+            "volume_test_rmse_by_horizon=%s",
+            {
+                record["horizon_minutes"]: record["test"]["rmse"]
+                for record in volume
+            },
         )
         return 0
     raise RuntimeError(f"Unhandled command: {args.command}")

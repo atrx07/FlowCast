@@ -81,9 +81,9 @@
       "sha256": "c4ed07e78fa3d8d0d3a895f6c62cbfec0cd804e3519b3f07b163070e30b0eb40"
     },
     "models": {
-      "bytes": 2308,
+      "bytes": 4270,
       "path": "config/models.yaml",
-      "sha256": "94adf467adca6b71665ac0c2579a34d93643fba36bf12b14317b944fd6d3d536"
+      "sha256": "6c8ab1d59ab026c731ba63fab3839dce761f7327b94fc79c0c21572581483e44"
     }
   },
   "contract_version": "split_preprocessing_v1",

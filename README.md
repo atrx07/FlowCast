@@ -12,8 +12,8 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 22 July 2026. Milestones M0-M4 are complete and M5 is in
-progress. Steps 00-11 now
+Last verified on 24 July 2026. Milestones M0-M4 are complete and M5 is in
+progress. Steps 00-12 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -28,10 +28,17 @@ baseline, now includes explicit prediction, MSE,
 analytical gradients, central finite-difference checks, deterministic synthetic
 recovery, and a real-data comparison on 27,150 validation rows. The scratch
 model converged after 4,153 updates with validation RMSE 86.93 versus 80.87 for
-scikit-learn on identical inputs; test remained sealed. All 106 tests pass.
-Step 12 multi-target, multi-horizon classical regression is the immediate next
-gate. Production model selection, inference, confidence, report export
-services, and the dashboard have not begun.
+scikit-learn on identical inputs; test remained sealed during that proof.
+Step 12 adds 12 direct regression pipelines across volume, speed, and travel
+time at four horizons, with seven configurations spanning Linear Regression,
+Decision Tree, Random Forest, and XGBoost over all five frozen CV folds. All 12
+choices were persisted before one final test evaluation; Random Forest won each
+validation comparison. Volume hold-out MAPE ranges from 10.218% to 10.952%, so
+all four horizons meet the formal 12% target. The run persists 650,700
+validation/test predictions, 12 model cards, candidate/family scoreboards, and
+feature importance. All 116 tests pass. Step 13 congestion and accident-risk
+classification is the immediate gate; confidence, inference services, report
+export, deep learning, and the dashboard remain ahead.
 
 ## Delivery timeline
 
@@ -39,7 +46,7 @@ services, and the dashboard have not begun.
 |---|---|---|
 | Before Week 1 | M0 governance and plan | Complete |
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
-| Week 2 | M5 classical machine learning | In progress - Steps 10-11 complete; Step 12 next |
+| Week 2 | M5 classical machine learning | In progress - Steps 10-12 complete; Step 13 next |
 | Week 3 | M6 recurrent deep learning and confidence | Not started |
 | Week 4 | M7 dashboard, M8 reproducibility and delivery | Not started |
 
@@ -61,6 +68,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli eda
 .\.venv\Scripts\python.exe -m flowcast.cli prepare-modeling
 .\.venv\Scripts\python.exe -m flowcast.cli train-scratch-linear
+.\.venv\Scripts\python.exe -m flowcast.cli train-classical-regression
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 

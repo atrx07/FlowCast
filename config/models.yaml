@@ -94,3 +94,77 @@ scratch_linear:
     patience: 25
     initialization_scale: 0.01
     coefficient_tolerance: 1.0e-5
+
+classical_regression:
+  contract_version: classical_regression_v1
+  version: classical_regression_v1
+  targets:
+    - volume
+    - speed
+    - travel_time
+  horizons: [1, 2, 3, 4]
+  primary_metric: rmse
+  cross_validation:
+    fold_count: 5
+    training_timestamp_budget: 96
+    sampling: evenly_spaced_timestamps
+    require_all_folds: true
+  selection:
+    hyperparameter_stage: mean_cv_rmse_within_family
+    family_stage: validation_rmse
+    tie_breakers:
+      - mean_cv_rmse
+      - family
+      - candidate_id
+    freeze_before_test: true
+  estimators:
+    linear_regression:
+      preprocessing_family: linear
+      candidates:
+        - candidate_id: linear_default
+          parameters: {}
+    decision_tree:
+      preprocessing_family: tree
+      candidates:
+        - candidate_id: tree_balanced
+          parameters:
+            max_depth: 8
+            min_samples_leaf: 12
+        - candidate_id: tree_deep
+          parameters:
+            max_depth: 14
+            min_samples_leaf: 6
+    random_forest:
+      preprocessing_family: tree
+      candidates:
+        - candidate_id: forest_balanced
+          parameters:
+            n_estimators: 12
+            max_depth: 10
+            min_samples_leaf: 8
+            max_features: 0.7
+        - candidate_id: forest_deep
+          parameters:
+            n_estimators: 24
+            max_depth: 14
+            min_samples_leaf: 4
+            max_features: 0.9
+    xgboost:
+      preprocessing_family: tree
+      candidates:
+        - candidate_id: xgb_balanced
+          parameters:
+            n_estimators: 24
+            max_depth: 4
+            learning_rate: 0.1
+            min_child_weight: 4
+            subsample: 1.0
+            colsample_bytree: 1.0
+        - candidate_id: xgb_deep
+          parameters:
+            n_estimators: 40
+            max_depth: 6
+            learning_rate: 0.06
+            min_child_weight: 3
+            subsample: 1.0
+            colsample_bytree: 1.0

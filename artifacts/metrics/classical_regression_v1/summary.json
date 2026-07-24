@@ -1,0 +1,760 @@
+{
+  "artifacts": {
+    "cv_candidate_metrics": {
+      "bytes": 23859,
+      "path": "artifacts/metrics/classical_regression_v1/cv_candidate_metrics.csv",
+      "sha256": "d4ced6aa3f1d0129437190fc36dd030b1427b5ff2dc48f3af6e6fde273566a67"
+    },
+    "cv_fold_metrics": {
+      "bytes": 130231,
+      "path": "artifacts/metrics/classical_regression_v1/cv_fold_metrics.csv",
+      "sha256": "d8bc856876c10f5d7cdea4252bd4b4f71cce229b83c5c69d66522cb241fc3ea5"
+    },
+    "family_validation_metrics": {
+      "bytes": 12423,
+      "path": "artifacts/metrics/classical_regression_v1/family_validation_metrics.csv",
+      "sha256": "7232f7b78c9c65425efb7aaab82a0724e3f93cb3845dc7b709e59e729928aace"
+    },
+    "feature_importance": {
+      "bytes": 69738,
+      "path": "artifacts/metrics/classical_regression_v1/feature_importance.csv",
+      "sha256": "03c51c8b8830111bfd88bc0d052ee38b7a5934992e01f3c217a02b2d8c0a6f1a"
+    },
+    "predictions": {
+      "bytes": 11879451,
+      "path": "artifacts/predictions/classical_regression_v1/selected_predictions.parquet",
+      "sha256": "ce53fda7ebaae58b5f198d3c323fd4001d6456eee849e92670c6b5c959cebc26"
+    },
+    "report": {
+      "bytes": 2401,
+      "path": "artifacts/metrics/classical_regression_v1/summary.md",
+      "sha256": "73b17366097be3f76245c8c1145f902f49c4edc7b6d4371fe31b71e9eb59a40b"
+    },
+    "scoreboard": {
+      "bytes": 4143,
+      "path": "artifacts/metrics/classical_regression_v1/scoreboard.csv",
+      "sha256": "ed99964fd713f37b6488fa1c15a6b540e233ed449e72e0227a0334d82573db85"
+    },
+    "selection_manifest": {
+      "bytes": 18190,
+      "path": "artifacts/metrics/classical_regression_v1/selection_manifest.json",
+      "sha256": "84c153160c105f73cf49f9e133e9ade982101d355c40f3d51f1567df082828f1"
+    }
+  },
+  "checks": [
+    {
+      "name": "twelve_generated_jobs",
+      "passed": true
+    },
+    {
+      "name": "all_required_family_job_pairs",
+      "passed": true
+    },
+    {
+      "name": "selection_frozen_before_test",
+      "passed": true
+    },
+    {
+      "name": "single_test_load",
+      "passed": true
+    },
+    {
+      "name": "all_selected_models_persisted",
+      "passed": true
+    },
+    {
+      "name": "all_metrics_finite",
+      "passed": true
+    }
+  ],
+  "configuration": {
+    "base": {
+      "bytes": 792,
+      "path": "config/base.yaml",
+      "sha256": "c2740c43017fa7fa802d08cb84967490c81d64968fece669ca42af0f62fa08ad"
+    },
+    "models": {
+      "bytes": 4270,
+      "path": "config/models.yaml",
+      "sha256": "6c8ab1d59ab026c731ba63fab3839dce761f7327b94fc79c0c21572581483e44"
+    },
+    "seed": 42
+  },
+  "contract_version": "classical_regression_v1",
+  "coverage": {
+    "horizon_count": 4,
+    "job_count": 12,
+    "model_card_count": 12,
+    "prediction_rows": 650700,
+    "required_family_job_pairs": 48,
+    "selected_model_count": 12,
+    "target_count": 3
+  },
+  "input_modeling": {
+    "assignments": {
+      "bytes": 354856,
+      "path": "data/processed/split_preprocessing_v1/assignments.parquet",
+      "sha256": "dd30fe7a475c049f9f981374ee3c97533a7b2270b7ef8336ea5be37cf2f55892"
+    },
+    "cv_folds": {
+      "bytes": 2436,
+      "path": "artifacts/features/split_preprocessing_v1/cv_folds.json",
+      "sha256": "ce36264dbe3824c4d119ea7e801471b94bdeeee6b4bcff250cf8f9f1c06488bb"
+    },
+    "feature_schema": {
+      "bytes": 73319,
+      "path": "artifacts/features/split_preprocessing_v1/feature_schema.json",
+      "sha256": "204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453"
+    },
+    "summary": {
+      "bytes": 76872,
+      "path": "artifacts/features/split_preprocessing_v1/summary.json",
+      "sha256": "6dd5cada2c86aac398562483911290d881399e97156219d53ab26ad1e3304c97"
+    }
+  },
+  "libraries": {
+    "joblib": "1.5.2",
+    "numpy": "2.3.3",
+    "pandas": "3.0.3",
+    "scikit_learn": "1.9.0",
+    "xgboost": "3.2.0"
+  },
+  "limitations": [
+    "CV search is bounded to evenly spaced origin timestamps spanning each full expanding training interval.",
+    "Final family fits use the complete eligible training partition; validation and test are transform-only.",
+    "Speed is included because the approved product objectives require multi-horizon average-speed forecasts.",
+    "Prediction confidence and segmented error analysis remain Step 16 work."
+  ],
+  "models": {
+    "speed_h1": {
+      "model": {
+        "bytes": 3983600,
+        "path": "artifacts/models/classical_regression_v1/speed_h1.joblib",
+        "sha256": "15296e95624de1b2980aab0b12cb8f126c7a9ea27895e25963d108b71667299e"
+      },
+      "model_card_json": {
+        "bytes": 4578,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h1.json",
+        "sha256": "f6aaa2460c0d65c793a157bb0539a2f12e9f293def4017dd929f213b783d3a0b"
+      },
+      "model_card_markdown": {
+        "bytes": 2021,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h1.md",
+        "sha256": "d5d515e7fde953072fa60200e7017b9b96d72e2c1a99db1b5a51aa0922d0d9f5"
+      }
+    },
+    "speed_h2": {
+      "model": {
+        "bytes": 3922541,
+        "path": "artifacts/models/classical_regression_v1/speed_h2.joblib",
+        "sha256": "a085be3ac89d46de03625cc9ff3a4dd09ad7b151ff36881877cc28bf996f6bc4"
+      },
+      "model_card_json": {
+        "bytes": 4578,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h2.json",
+        "sha256": "fb15fd37387549f56a7955f52949605a0c24aa159e1ed2a3b8f6bbf5c7b27ae4"
+      },
+      "model_card_markdown": {
+        "bytes": 2021,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h2.md",
+        "sha256": "22c1ac58cc9a98b532daa9e2f1524ccf6515e8b6ce35df26373a3f58172669c5"
+      }
+    },
+    "speed_h3": {
+      "model": {
+        "bytes": 407189,
+        "path": "artifacts/models/classical_regression_v1/speed_h3.joblib",
+        "sha256": "d6f0250974dceceb7ae3740cd49f730ef4637423928bb65d4a04db38f4ebf7e7"
+      },
+      "model_card_json": {
+        "bytes": 4581,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h3.json",
+        "sha256": "aee2d8c9aab9f9826d423c95b68baa2820c4a3d1e80de4f1b62b913a9a65cdbe"
+      },
+      "model_card_markdown": {
+        "bytes": 2025,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h3.md",
+        "sha256": "92b249f23c4848cdc87871a75e46caee91eac7f09126a072ca8be153523270ce"
+      }
+    },
+    "speed_h4": {
+      "model": {
+        "bytes": 396466,
+        "path": "artifacts/models/classical_regression_v1/speed_h4.joblib",
+        "sha256": "451632fab6a083decfed2db9057b755c450b9bda0b065b983d739be190339513"
+      },
+      "model_card_json": {
+        "bytes": 4582,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h4.json",
+        "sha256": "51120869ac758f6b3c6d8f5ed8daa190ab435ec416d0d08b736df2b642ac5121"
+      },
+      "model_card_markdown": {
+        "bytes": 2026,
+        "path": "artifacts/model_cards/classical_regression_v1/speed_h4.md",
+        "sha256": "22b143bb42f5a6a1ec3e722ea9ecc70b09e42ffa1f75308a09d490fe46b17d27"
+      }
+    },
+    "travel_time_h1": {
+      "model": {
+        "bytes": 5283810,
+        "path": "artifacts/models/classical_regression_v1/travel_time_h1.joblib",
+        "sha256": "4002e12eafed5092f515c3a9fd20ef795c0d4e6a883097b2f8ef9d8ec0fe9be6"
+      },
+      "model_card_json": {
+        "bytes": 4601,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h1.json",
+        "sha256": "17a9b27ad4f5df5627481680f007b059f34526ed329b0cd88627693dfa382f09"
+      },
+      "model_card_markdown": {
+        "bytes": 2039,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h1.md",
+        "sha256": "70fd19f0fa3ec1df78b439f8b20034c52115f7b7b8199b97c9b6ddd5268c84a3"
+      }
+    },
+    "travel_time_h2": {
+      "model": {
+        "bytes": 5366347,
+        "path": "artifacts/models/classical_regression_v1/travel_time_h2.joblib",
+        "sha256": "16843d401a6d6ad76e1f1bf41f97d00f4fe3cc93c98647f2402f88154215e8cc"
+      },
+      "model_card_json": {
+        "bytes": 4601,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h2.json",
+        "sha256": "11a5097e5949509e7ce38f36f8767c44a781b03f94d2aa4afb011d5fec1cb57c"
+      },
+      "model_card_markdown": {
+        "bytes": 2039,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h2.md",
+        "sha256": "2b937e1d95251f076cb428061898189e246d2f45166af0e92097239878a2b812"
+      }
+    },
+    "travel_time_h3": {
+      "model": {
+        "bytes": 5299731,
+        "path": "artifacts/models/classical_regression_v1/travel_time_h3.joblib",
+        "sha256": "48e7d8f77be5a57ed7034d89f17fbb10293816809f09965c978901e286e074e8"
+      },
+      "model_card_json": {
+        "bytes": 4601,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h3.json",
+        "sha256": "b2236de5db47407eb7ea63129f14bb47896f1da6b96df4eeeca5a8f212e8be62"
+      },
+      "model_card_markdown": {
+        "bytes": 2039,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h3.md",
+        "sha256": "a578e26a596337d5a8dbaac5cce5a4fdbec78d019276139f9664f0ec04483f3a"
+      }
+    },
+    "travel_time_h4": {
+      "model": {
+        "bytes": 4870213,
+        "path": "artifacts/models/classical_regression_v1/travel_time_h4.joblib",
+        "sha256": "96d59c4abb607d153046f3e26daee8592a2aec0df478305135330182d39d56f3"
+      },
+      "model_card_json": {
+        "bytes": 4603,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h4.json",
+        "sha256": "b2313e57784d0490b7f65e8386f936102ae837243083560d5e76991037009e1d"
+      },
+      "model_card_markdown": {
+        "bytes": 2040,
+        "path": "artifacts/model_cards/classical_regression_v1/travel_time_h4.md",
+        "sha256": "8d5247b41641631c65d23fbb492fcfcaca21286b9dbed712748c47fcc76e06a0"
+      }
+    },
+    "volume_h1": {
+      "model": {
+        "bytes": 5390119,
+        "path": "artifacts/models/classical_regression_v1/volume_h1.joblib",
+        "sha256": "b7770302ad346e36466e10df4b879d08de652faaa37b8d91c15681df57427075"
+      },
+      "model_card_json": {
+        "bytes": 4587,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h1.json",
+        "sha256": "a3db2023f93d218f66d6341c39eb1fa2ecfeadd51af3e955ed453815e8b9dd84"
+      },
+      "model_card_markdown": {
+        "bytes": 2029,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h1.md",
+        "sha256": "0a74f8d76ddab22803ff96af2aa5c7dca20520dcc94bfb1088877f6ccc571652"
+      }
+    },
+    "volume_h2": {
+      "model": {
+        "bytes": 5509926,
+        "path": "artifacts/models/classical_regression_v1/volume_h2.joblib",
+        "sha256": "395c9ec82cb96df0798a9ed4e8df3c02fc89d4eae009a4ffda8bf56c27823687"
+      },
+      "model_card_json": {
+        "bytes": 4586,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h2.json",
+        "sha256": "67347461e97631c2aa07ae8bfcf67502df532ca55b98de895658116c162dacfd"
+      },
+      "model_card_markdown": {
+        "bytes": 2030,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h2.md",
+        "sha256": "5004d7260d9736c4f76b36a30b005fe9f3c7be56667982f9683f5eaef5679ce1"
+      }
+    },
+    "volume_h3": {
+      "model": {
+        "bytes": 497220,
+        "path": "artifacts/models/classical_regression_v1/volume_h3.joblib",
+        "sha256": "9ededd03a93ec713f7f4f277952567fcdff45cc7e0a957b9414bb5e088b9c27c"
+      },
+      "model_card_json": {
+        "bytes": 4590,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h3.json",
+        "sha256": "1141b6134f10fa5e6b8a71c86f538ed07d694e78c1943e2fb5b2af273064b979"
+      },
+      "model_card_markdown": {
+        "bytes": 2034,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h3.md",
+        "sha256": "b58b7da289ea8901bf8126a6523198ae7950c64c50f0dc9e3712e2998a721a26"
+      }
+    },
+    "volume_h4": {
+      "model": {
+        "bytes": 4962608,
+        "path": "artifacts/models/classical_regression_v1/volume_h4.joblib",
+        "sha256": "5ce1045ad5973916660f067efee1d9707f0b8aed1986af6cc0e5b5e86d2b5880"
+      },
+      "model_card_json": {
+        "bytes": 4590,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h4.json",
+        "sha256": "66bf0d164d26eea1a03c940dae9f969c9b2d5c4de164475609952c54bc07530a"
+      },
+      "model_card_markdown": {
+        "bytes": 2031,
+        "path": "artifacts/model_cards/classical_regression_v1/volume_h4.md",
+        "sha256": "11f3941a88e72f7a2082d3293251e343882891e49daa8517b5fbfe0d48a9fe60"
+      }
+    }
+  },
+  "runtime": {
+    "cv_fit_seconds": 20.699644,
+    "cv_prediction_seconds": 10.90642,
+    "test_prediction_seconds": 0.851304,
+    "validation_fit_seconds": 64.098965,
+    "validation_prediction_seconds": 2.713963
+  },
+  "scoreboard": [
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "job_id": "volume_h1",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "volume",
+      "target_column": "target_volume_h1",
+      "test": {
+        "mae": 42.2053668753,
+        "mape_nonzero_rows": 27150,
+        "mape_percent": 10.2175958928,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.072314,
+        "r_squared": 0.9513957024,
+        "rmse": 63.4594878679,
+        "rows": 27150
+      },
+      "test_end": "2025-05-31T23:00:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.126796,
+        "mae": 41.2147894069,
+        "mape_nonzero_rows": 27150,
+        "mape_percent": 9.9766787652,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.066939,
+        "r_squared": 0.9517806646,
+        "rmse": 61.192570471,
+        "rows": 27150
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "job_id": "volume_h2",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "volume",
+      "target_column": "target_volume_h2",
+      "test": {
+        "mae": 42.0109050389,
+        "mape_nonzero_rows": 27125,
+        "mape_percent": 10.2634226366,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.069879,
+        "r_squared": 0.9521587897,
+        "rmse": 62.8625581165,
+        "rows": 27125
+      },
+      "test_end": "2025-05-31T22:30:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.082366,
+        "mae": 41.115935706,
+        "mape_nonzero_rows": 27125,
+        "mape_percent": 10.0936886813,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.07191,
+        "r_squared": 0.951776362,
+        "rmse": 61.1235555945,
+        "rows": 27125
+      }
+    },
+    {
+      "candidate_id": "forest_balanced",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "job_id": "volume_h3",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "volume",
+      "target_column": "target_volume_h3",
+      "test": {
+        "mae": 44.0438468443,
+        "mape_nonzero_rows": 27100,
+        "mape_percent": 10.9516888502,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.065933,
+        "r_squared": 0.9482755677,
+        "rmse": 65.30578945,
+        "rows": 27100
+      },
+      "test_end": "2025-05-31T22:00:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 1.406168,
+        "mae": 44.2078891315,
+        "mape_nonzero_rows": 27100,
+        "mape_percent": 11.1107227124,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.068483,
+        "r_squared": 0.9442008321,
+        "rmse": 65.6564903895,
+        "rows": 27100
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "job_id": "volume_h4",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "volume",
+      "target_column": "target_volume_h4",
+      "test": {
+        "mae": 41.6263444947,
+        "mape_nonzero_rows": 27075,
+        "mape_percent": 10.2947558886,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.072206,
+        "r_squared": 0.9533482816,
+        "rmse": 62.0091681736,
+        "rows": 27075
+      },
+      "test_end": "2025-05-31T21:30:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.112411,
+        "mae": 41.2371421908,
+        "mape_nonzero_rows": 27075,
+        "mape_percent": 10.5554606729,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.069832,
+        "r_squared": 0.9523784344,
+        "rmse": 60.5923775842,
+        "rows": 27075
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "job_id": "speed_h1",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "speed",
+      "target_column": "target_speed_h1",
+      "test": {
+        "mae": 2.8213862472,
+        "mape_nonzero_rows": 27150,
+        "mape_percent": 9.0286201567,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.074895,
+        "r_squared": 0.8980231916,
+        "rmse": 3.7399844314,
+        "rows": 27150
+      },
+      "test_end": "2025-05-31T23:00:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.113655,
+        "mae": 2.8127505806,
+        "mape_nonzero_rows": 27150,
+        "mape_percent": 8.8385146432,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.068673,
+        "r_squared": 0.8928018272,
+        "rmse": 3.7229821969,
+        "rows": 27150
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "job_id": "speed_h2",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "speed",
+      "target_column": "target_speed_h2",
+      "test": {
+        "mae": 2.8537939106,
+        "mape_nonzero_rows": 27125,
+        "mape_percent": 9.0561166237,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.079872,
+        "r_squared": 0.8960345175,
+        "rmse": 3.7682986979,
+        "rows": 27125
+      },
+      "test_end": "2025-05-31T22:30:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.101445,
+        "mae": 2.8335186851,
+        "mape_nonzero_rows": 27125,
+        "mape_percent": 8.8629248669,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.068775,
+        "r_squared": 0.8903613758,
+        "rmse": 3.7590777742,
+        "rows": 27125
+      }
+    },
+    {
+      "candidate_id": "forest_balanced",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "job_id": "speed_h3",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "speed",
+      "target_column": "target_speed_h3",
+      "test": {
+        "mae": 2.8714671676,
+        "mape_nonzero_rows": 27100,
+        "mape_percent": 9.1447160492,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.073882,
+        "r_squared": 0.8943737872,
+        "rmse": 3.7940188313,
+        "rows": 27100
+      },
+      "test_end": "2025-05-31T22:00:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 1.431473,
+        "mae": 2.9143107317,
+        "mape_nonzero_rows": 27100,
+        "mape_percent": 9.0850935217,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.071599,
+        "r_squared": 0.8843770566,
+        "rmse": 3.8544108763,
+        "rows": 27100
+      }
+    },
+    {
+      "candidate_id": "forest_balanced",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "job_id": "speed_h4",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "speed",
+      "target_column": "target_speed_h4",
+      "test": {
+        "mae": 2.8730982037,
+        "mape_nonzero_rows": 27075,
+        "mape_percent": 9.0851187838,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.068711,
+        "r_squared": 0.8944522222,
+        "rmse": 3.7923349063,
+        "rows": 27075
+      },
+      "test_end": "2025-05-31T21:30:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 1.407967,
+        "mae": 2.9119783211,
+        "mape_nonzero_rows": 27075,
+        "mape_percent": 9.0620157884,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.067301,
+        "r_squared": 0.8848580965,
+        "rmse": 3.8418605814,
+        "rows": 27075
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 30,
+      "horizon_windows": 1,
+      "job_id": "travel_time_h1",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "travel_time",
+      "target_column": "target_travel_time_h1",
+      "test": {
+        "mae": 0.4610248102,
+        "mape_nonzero_rows": 27150,
+        "mape_percent": 9.7532276832,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.067082,
+        "r_squared": 0.8065249258,
+        "rmse": 1.1426335123,
+        "rows": 27150
+      },
+      "test_end": "2025-05-31T23:00:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.22995,
+        "mae": 0.4405902833,
+        "mape_nonzero_rows": 27150,
+        "mape_percent": 9.5145271974,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.070559,
+        "r_squared": 0.7796204661,
+        "rmse": 1.1004809536,
+        "rows": 27150
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 60,
+      "horizon_windows": 2,
+      "job_id": "travel_time_h2",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "travel_time",
+      "target_column": "target_travel_time_h2",
+      "test": {
+        "mae": 0.4393373466,
+        "mape_nonzero_rows": 27125,
+        "mape_percent": 9.3162069585,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.070178,
+        "r_squared": 0.8209535241,
+        "rmse": 1.0948588833,
+        "rows": 27125
+      },
+      "test_end": "2025-05-31T22:30:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.149745,
+        "mae": 0.4365356943,
+        "mape_nonzero_rows": 27125,
+        "mape_percent": 9.579594156,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.078865,
+        "r_squared": 0.7852796097,
+        "rmse": 1.0853351419,
+        "rows": 27125
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 90,
+      "horizon_windows": 3,
+      "job_id": "travel_time_h3",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "travel_time",
+      "target_column": "target_travel_time_h3",
+      "test": {
+        "mae": 0.4290678887,
+        "mape_nonzero_rows": 27100,
+        "mape_percent": 9.0121382581,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.067125,
+        "r_squared": 0.8246813366,
+        "rmse": 1.0821702643,
+        "rows": 27100
+      },
+      "test_end": "2025-05-31T22:00:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.120534,
+        "mae": 0.4356693844,
+        "mape_nonzero_rows": 27100,
+        "mape_percent": 9.6989379678,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.070117,
+        "r_squared": 0.783648096,
+        "rmse": 1.0870033994,
+        "rows": 27100
+      }
+    },
+    {
+      "candidate_id": "forest_deep",
+      "horizon_minutes": 120,
+      "horizon_windows": 4,
+      "job_id": "travel_time_h4",
+      "model_version": "classical_regression_v1",
+      "selected_family": "random_forest",
+      "target": "travel_time",
+      "target_column": "target_travel_time_h4",
+      "test": {
+        "mae": 0.4381270522,
+        "mape_nonzero_rows": 27075,
+        "mape_percent": 9.2029608944,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.069227,
+        "r_squared": 0.8184442912,
+        "rmse": 1.1015849175,
+        "rows": 27075
+      },
+      "test_end": "2025-05-31T21:30:00+05:30",
+      "test_start": "2025-05-09T08:30:00+05:30",
+      "validation": {
+        "fit_seconds": 2.161758,
+        "mae": 0.4312424022,
+        "mape_nonzero_rows": 27075,
+        "mape_percent": 9.5005054154,
+        "mape_zero_actual_rows": 0,
+        "prediction_seconds": 0.068963,
+        "r_squared": 0.7850302527,
+        "rmse": 1.0822502765,
+        "rows": 27075
+      }
+    }
+  ],
+  "search": {
+    "candidate_count": 7,
+    "family_count": 4,
+    "family_selection": "validation_rmse",
+    "fold_count": 5,
+    "hyperparameter_selection": "mean_cv_rmse_within_family",
+    "sampling": "evenly_spaced_timestamps",
+    "training_timestamp_budget": 96
+  },
+  "test_access": {
+    "loader_invocation_count": 1,
+    "models_refit_after_test_load": false,
+    "purpose": "final_evaluation",
+    "selection_manifest": {
+      "bytes": 18190,
+      "path": "artifacts/metrics/classical_regression_v1/selection_manifest.json",
+      "sha256": "84c153160c105f73cf49f9e133e9ade982101d355c40f3d51f1567df082828f1"
+    },
+    "selection_status_before_load": "frozen_before_test_access"
+  },
+  "version": "classical_regression_v1"
+}

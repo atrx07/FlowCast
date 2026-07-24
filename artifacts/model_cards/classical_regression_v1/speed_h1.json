@@ -1,0 +1,152 @@
+{
+  "artifacts": {
+    "model": {
+      "bytes": 3983600,
+      "path": "artifacts/models/classical_regression_v1/speed_h1.joblib",
+      "sha256": "15296e95624de1b2980aab0b12cb8f126c7a9ea27895e25963d108b71667299e"
+    },
+    "predictions": {
+      "bytes": 11879451,
+      "path": "artifacts/predictions/classical_regression_v1/selected_predictions.parquet",
+      "sha256": "ce53fda7ebaae58b5f198d3c323fd4001d6456eee849e92670c6b5c959cebc26"
+    }
+  },
+  "contract_version": "flowcast_model_card_v1",
+  "data": {
+    "test_end": "2025-05-31T23:00:00+05:30",
+    "test_rows": 27150,
+    "test_start": "2025-05-09T08:30:00+05:30",
+    "train_end": "2025-04-16T16:00:00+05:30",
+    "train_rows": 126825,
+    "train_start": "2025-01-01T00:00:00+05:30",
+    "validation_end": "2025-05-09T07:30:00+05:30",
+    "validation_rows": 27150,
+    "validation_start": "2025-04-16T17:00:00+05:30"
+  },
+  "features": {
+    "input_feature_count": 62,
+    "input_features": [
+      "traffic_volume",
+      "avg_speed",
+      "occupancy",
+      "signal_timing",
+      "road_capacity",
+      "temperature",
+      "rainfall",
+      "visibility",
+      "share_2w",
+      "share_car",
+      "share_lcv",
+      "share_hcv",
+      "public_holiday",
+      "event_flag",
+      "roadwork_flag",
+      "_inserted_window",
+      "traffic_volume_original_missing",
+      "traffic_volume_physical_invalid",
+      "avg_speed_original_missing",
+      "avg_speed_physical_invalid",
+      "temperature_was_missing",
+      "visibility_was_missing",
+      "vehicle_shares_normalized",
+      "hour_of_day",
+      "hour_sin",
+      "hour_cos",
+      "day_of_week",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "is_weekend",
+      "is_morning_peak",
+      "is_evening_peak",
+      "is_peak",
+      "volume_lag_1",
+      "volume_lag_2",
+      "volume_lag_48",
+      "volume_rolling_mean_4",
+      "volume_rolling_std_4",
+      "volume_rolling_mean_8",
+      "volume_rolling_std_8",
+      "speed_lag_1",
+      "speed_lag_2",
+      "speed_lag_48",
+      "speed_rolling_mean_4",
+      "speed_rolling_std_4",
+      "speed_rolling_mean_8",
+      "speed_rolling_std_8",
+      "history_available",
+      "half_hour_capacity",
+      "volume_capacity_ratio",
+      "capacity_headroom",
+      "is_rain",
+      "is_low_visibility",
+      "weather_is_clear",
+      "weather_is_cloudy",
+      "weather_is_overcast",
+      "weather_is_rain",
+      "weather_is_fog",
+      "temperature_band",
+      "holiday_peak",
+      "days_to_nearest_event",
+      "event_within_proximity"
+    ],
+    "output_feature_count": 64,
+    "preprocessing_family": "tree",
+    "preprocessing_version": "split_preprocessing_v1"
+  },
+  "job_id": "speed_h1",
+  "limitations": [
+    "This direct model is specific to one target and horizon.",
+    "CV search uses a deterministic timestamp budget spanning each fold; the selected family fit uses every eligible training row.",
+    "Weather inputs are observed at the origin, not future weather forecasts.",
+    "Uncertainty intervals are added in Step 16 and are not part of this card."
+  ],
+  "lineage": {
+    "feature_schema_sha256": "204d2fc3ab00e18a452e4ef2898826cf9dc0bd05dbaf795f8f203ca26f71f453",
+    "processed_sha256": "f5377b7f8969d6b74e850d71a803c91f252ec236d5bceeaa02e3e31dedfa81a4",
+    "selection_sha256": "84c153160c105f73cf49f9e133e9ade982101d355c40f3d51f1567df082828f1"
+  },
+  "metrics": {
+    "test": {
+      "mae": 2.8213862472,
+      "mape_nonzero_rows": 27150,
+      "mape_percent": 9.0286201567,
+      "mape_zero_actual_rows": 0,
+      "prediction_seconds": 0.074895,
+      "r_squared": 0.8980231916,
+      "rmse": 3.7399844314,
+      "rows": 27150
+    },
+    "validation": {
+      "fit_seconds": 2.113655,
+      "mae": 2.8127505806,
+      "mape_nonzero_rows": 27150,
+      "mape_percent": 8.8385146432,
+      "mape_zero_actual_rows": 0,
+      "prediction_seconds": 0.068673,
+      "r_squared": 0.8928018272,
+      "rmse": 3.7229821969,
+      "rows": 27150
+    }
+  },
+  "model_version": "classical_regression_v1",
+  "seed": 42,
+  "selection": {
+    "candidate_id": "forest_deep",
+    "family": "random_forest",
+    "mean_cv_rmse": 4.6877100515,
+    "parameters": {
+      "max_depth": 14,
+      "max_features": 0.9,
+      "min_samples_leaf": 4,
+      "n_estimators": 24
+    },
+    "parameters_json": "{\n  \"max_depth\": 14,\n  \"max_features\": 0.9,\n  \"min_samples_leaf\": 4,\n  \"n_estimators\": 24\n}",
+    "validation_primary_metric": "rmse"
+  },
+  "target": {
+    "column": "target_speed_h1",
+    "horizon_minutes": 30,
+    "horizon_windows": 1,
+    "key": "speed"
+  }
+}

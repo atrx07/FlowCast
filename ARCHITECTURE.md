@@ -53,7 +53,7 @@ python -m flowcast.cli prepare-data
 python -m flowcast.cli eda
 python -m flowcast.cli prepare-modeling
 python -m flowcast.cli train-scratch-linear
-python -m flowcast.cli train-classical
+python -m flowcast.cli train-classical-regression
 python -m flowcast.cli train-deep
 python -m flowcast.cli evaluate
 python -m flowcast.cli predict --horizons 1 2 3 4
@@ -255,8 +255,11 @@ This is a target structure, not permission to create empty files unnecessarily. 
 - Feature grouping, imputation, encoding, and per-family scaling policies.
 - Step 11 scratch-linear target, chronological row budget, optimizer,
   finite-difference tolerances, and synthetic parameter-recovery contract.
-- Later steps add model grids, search budgets, calibration, recurrent training,
-  and early-stopping settings without weakening the frozen split contract.
+- Step 12 direct-regression targets/horizons, four required estimator families,
+  bounded two-candidate search spaces, deterministic CV timestamp budget,
+  validation selection rule, and pre-test freeze rule.
+- Later steps add classification grids, calibration, recurrent training, and
+  early-stopping settings without weakening the frozen split contract.
 
 ## 6. Data Contracts
 ### 6.1 Raw traffic contract
@@ -435,6 +438,30 @@ Key: `road_id + timestamp`.
   validation matrices and reports RMSE, MAE, MAPE, and R-squared. It is a
   mathematical verification, not final model selection or test evaluation.
 
+### 6.13 Classical regression artifact boundary
+
+- `train-classical-regression` generates 12 direct jobs from the processed
+  target manifest: volume, speed, and travel time at horizons 1-4.
+- Linear Regression, Decision Tree, Random Forest, and XGBoost candidates use
+  all five frozen horizon-gapped folds. Each fold fits a fresh training-only
+  preprocessor; the deterministic timestamp budget spans the fold's complete
+  expanding training interval while each final family fit uses all eligible
+  training rows.
+- Mean CV RMSE selects hyperparameters within a family. Validation RMSE then
+  selects one family per target/horizon, with documented deterministic
+  tie-breakers.
+- All 12 selected pipelines and `selection_manifest.json` are persisted before
+  one explicit `final_evaluation` test-partition load. Models are never refit
+  after that load.
+- Canonical candidate/fold/family/final scoreboards and feature importance live
+  under `artifacts/metrics/classical_regression_v1/`. Selected Joblib pipelines,
+  combined validation/test predictions, and JSON plus Markdown model cards live
+  under the corresponding versioned model, prediction, and model-card roots.
+- The canonical summary records input/config hashes, the selection-manifest
+  hash, all output hashes, runtime, library versions, model lineage, and the
+  single test-access evidence. Reloading verifies the complete chain before
+  returning a selected pipeline.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -531,7 +558,18 @@ common base retains trailing origins instead of globally dropping them.
   window volume target. Persisted coefficients can be reloaded without a
   modelling-library estimator and must reproduce stored validation predictions.
 
-### 10.2 Classical registry key
+### 10.2 Classical regression selection
+
+- The three continuous targets use direct horizon-specific pipelines.
+- Seven configured candidates cover all four required estimator families.
+- All five expanding-window folds contribute to hyperparameter selection.
+- Mean CV RMSE selects a configuration within each family; validation RMSE
+  selects the family for each target/horizon.
+- The final test is prediction-only and cannot alter selections.
+- Selected pipelines include their fitted preprocessor and expose coefficients
+  or tree feature importance through a common persisted table.
+
+### 10.3 Classical registry key
 ```text
 {target}/{horizon}/{model_name}/{version}
 ```
@@ -546,14 +584,14 @@ Each registry entry contains:
 - calibration/threshold artifact where relevant.
 - model card.
 
-### 10.3 Accident-risk classifier
+### 10.4 Accident-risk classifier
 - Binary label: future `accident_count > 0`.
 - Use class weights or XGBoost `scale_pos_weight` derived from training only.
 - Do not select by accuracy.
 - Tune threshold on validation data according to operational trade-off and report precision/recall.
 - Calibrate probability when the selected model requires it.
 
-### 10.4 Recurrent volume model
+### 10.5 Recurrent volume model
 Preferred v1 design:
 
 ```text

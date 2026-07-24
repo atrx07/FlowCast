@@ -71,7 +71,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M2 - Cleaning and merge | Week 1 | Cleaned source tables and merged interim table | Complete - Step 06 gate passed with zero misses or row multiplication |
 | M3 - Features and targets | Week 1 | Analysis-ready versioned dataset | Complete - Step 08 gate passed with 181,200 origins and 20 masked targets |
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
-| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | In progress - Steps 10-11 complete; Step 12 next |
+| M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | In progress - Steps 10-12 complete; Step 13 next |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Not started |
 | M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Not started |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
@@ -233,10 +233,11 @@ A proposed change must be classified before implementation:
 ## 13. Current Roadmap Position
 
 Milestones M0 through M4 are complete and M5 is in progress. Step 10 froze the
-shared chronological evaluation and preprocessing contract. Step 11 then
-implemented and numerically verified the required NumPy prediction, MSE,
-gradients, and full-batch descent loop; proved synthetic parameter recovery;
-and compared it honestly with scikit-learn on identical frozen validation rows
-without opening test. Step 12 classical regression across volume, speed, and
-travel time at all four horizons is next. See `STATUS.md` and `NEXT_STEP.md` for
-the live state.
+shared chronological evaluation and preprocessing contract, and Step 11
+verified the required NumPy regression mathematics. Step 12 now provides 12
+direct volume/speed/travel-time models across horizons 1-4, complete
+Linear/Tree/Forest/XGBoost evidence, a pre-test selection freeze, persisted
+predictions and model cards, and honest final hold-out metrics. Random Forest
+won all 12 validation comparisons, and all four volume horizons met the formal
+hold-out MAPE target. Step 13 congestion and accident-risk classification is
+next. See `STATUS.md` and `NEXT_STEP.md` for the live state.

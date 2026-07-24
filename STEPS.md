@@ -435,6 +435,30 @@ Forecast volume, average speed, and travel time for all four horizons.
 6. Persist pipelines, predictions, metrics, and feature importance where available.
 7. Build model cards.
 
+### Proven Step 12 procedure
+
+- `config/models.yaml` defines three continuous targets, four horizons, all
+  four required estimator families, seven bounded candidate configurations,
+  seed 42, and a deterministic 96-timestamp CV training budget.
+- `flowcast train-classical-regression` hash-verifies Step 10 and generates all
+  12 jobs from the processed target manifest. Every candidate uses all five
+  expanding folds; fresh preprocessing is fit only on each fold's sampled
+  training rows, whose timestamps span the full available training interval.
+- Mean CV RMSE selects a candidate within each family. Each family winner is
+  then fit on every eligible frozen training row and evaluated on validation;
+  validation RMSE selects the final family with deterministic tie-breakers.
+- All 12 selected preprocessing-plus-estimator pipelines and the selection
+  manifest are persisted before the test loader is called once with
+  `purpose="final_evaluation"`. No model is refit after that call.
+- Canonical fold/candidate/family/final metrics, validation/test predictions,
+  feature importance, runtime, hashes, and generated Markdown are persisted
+  under `classical_regression_v1`. Every selected model has JSON and Markdown
+  cards and a verified Joblib reload path.
+- Full-data contracts prove 420 successful fold results, 48 required
+  family/task validation results, 650,700 persisted prediction rows, selection
+  freeze ordering, metric finiteness, model-card completeness, prediction
+  equality after reload, and tamper rejection.
+
 ### Exit gate
 - Required model families are represented.
 - Metrics include RMSE, MAE, MAPE, and R².

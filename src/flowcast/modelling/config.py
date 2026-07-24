@@ -14,6 +14,13 @@ from flowcast.settings import Settings
 PARTITIONS = ("train", "validation", "test")
 MODEL_FAMILIES = ("linear", "tree", "svm", "recurrent")
 _SCALING = {"none", "standard", "minmax"}
+REGRESSION_TARGETS = ("volume", "speed", "travel_time")
+REGRESSION_ESTIMATORS = (
+    "linear_regression",
+    "decision_tree",
+    "random_forest",
+    "xgboost",
+)
 
 
 def allocate_largest_remainder(
@@ -195,6 +202,77 @@ def _validate_scratch_linear(config: dict[str, Any]) -> None:
     _positive_number(proof, "coefficient_tolerance")
 
 
+def _validate_classical_regression(config: dict[str, Any]) -> None:
+    regression = config.get("classical_regression", {})
+    if regression.get("contract_version") != "classical_regression_v1":
+        raise ValueError("Unsupported classical-regression contract version")
+    if regression.get("version") != "classical_regression_v1":
+        raise ValueError("Unsupported classical-regression artifact version")
+    if tuple(regression.get("targets", [])) != REGRESSION_TARGETS:
+        raise ValueError(
+            "Classical regression must cover volume, speed, and travel time"
+        )
+    if tuple(int(value) for value in regression.get("horizons", [])) != (
+        1,
+        2,
+        3,
+        4,
+    ):
+        raise ValueError("Classical regression horizons must be 1, 2, 3, and 4")
+    if regression.get("primary_metric") != "rmse":
+        raise ValueError("Classical regression must select by RMSE")
+    cv = regression.get("cross_validation", {})
+    if int(cv.get("fold_count", 0)) != int(
+        config["cross_validation"]["fold_count"]
+    ):
+        raise ValueError("Classical regression must use every frozen CV fold")
+    if int(cv.get("training_timestamp_budget", 0)) <= 0:
+        raise ValueError("Classical-regression CV budget must be positive")
+    if cv.get("sampling") != "evenly_spaced_timestamps":
+        raise ValueError("Unsupported classical-regression CV sampling policy")
+    if cv.get("require_all_folds") is not True:
+        raise ValueError("Every classical-regression candidate must use all folds")
+    selection = regression.get("selection", {})
+    if selection.get("hyperparameter_stage") != "mean_cv_rmse_within_family":
+        raise ValueError("Regression hyperparameters must be selected by mean CV RMSE")
+    if selection.get("family_stage") != "validation_rmse":
+        raise ValueError("Regression family selection must use validation RMSE")
+    if selection.get("freeze_before_test") is not True:
+        raise ValueError("Regression selection must be frozen before test access")
+    if tuple(selection.get("tie_breakers", [])) != (
+        "mean_cv_rmse",
+        "family",
+        "candidate_id",
+    ):
+        raise ValueError("Classical-regression tie breakers changed")
+
+    estimators = regression.get("estimators", {})
+    if tuple(estimators) != REGRESSION_ESTIMATORS:
+        raise ValueError("Classical-regression estimator coverage changed")
+    expected_preprocessing = {
+        "linear_regression": "linear",
+        "decision_tree": "tree",
+        "random_forest": "tree",
+        "xgboost": "tree",
+    }
+    candidate_ids: set[str] = set()
+    for family, record in estimators.items():
+        if record.get("preprocessing_family") != expected_preprocessing[family]:
+            raise ValueError(f"Unexpected preprocessing family for {family}")
+        candidates = record.get("candidates", [])
+        if not 1 <= len(candidates) <= 2:
+            raise ValueError(
+                f"{family} needs one or two bounded candidate configurations"
+            )
+        for candidate in candidates:
+            candidate_id = str(candidate.get("candidate_id", ""))
+            if not candidate_id or candidate_id in candidate_ids:
+                raise ValueError("Regression candidate IDs must be unique")
+            candidate_ids.add(candidate_id)
+            if not isinstance(candidate.get("parameters"), dict):
+                raise ValueError("Regression candidate parameters must be mappings")
+
+
 def load_model_config(settings: Settings) -> dict[str, Any]:
     """Load and fail closed on an invalid Step 10 modelling configuration."""
 
@@ -213,4 +291,5 @@ def load_model_config(settings: Settings) -> dict[str, Any]:
     _validate_cv(config)
     _validate_preprocessing(config)
     _validate_scratch_linear(config)
+    _validate_classical_regression(config)
     return config
