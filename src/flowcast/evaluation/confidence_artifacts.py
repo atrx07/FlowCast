@@ -48,6 +48,15 @@ class VerifiedConfidenceArtifacts:
     paired_volume: pd.DataFrame
 
 
+@dataclass(frozen=True)
+class VerifiedConfidenceCalibration:
+    """Verified Step 16 summary, configuration, and conformal widths."""
+
+    summary: dict[str, Any]
+    config: dict[str, Any]
+    interval_calibration: pd.DataFrame
+
+
 def confidence_paths(settings: Settings, version: str) -> ConfidencePaths:
     """Return Step 16 paths without creating directories."""
 
@@ -95,13 +104,10 @@ def verify_record(record: dict[str, Any], settings: Settings) -> Path:
     return verify_artifact_record(record_path(record, settings), record, settings)
 
 
-def load_verified_confidence_artifacts(
+def _load_verified_summary(
     settings: Settings,
-    *,
-    version: str = "confidence_error_v1",
-) -> VerifiedConfidenceArtifacts:
-    """Verify upstream lineage and load the three dashboard-ready tables."""
-
+    version: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
     paths = confidence_paths(settings, version)
     summary = read_json(paths.summary_path)
     if summary.get("contract_version") != "confidence_error_v1":
@@ -119,6 +125,39 @@ def load_verified_confidence_artifacts(
         raise RuntimeError("Confidence upstream lineage changed")
     for record in summary["artifacts"].values():
         verify_record(record, settings)
+    return summary, config
+
+
+def load_verified_confidence_calibration(
+    settings: Settings,
+    *,
+    version: str = "confidence_error_v1",
+) -> VerifiedConfidenceCalibration:
+    """Verify the full Step 16 chain while loading only inference-time widths."""
+
+    paths = confidence_paths(settings, version)
+    summary, config = _load_verified_summary(settings, version)
+    calibration = pd.read_csv(paths.interval_calibration_path)
+    expected_groups = int(summary["coverage"]["conformal_group_count"])
+    if len(calibration) != expected_groups:
+        raise RuntimeError("Confidence calibration group count changed")
+    keys = ["model_version", "target", "horizon_windows"]
+    if calibration.duplicated(keys).any():
+        raise RuntimeError("Confidence calibration keys are no longer unique")
+    if set(calibration["calibration_split"]) != {"validation"}:
+        raise RuntimeError("Confidence calibration must remain validation-only")
+    return VerifiedConfidenceCalibration(summary, config, calibration)
+
+
+def load_verified_confidence_artifacts(
+    settings: Settings,
+    *,
+    version: str = "confidence_error_v1",
+) -> VerifiedConfidenceArtifacts:
+    """Verify upstream lineage and load the three dashboard-ready tables."""
+
+    paths = confidence_paths(settings, version)
+    summary, _ = _load_verified_summary(settings, version)
 
     regression = pd.read_parquet(paths.regression_predictions_path)
     classification = pd.read_parquet(paths.classification_predictions_path)

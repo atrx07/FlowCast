@@ -13,7 +13,7 @@ learning and a from-scratch recurrent neural network.
 ## Current status
 
 Last verified on 25 July 2026. Milestones M0-M6 are complete and M7 is in
-progress. Steps 00-16 now
+progress. Steps 00-17 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -66,11 +66,19 @@ time, weekday, peak period, weather, congestion, and horizon. Its dashboard-read
 outputs contain 862,700 regression rows, 428,257 classification rows, and
 212,000 exact deep/classical paired rows. Test interval coverage across the 16
 groups is 0.8924-0.9055; the weak classifier goals and 120-minute recurrent
-deficit remain visible. The complete assurance suite passes all 164 tests,
-including deterministic rebuild, tamper rejection, an isolated notebook smoke,
-an exact-exit pytest runner, and a session guard that restores and rejects
-tracked-file mutation. Step 17 inference and report services are the immediate
-gate; the Streamlit surface and final reproduction remain ahead.
+deficit remain visible. Step 17 adds one verified frozen-model `Predictor` with
+validation-led recurrent volume routing, an explicit classical volume
+comparator, speed/travel-time/congestion/accident outputs, unchanged Step 16
+confidence, and full data/model/config lineage. The latest-origin 25-road
+one-horizon CPU request completes in 2.350 seconds cold against the 30-second
+target; the complete four-horizon request produces 100 validated rows in 4.222
+seconds cold. Request-scoped Parquet/JSON batches, verified reload, real-data
+insights, full CSV, and self-contained HTML reports are available through the
+CLI. The complete assurance suite passes all 173 tests, including deterministic
+inference, report/prediction tamper rejection, an isolated notebook smoke, an
+exact-exit pytest runner, and a session guard that restores and rejects
+tracked-file mutation. Step 18 Streamlit implementation is the immediate gate;
+final reproduction remains ahead.
 
 ## Delivery timeline
 
@@ -80,7 +88,7 @@ gate; the Streamlit surface and final reproduction remain ahead.
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
 | Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
 | Week 3 | M6 recurrent deep learning and confidence | Complete - Steps 15-16 verified |
-| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 17 next |
+| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 17 complete; Step 18 next |
 
 ## Quick start
 
@@ -105,7 +113,14 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli build-classical-registry
 .\.venv\Scripts\python.exe -m flowcast.cli train-recurrent-volume
 .\.venv\Scripts\python.exe -m flowcast.cli analyze-confidence
+.\.venv\Scripts\python.exe -m flowcast.cli predict --horizons 1 2 3 4 --export-reports
 .\.venv\Scripts\python.exe scripts\run_tests.py -q
+```
+
+To rebuild reports from an existing verified prediction batch:
+
+```powershell
+.\.venv\Scripts\python.exe -m flowcast.cli build-reports --manifest <path-to-manifest.json>
 ```
 
 The test runner prints `FLOWCAST_PYTEST_EXIT=0` only for a successful suite and

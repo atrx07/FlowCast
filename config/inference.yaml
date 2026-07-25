@@ -1,0 +1,50 @@
+inference_reporting:
+  contract_version: inference_reporting_v1
+  version: inference_reporting_v1
+
+  upstream:
+    processed_version: processed_targets_v1
+    modelling_version: split_preprocessing_v1
+    registry_version: classical_registry_v1
+    recurrent_version: recurrent_volume_v1
+    confidence_version: confidence_error_v1
+
+  active_routing:
+    volume:
+      source: recurrent
+      model_version: recurrent_volume_v1
+      selection_basis: validation_mean_rmse_all_horizons
+      fallback:
+        source: classical_registry
+        model_version: classical_regression_v1
+        expose_comparator: true
+    speed:
+      source: classical_registry
+      model_version: classical_regression_v1
+    travel_time:
+      source: classical_registry
+      model_version: classical_regression_v1
+    congestion:
+      source: classical_registry
+      model_version: classical_classification_v1
+    accident:
+      source: classical_registry
+      model_version: classical_classification_v1
+
+  request:
+    horizons: [1, 2, 3, 4]
+    cadence_minutes: 30
+    recurrent_sequence_length: 12
+    maximum_roads: 25
+    default_scope: full_corridor
+
+  device:
+    default: cpu
+    allowed: [cpu, cuda]
+    cpu_threads: 8
+
+  output:
+    schema_version: flowcast_prediction_v1
+    prediction_formats: [parquet, json]
+    report_formats: [csv, html]
+    full_corridor_runtime_target_seconds: 30.0

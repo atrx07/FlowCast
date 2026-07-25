@@ -278,6 +278,11 @@ This is a target structure, not permission to create empty files unnecessarily. 
   interval method, probability diagnostics, accident risk-band multipliers,
   reliability bins, subgroup dimensions, and minimum-support policy. It names
   every frozen upstream version and cannot alter a model-selection hash.
+- `config/inference.yaml` independently defines the Step 17 active routing,
+  upstream versions, request/cadence/sequence contract, CPU-default device
+  policy, output schema, report formats, and full-corridor runtime target.
+  Reporting or dashboard changes therefore cannot silently change a frozen
+  training, selection, calibration, or confidence hash.
 
 ## 6. Data Contracts
 ### 6.1 Raw traffic contract
@@ -549,6 +554,36 @@ Key: `road_id + timestamp`.
 - The confidence layer is immutable-model evaluation: it cannot refit, select,
   recalibrate, rethreshold, or replace a Step 12-15 prediction.
 
+### 6.17 Inference and reporting artifact boundary
+
+- `flowcast.inference.Predictor` is the single public forecast interface.
+  Initialization verifies the Step 08 processed chain, Step 10 preprocessing
+  chain, Step 14 registry, Step 15 recurrent checkpoint, and Step 16
+  calibration before model use.
+- Active recurrent volume routing is frozen from validation-only evidence at
+  all four horizons. The classical registry volume winner remains an explicit
+  comparator/fallback; speed, travel time, congestion, and accident models
+  resolve through the frozen registry.
+- Feature preparation accepts only a verified processed origin, checks
+  half-hour cadence and road coverage, and requires twelve contiguous
+  road-local rows for the recurrent input. It never constructs future observed
+  weather or target features.
+- Every output row contains five target predictions, conformal interval or
+  probability confidence, accident threshold/risk band, origin and target
+  timestamps, active/fallback model versions, data/feature/preprocessing
+  versions, registry/confidence/inference versions, and the processed-data
+  SHA-256.
+- `flowcast.inference.artifacts` writes one request-scoped Parquet plus JSON
+  manifest under `artifacts/predictions/inference_reporting_v1/<request_id>/`.
+  Reload recursively verifies configs, upstream summaries, model/card records,
+  output hash, deterministic request identity, schema, probabilities, physical
+  bounds, and coverage.
+- `flowcast.reports` derives operational findings only from verified
+  prediction rows, exports full CSV plus self-contained HTML under the matching
+  report directory, and persists a tamper-checked report manifest.
+- No Step 17 module exposes model fitting, recalibration, rethresholding, or
+  active-route mutation.
+
 ## 7. Cleaning Strategy
 ### 7.1 Duplicate policy
 - Exact duplicates and key duplicates are identified separately.
@@ -788,7 +823,15 @@ Conceptual output fields:
 - confidence interval or confidence score.
 - model versions and data version.
 
-Batch inference writes Parquet plus a JSON manifest.
+The implemented interface defaults to the latest common origin and full
+25-road scope when these values are omitted. Requests accept only horizons
+1-4, exact half-hour origins present in the processed dataset, and `cpu` or
+guarded `cuda` execution. CPU is the default and reproduction path.
+
+Batch inference writes Parquet plus a JSON manifest. The manifest contains the
+normalized request, row/road/horizon coverage, measured initialization and
+prediction time, verified upstream/model records, schema version, and output
+hash. CSV/HTML reports load only through this verified boundary.
 
 ## 13. Dashboard Architecture
 ### App shell
@@ -894,6 +937,10 @@ Critical failures stop the pipeline. Recoverable row-level problems enter quaran
   pre-test checkpoint freeze, best-weight reload equality, exact classical
   origin mapping, metric correctness, registry-extension coverage, and
   checkpoint tamper rejection.
+- inference request/cadence/sequence rejection, five-target/four-horizon
+  coverage, frozen routing, repeated CPU equality, physical/probability schema
+  bounds, prediction/report reconciliation, runtime measurement, and
+  prediction/report tamper rejection.
 
 ### Integration
 - raw -> interim.

@@ -73,7 +73,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
 | M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Complete - Step 14 verified 20 entries and 1,078,957 indexed predictions |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Complete - Steps 15-16 verified with confidence/error artifacts |
-| M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | In progress - Step 17 inference/reporting service next |
+| M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | In progress - Step 17 service complete; Step 18 dashboard next |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Not started |
 
 ## 5. Week 1 - Data Engineering and EDA
@@ -271,5 +271,12 @@ Step 16 now adds 16 validation-only finite-sample conformal calibrations,
 accident risk bands, and 3,408 minimum-support error slices. Test interval
 coverage ranges from 0.8924 to 0.9055 around the nominal 0.90 level. The weak
 classifier goals and the recurrent 120-minute deficit remain explicit rather
-than triggering post-test changes. Step 17 inference and reporting services
-are next. See `STATUS.md` and `NEXT_STEP.md` for the live state.
+than triggering post-test changes. Step 17 now adds a verified frozen-model
+`Predictor`, validation-led recurrent-volume routing with an explicit
+classical comparator, five-target/four-horizon output, unchanged Step 16
+confidence, Parquet/JSON batch persistence, verified CSV/HTML reporting,
+repeatability and tamper contracts, and CPU runtime evidence. The latest-origin
+25-road/one-horizon request completes in 2.350 seconds cold against the
+30-second target; the complete four-horizon request produces 100 rows in 4.222
+seconds cold. Step 18 Streamlit implementation is next. See `STATUS.md` and
+`NEXT_STEP.md` for the live state.

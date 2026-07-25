@@ -8,6 +8,10 @@ from typing import Sequence
 
 from flowcast.analysis.pipeline import run_eda
 from flowcast.cli_model_commands import register_model_parsers, run_model_command
+from flowcast.cli_service_commands import (
+    register_service_parsers,
+    run_service_command,
+)
 from flowcast.data.audit import run_raw_audit
 from flowcast.data.clean_context import run_context_cleaning
 from flowcast.data.merge_pipeline import run_source_merge
@@ -112,6 +116,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Versioned EDA artifact directory (default: eda_v1).",
     )
     register_model_parsers(subparsers)
+    register_service_parsers(subparsers)
     return parser
 
 
@@ -221,6 +226,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     model_result = run_model_command(args, settings, logger)
     if model_result is not None:
         return model_result
+    service_result = run_service_command(args, settings, logger)
+    if service_result is not None:
+        return service_result
     raise RuntimeError(f"Unhandled command: {args.command}")
 
 

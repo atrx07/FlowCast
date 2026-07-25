@@ -5,9 +5,9 @@
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-25
 - **Current milestone:** M7 - Dashboard and service layer (in progress)
-- **Current step:** Steps 00-16 complete; Step 17 next
-- **Overall state:** Confidence/error evidence and build-safety safeguards are
-  verified; inference and reporting services are the next gate
+- **Current step:** Steps 00-17 complete; Step 18 next
+- **Overall state:** Frozen-model inference and reporting services are verified;
+  the Streamlit dashboard is the next gate
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
@@ -16,235 +16,181 @@ FlowCast has a reproducible Python 3.11 pipeline from immutable raw inputs
 through validation, cleaning, merge, leakage-safe features, four-horizon
 targets, EDA, frozen chronological evaluation, training-only preprocessing,
 NumPy regression proof, complete classical regression/classification, a
-combined classical registry, a from-scratch recurrent volume forecaster, and
-validation-calibrated confidence/error analysis.
+combined classical registry, a from-scratch recurrent volume forecaster,
+validation-calibrated confidence/error analysis, and frozen-model
+inference/reporting.
 
-Step 16 consumes only the frozen Step 08 and Step 12-15 datasets, summaries,
-registries, model cards, and prediction tables. It does not alter a model,
-candidate, threshold, calibrator, architecture, sequence length, split, source
-prediction, or upstream hash.
+Step 17 loads only verified Step 08/10/14/15/16 artifacts. It does not fit a
+preprocessor, model, calibrator, threshold, or confidence width. The recurrent
+volume route is frozen from lower validation RMSE at all four horizons; the
+classical volume model remains an explicit comparator. Speed, travel time,
+congestion, and accident risk resolve through the frozen Step 14 registry.
 
 `FlowCast-project_file/`, `data/raw/`, the delivered CSV/DOCX sources, and all
-frozen Step 10-15 source artifacts remain unchanged.
+Step 10-16 source artifacts remain unchanged.
 
-## 2. Step 16 Implementation
+## 2. Step 17 Implementation
 
-- Added independent `config/confidence.yaml` with the
-  `confidence_error_v1` contract, exact upstream versions, validation-only
-  split-conformal calibration, fixed reliability bins, confidence/risk bands,
-  subgroup dimensions, and minimum-support rules.
-- Added modular confidence configuration, verified input loading, artifact
-  loading, interval/probability metrics, supported error slices, exact-row
-  deep/classical pairing, diagnostics, reporting, and orchestration under
-  `flowcast.evaluation`.
-- Regression intervals use the finite-sample higher absolute-residual
-  quantile at `ceil((n + 1) * 0.90)` for each model/target/horizon validation
-  group. Test residuals never fit the width.
-- Classification rows preserve frozen ordered probabilities and add maximum
-  probability, entropy, normalized entropy, and confidence band.
-- Accident rows preserve the validation-selected operating threshold and add
-  low/elevated/high/critical bands at 0.5x/1x/2x threshold boundaries. Empty
-  bands remain present in the aggregate table.
-- Error analysis covers road, origin hour, weekday, weekday/weekend, peak
-  period, weather, actual congestion, and horizon. Unsupported slices remain
-  visible with counts, `sufficient_support=false`, and blank metrics.
-- Added `flowcast analyze-confidence`. Modeling/evaluation command
-  registration and dispatch now live in `cli_model_commands.py`, keeping the
-  root CLI small without changing existing command behavior.
-- Added unit/full-artifact contracts for validation-only fitting, probability
-  and risk-band semantics, minimum support, exact pairing, row reconciliation,
-  determinism, recursive loading, and tamper rejection.
-- Corrected the EDA notebook smoke test to use isolated temporary
-  artifacts. With CUDA packages installed, its previous canonical rerun
-  changed only the EDA environment snapshot and invalidated frozen downstream
-  hashes; the isolated smoke now passes while preserving the canonical EDA
-  SHA-256.
+- Added standalone `config/inference.yaml` with frozen upstream versions,
+  validation-led active routing, explicit classical-volume fallback,
+  request/cadence/sequence rules, CPU-default device policy, output schemas,
+  report formats, and the 30-second full-corridor target.
+- Added typed `PredictionRequest`, `PredictionResult`, and `Predictor`
+  interfaces under `flowcast.inference`.
+- Latest-origin preparation verifies road coverage, 30-minute alignment, and
+  twelve contiguous road-local recurrent rows before preprocessing.
+- The service returns volume, speed, travel time, four-class congestion
+  probabilities, accident probability/decision/risk band, regression
+  intervals, classifier confidence/entropy, origin/target timestamps, and exact
+  data/model/config lineage for every requested road and horizon.
+- Active recurrent volume inference uses the portable state dictionary with
+  explicit `map_location`; ordinary inference defaults to CPU and guarded CUDA
+  remains optional.
+- Classical estimators load only through verified source loaders after the
+  registry is recursively verified. Loaded entries are checked back against
+  their registry model/card records.
+- Step 16 conformal widths, classifier confidence bands, accident thresholds,
+  and risk-band multipliers are applied unchanged.
+- Added deterministic Parquet prediction batches plus JSON manifests, verified
+  batch reload, real-data insight aggregation, full CSV export, self-contained
+  HTML export, and report-manifest verification.
+- Added `flowcast predict` and `flowcast build-reports`. Normal prediction and
+  report generation contain no training path.
 
-## 3. Canonical Confidence and Error Evidence
+## 3. Canonical Inference and Report Evidence
 
-- Canonical CPU run: 18.35 seconds.
-- Regression confidence rows: 862,700.
-- Classification confidence rows: 428,257.
-- Exact recurrent/classical paired volume rows: 212,000.
-- Conformal calibration groups: 16.
-- Reliability rows: 160 (ten bins x task/horizon/split).
-- Accident risk-band rows: 32, including configured zero-count bands.
-- Error slices: 3,408 total; 3,394 meet support and 14 remain visible as
-  unsupported.
-- RTX 5070 Laptop GPU/VRAM used: no. Step 16 is tabular/statistical and stayed
-  on the Intel Core Ultra 9 CPU.
-- Intel NPU used: no.
+Canonical CPU requests used the latest common origin
+`2025-05-31T23:30:00+05:30`.
 
-### Regression test intervals
+### Full-corridor one-horizon benchmark
 
-The nominal coverage is 0.90. Across the 16 model/target/horizon test groups:
+- Request ID: `3e0585348e1f7f4b`.
+- Roads/horizons/rows: 25 / 1 / 25.
+- Service initialization: 0.844 seconds.
+- Prediction execution including first-use model loading: 1.506 seconds.
+- Cold total: 2.350 seconds.
+- Result: meets the PRD target of at most 30 seconds.
 
-- Minimum empirical coverage: 0.8924 (recurrent volume, 90 minutes).
-- Maximum empirical coverage: 0.9055 (classical travel time, 90 minutes).
-- Nine groups are slightly below nominal and seven are at/above nominal.
-- Recurrent volume mean interval widths are 185.45, 187.00, 186.37, and
-  190.19 vehicles for 30-120 minutes.
-- Classical volume mean interval widths are 198.39, 197.19, 209.37, and
-  198.78 vehicles.
+### Full five-target, four-horizon request
 
-The observed range is close to nominal, but remains hold-out evidence rather
-than a guarantee under future distribution shift.
+- Request ID: `0f02bc6449c56a75`.
+- Roads/horizons/rows: 25 / 4 / 100.
+- Service initialization: 0.817 seconds.
+- Prediction execution: 3.404 seconds.
+- Cold total: 4.222 seconds.
+- Verified reload reconciles all 100 rows, 25 roads, four horizons, schema,
+  model records, upstream hashes, and the deterministic request identifier.
+- CSV and self-contained HTML reports were generated and verified from the
+  persisted batch.
 
-### Classification calibration and failure modes
-
-- Congestion test Macro-F1 remains 0.7540, 0.7503, 0.7493, and 0.7468.
-- Congestion expected calibration error is 0.0029 at 30 minutes and
-  0.0515-0.0602 at 60-120 minutes.
-- The largest overall off-diagonal congestion confusion is actual Free-flow
-  predicted Moderate at 60 minutes (1,263 rows).
-- Accident ROC-AUC remains 0.6209, 0.6237, 0.5980, and 0.5894; PR-AUC remains
-  0.0209, 0.0182, 0.0161, and 0.0165 against roughly 0.98% prevalence.
-- Accident probability expected calibration error is low
-  (0.00087-0.00124), but low calibration error under extreme imbalance does
-  not compensate for weak ranking and precision.
-- Where populated, higher configured accident risk bands show higher observed
-  event rates. Very small high/critical groups remain visibly count-qualified.
-
-### Exact deep/classical diagnosis
-
-- The recurrent model retains test RMSE wins at 30, 60, and 90 minutes and
-  trails classical by 0.0471 overall at 120 minutes.
-- On validation-only paired evidence, recurrent RMSE is lower at all four
-  horizons, so a future active-volume policy can be frozen without consulting
-  test outcomes.
-- The largest supported test deficit is at origin hour 22 for the 120-minute
-  horizon: recurrent minus classical RMSE is +10.0931 across 1,100 exact rows.
-- Other large deficits cluster around origin hours 23 and 0. These are
-  descriptive associations, not causal conclusions.
+The RTX 5070 Laptop GPU/VRAM and Intel NPU were not used. Step 17 ran on the
+Intel Core Ultra 9 CPU.
 
 ## 4. Produced Artifacts
 
 ```text
-config/confidence.yaml
+config/inference.yaml
 
-artifacts/metrics/confidence_error_v1/
-  accident_risk_bands.csv
-  classification_reliability.csv
-  confusion_matrices.csv
-  error_slices.csv
-  interval_calibration.csv
-  paired_volume_slices.csv
-  regression_coverage.csv
-  summary.json
-  summary.md
+src/flowcast/inference/
+  artifacts.py
+  confidence.py
+  config.py
+  feature_prep.py
+  inputs.py
+  model_router.py
+  predictor.py
+  schemas.py
 
-artifacts/predictions/confidence_error_v1/  # ignored, reproducible
-  classification_confidence.parquet
-  paired_volume_comparison.parquet
-  regression_confidence.parquet
+src/flowcast/reports/
+  export.py
+  insights.py
+
+artifacts/predictions/inference_reporting_v1/
+  3e0585348e1f7f4b/               # ignored, reproducible benchmark
+  0f02bc6449c56a75/               # ignored, reproducible complete batch
+
+artifacts/reports/inference_reporting_v1/0f02bc6449c56a75/
+  predictions.csv                 # ignored, reproducible
+  report.html                     # ignored, reproducible
+  manifest.json                   # ignored, reproducible
 ```
 
-Key canonical artifacts:
+Canonical complete-batch sizes:
 
-| Artifact | Bytes | SHA-256 |
-|---|---:|---|
-| Regression confidence Parquet | 44,636,053 | `73c410c1e1fc9a5313477a9a7104c9bf00abc998b7c50f7fbbe548111f396b06` |
-| Classification confidence Parquet | 18,794,358 | `0d665712d7af3da719f7ed9804583dcf69b91e8e5b3941b9f06d899ee90e3693` |
-| Paired volume Parquet | 18,114,789 | `8fc6403324e172f83da72382028ddc58a8a858c1949378f36dbbf1642bf739de` |
-| Error slices CSV | 792,354 | `5fe1ae82559c019e751fe3807b870df5df17665eb725e939d8bd0b53df756262` |
-| Interval calibration CSV | 1,811 | `cfa11e025a46e55868d2419187beeabc4ad4262c345662f8a62add838d983d73` |
+| Artifact | Bytes |
+|---|---:|
+| Prediction manifest | 20,687 |
+| Prediction Parquet | 50,977 |
+| Report manifest | 4,110 |
+| Report CSV | 83,628 |
+| Self-contained HTML | 3,211 |
 
 ## 5. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
 ```text
-.venv/Scripts/python.exe -m flowcast.cli analyze-confidence
-.venv/Scripts/python.exe -m pytest -q tests/unit/test_confidence_analysis.py tests/data_contracts/test_confidence_analysis_contract.py
-.venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_build_safety.py tests/smoke/test_eda_notebook.py
+.venv/Scripts/python.exe -m flowcast.cli predict --horizons 1
+.venv/Scripts/python.exe -m flowcast.cli predict --horizons 1 2 3 4 --export-reports
+.venv/Scripts/python.exe -m flowcast.cli build-reports --manifest <manifest>
+.venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_inference_reporting.py tests/data_contracts/test_inference_reporting_contract.py
+.venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_confidence_analysis.py tests/data_contracts/test_confidence_analysis_contract.py tests/data_contracts/test_recurrent_volume_contract.py tests/unit/test_package.py tests/unit/test_build_safety.py
 .venv/Scripts/python.exe scripts/run_tests.py -q
 .venv/Scripts/python.exe -m compileall -q src tests scripts
-.venv/Scripts/python.exe -m flowcast.cli analyze-confidence --help
+.venv/Scripts/python.exe -m flowcast.cli predict --help
+.venv/Scripts/python.exe -m flowcast.cli build-reports --help
 .venv/Scripts/python.exe -m pip check
 git diff --check
 ```
 
 Verified results:
 
-- Canonical Step 16 build: passed in 18.35 seconds.
-- Focused Step 16 unit/full-artifact contracts: 10 passed in 19.04 seconds.
-- Focused build-safety plus isolated-notebook regression: 6 passed in 6.79
-  seconds with `FLOWCAST_PYTEST_EXIT=0`.
-- Complete repository suite after hardening: 164 passed in 497.45 seconds with
+- Focused Step 17 unit/full-artifact contracts: 9 passed in 14.54 seconds with
   `FLOWCAST_PYTEST_EXIT=0`.
-- The complete suite retrained bounded classical families in temporary roots,
-  verified every prior pipeline layer, reran Step 16 determinism/tamper
-  contracts, executed the isolated EDA notebook, and completed the
-  session-wide repository comparison without a tracked-file mutation.
-- A repeated canonical build reproduces every tracked committed metric/report
-  byte exactly.
-- Deliberate output-byte tampering is rejected before a confidence table loads.
-- All three row-level Parquets reconcile to their frozen prediction sources.
-- Every recurrent volume prediction maps to one exact classical row with the
-  same actual value.
-- All interval bounds are ordered and all classifier uncertainty values are
-  finite.
-- Dependency consistency, CLI help, source/test byte compilation, whitespace,
+- Affected confidence/recurrent/package/build-safety regression set: 21 passed
+  in 22.82 seconds with `FLOWCAST_PYTEST_EXIT=0`.
+- Complete repository suite: 173 passed in 504.65 seconds with
+  `FLOWCAST_PYTEST_EXIT=0`.
+- Repeated seeded CPU inference returns exactly equal prediction frames.
+- Invalid roads, horizons, cadence, origins, and insufficient sequence history
+  fail clearly.
+- Prediction and report byte tampering is rejected before data loads.
+- Report CSV rows/schema reconcile to the verified prediction batch; HTML
+  identifies its exact request and contains only real aggregates/evidence.
+- CLI help, dependency consistency, source/test byte compilation, whitespace,
   and source-size assurance pass.
 - Every source file remains below 400 physical lines.
+- The full test session completed its repository comparison without a tracked
+  file mutation.
 
-## 6. Build-Reliability Hardening and Known Challenges
+## 6. Decisions and Constraints
 
-- The Step 16 full-suite rerun exposed a pre-existing smoke-test isolation
-  defect: the EDA notebook executed with canonical output paths. Installing
-  CUDA legitimately changed the environment snapshot, which changed the EDA
-  summary hash; downstream recursive verification then failed closed. No model
-  or source data was corrupted.
-- The notebook smoke now copies its required inputs and redirects processed,
-  artifact, quarantine, log, IPython, and Jupyter writable paths to temporary
-  directories.
-- `tests/conftest.py` now snapshots the exact current bytes of every Git-tracked
-  file at session start. Any test-side modification, deletion, or creation of a
-  tracked path is restored and fails the suite with the offending path. The
-  snapshot preserves pre-existing user edits instead of assuming `HEAD`.
-- `scripts/run_tests.py` now calls pytest directly, returns its exact status,
-  and prints `FLOWCAST_PYTEST_EXIT=<code>` plus elapsed time. This prevents a
-  PowerShell timing wrapper from being accepted as test evidence when it hides
-  child output or status.
-- The first focused runner check correctly surfaced
-  `FLOWCAST_PYTEST_EXIT=2` for a script-import packaging mistake. The reusable
-  logic was moved under `flowcast.testing`; the repeated focused and complete
-  runs both returned zero.
-- These failure modes remain documented in `AGENTS.md`, `TECH_STACK.md`,
-  `ARCHITECTURE.md`, `STEPS.md`, `ROADMAP.md`, and `README.md` so future build
-  steps inherit the prevention rules.
+- Recurrent volume is active at all horizons because validation RMSE is lower
+  at all four; the 120-minute test deficit remains reported and cannot alter
+  this validation-led policy.
+- Classical volume predictions remain visible as a comparator/fallback.
+- Observed origin weather is used; no future-weather values are fabricated.
+- Inference accepts only origins present in the verified processed dataset.
+- Report insights are deterministic aggregates over persisted prediction rows.
+- Runtime evidence records both service initialization and prediction time.
+- CPU is the default and required reproduction path.
 
-## 7. Decisions and Constraints
+## 7. Risks and Unresolved Work
 
-- Confidence configuration is separate from frozen training and registry
-  configuration. Reporting changes cannot invalidate model-selection hashes.
-- Regression interval widths are target/horizon/model specific, validation
-  fitted, and then immutable. There is no test-driven interval widening.
-- Recurrent and classical volume use the same external interval method so their
-  uncertainty is comparable.
-- Risk-band labels are relative rankings around each frozen accident operating
-  threshold; they are not calibrated claims of absolute real-world danger.
-- Unsupported groups are retained instead of silently dropped or reported with
-  unstable metrics.
-- The current PyTorch environment remains `2.13.0+cu130` with a verified RTX
-  5070 path, but CPU fallback is mandatory. Step 16 correctly stayed on CPU.
-
-## 8. Risks and Unresolved Work
-
-- Congestion Macro-F1 and accident ROC-AUC formal targets remain unmet.
-- Low accident prevalence makes subgroup ranking estimates volatile even with
-  minimum-positive rules.
-- The recurrent model still trails classical at the 120-minute test horizon,
-  especially in late-night slices.
-- Inference/report services, Streamlit views, upload/retraining controls, and
+- Congestion Macro-F1 and accident ROC-AUC formal targets remain unmet and are
+  included in exported report evidence.
+- Low accident prevalence makes probability ranking and high/critical risk
+  groups uncertain.
+- The recurrent model still trails classical volume slightly at the
+  120-minute test horizon, especially in late-night slices.
+- The Streamlit views, upload validation, explicit retraining control, and
   final clean reproduction remain.
-- Generated model and row-level prediction artifacts are ignored by Git and
-  must be rebuilt with documented CLI commands after a clean clone.
-- The repository guard protects tracked files. Hash-verified generated
-  artifacts remain protected by recursive loader validation and must continue
-  to be written only under temporary roots in automated tests.
+- Generated models, predictions, and reports are ignored by Git and must be
+  rebuilt through documented CLI commands after a clean clone.
+- The Matplotlib default Windows cache path is sandbox-restricted on this
+  workstation; commands/tests use a writable `MPLCONFIGDIR` when needed.
 
-## 9. Next Gate
+## 8. Next Gate
 
-Proceed only to **Step 17 - Build the Inference and Reporting Services**. The
-bounded action and evidence gate are maintained in `NEXT_STEP.md`.
+Proceed only to **Step 18 - Build the Streamlit Dashboard**. The bounded action
+and evidence gate are maintained in `NEXT_STEP.md`.

@@ -714,6 +714,41 @@ Create one stable interface between artifacts and the dashboard.
 - CLI prediction works without retraining.
 - Output schema is validated.
 - Full-corridor runtime is measured.
+
+### Proven implementation (verified 2026-07-25)
+
+- `config/inference.yaml` independently freezes the Step 17 upstream versions,
+  validation-led active recurrent-volume route, explicit classical comparator,
+  request/sequence contract, CPU-default device policy, output schemas, report
+  formats, and 30-second performance target without changing Step 10-16 hashes.
+- `flowcast.inference.Predictor` recursively verifies the processed dataset,
+  Step 10 preprocessors, Step 14 registry, Step 15 recurrent state dictionary,
+  and Step 16 calibration before serving a request. All classical models load
+  through verified source loaders and are checked against cached registry
+  entries.
+- Requests validate road IDs, horizons, timezone/cadence, origin coverage, and
+  twelve contiguous road-local half-hour rows. Invalid or insufficient
+  histories fail closed.
+- One request returns recurrent volume, classical volume comparator, speed,
+  travel time, ordered congestion probabilities/class, accident
+  probability/decision/risk band, conformal intervals, classifier
+  confidence/entropy, target timestamps, and full version/hash lineage.
+- The service never fits preprocessing, weights, calibration, thresholds, or
+  intervals. Step 16 confidence and risk semantics are applied unchanged.
+- Batch forecasts persist as Parquet plus a JSON request/lineage manifest.
+  Verified reload checks configuration, upstream/model records, artifact
+  hashes, request identity, output schema, physical bounds, probabilities, and
+  row coverage.
+- Real-data insights export to full CSV and self-contained HTML. Report
+  manifests link to the verified prediction batch and reject source/report
+  tampering.
+- `flowcast predict` and `flowcast build-reports` expose the service through
+  the CLI. A latest-origin 25-road/one-horizon CPU request completed in 2.350
+  seconds cold, while the complete 25-road/four-horizon request returned 100
+  rows in 4.222 seconds cold.
+- Focused Step 17 contracts pass 9 tests, the affected regression set passes 21
+  tests, and the complete repository suite passes 173 tests with
+  `FLOWCAST_PYTEST_EXIT=0` and no tracked-file mutation.
 ---
 ## Step 18 - Build the Streamlit Dashboard
 ### Goal
