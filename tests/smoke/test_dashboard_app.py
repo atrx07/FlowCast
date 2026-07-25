@@ -33,3 +33,12 @@ def test_streamlit_shell_and_all_pages_render() -> None:
             caption.value.startswith("How to read")
             for caption in app.caption
         ), page
+        if page == "live_predictions.py":
+            assert (
+                app.date_input(key="prediction_origin_date").label
+                == "Prediction date"
+            )
+            assert (
+                app.time_input(key="prediction_origin_time").label
+                == "Prediction time"
+            )

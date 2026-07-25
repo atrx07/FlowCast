@@ -92,6 +92,13 @@ Step 10-16 source artifacts remain unchanged.
   unavailable horizon. The dashboard contract test now reconciles the latest
   batch to its own verified request/coverage manifest instead of assuming the
   canonical 25-road/four-horizon batch is always newest.
+- Replaced the arbitrary 336-timestamp, seven-day prediction-origin dropdown
+  with native date and time controls over the complete verified history. The
+  selector derives 7,237 full-corridor origins from the configured twelve-step,
+  30-minute recurrent contract, covering 1 January 2025 at 05:30 through
+  31 May 2025 at 23:30, and revalidates the combined value before inference.
+- A real empty-state interpretation now preserves the live page's evidence-brief
+  contract when the latest persisted batch does not match session filters.
 - All displayed metrics, aggregates, predictions, intervals, probabilities,
   limitations, and lineage come from verified Step 08-17 artifacts. No
   placeholder analytics or fabricated future weather were introduced.
@@ -188,7 +195,7 @@ Executed with project-local CPython 3.11.9:
 .venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_inference_reporting.py tests/data_contracts/test_inference_reporting_contract.py
 .venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_confidence_analysis.py tests/data_contracts/test_confidence_analysis_contract.py tests/data_contracts/test_recurrent_volume_contract.py tests/unit/test_package.py tests/unit/test_build_safety.py
 .venv/Scripts/python.exe scripts/run_tests.py -q
-.venv/Scripts/python.exe -m compileall -q src tests scripts
+.venv/Scripts/python.exe -m compileall -q src dashboard tests scripts
 .venv/Scripts/python.exe -m flowcast.cli predict --help
 .venv/Scripts/python.exe -m flowcast.cli build-reports --help
 .venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_dashboard.py tests/data_contracts/test_dashboard_contract.py tests/smoke/test_dashboard_app.py
@@ -202,15 +209,16 @@ Verified results:
   `FLOWCAST_PYTEST_EXIT=0`.
 - Affected confidence/recurrent/package/build-safety regression set: 21 passed
   in 22.82 seconds with `FLOWCAST_PYTEST_EXIT=0`.
-- Focused dashboard unit/data-contract/all-page smoke suite: 7 passed in 12.16
-  seconds with `FLOWCAST_PYTEST_EXIT=0`; the all-page smoke now asserts that
-  every route exposes chart-reading guidance.
+- Focused dashboard unit/data-contract/all-page smoke suite: 7 passed in 12.29
+  seconds with `FLOWCAST_PYTEST_EXIT=0`; it verifies the 7,237 eligible origin
+  contract, native date/time widgets, and chart-reading guidance on every
+  route.
 - Affected feature/processed contracts: 10 passed in 7.08 seconds.
 - Isolated classical regression/classification/scratch contracts: 15 passed in
   380.40 seconds without changing the canonical processed-data hash.
 - Isolated confidence plus dashboard contracts: 7 passed in 43.63 seconds
   without changing canonical confidence artifacts.
-- Complete repository suite: 180 passed in 502.71 seconds with
+- Complete repository suite: 180 passed in 510.45 seconds with
   `FLOWCAST_PYTEST_EXIT=0`.
 - Repeated seeded CPU inference returns exactly equal prediction frames.
 - Invalid roads, horizons, cadence, origins, and insufficient sequence history
@@ -231,6 +239,10 @@ Verified results:
   182.9px and the status strip began at 63.8px. Representative live,
   model-performance, confidence, and system-control pages were also visually
   inspected.
+- Follow-up browser QA verified the origin calendar, 48-choice half-hour time
+  menu, visible January-May eligibility range, side-by-side desktop geometry,
+  and zero horizontal overflow at 1280 x 720, 1440 x 900, and 1920 x 1080;
+  the browser console reported no errors.
 
 ## 7. Decisions and Constraints
 
@@ -240,6 +252,9 @@ Verified results:
 - Classical volume predictions remain visible as a comparator/fallback.
 - Observed origin weather is used; no future-weather values are fabricated.
 - Inference accepts only origins present in the verified processed dataset.
+- The dashboard exposes every full-corridor origin that satisfies the frozen
+  twelve-row recurrent history requirement; this excludes only the first
+  eleven dataset timestamps rather than hiding an arbitrary recent window.
 - Report insights are deterministic aggregates over persisted prediction rows.
 - Runtime evidence records both service initialization and prediction time.
 - CPU is the default and required reproduction path.

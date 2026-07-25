@@ -83,7 +83,9 @@ retraining that never changes active routing on a rerun. The supplied
 Every route now uses a compact operational opener and a data-derived
 plain-language reading with chart guidance; no brief invents values or causal
 claims. At 1280 x 720 the live opener is 67.1% shorter than the prior layout,
-and the verified status strip clears Streamlit's top toolbar.
+and the verified status strip clears Streamlit's top toolbar. The live request
+uses a calendar plus a 30-minute time field for all 7,237 model-eligible origins
+from 1 January through 31 May instead of a seven-day timestamp dropdown.
 The complete assurance suite passes all 180 tests, including deterministic
 inference, report/prediction tamper rejection, an isolated notebook smoke, an
 exact-exit pytest runner, and a session guard that restores and rejects

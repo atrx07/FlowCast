@@ -13,8 +13,10 @@ acceptance result. Record every limitation honestly.
 
 The Step 18 follow-up density/readability pass is complete: all ten routes use
 compact headers, the status strip clears Streamlit's desktop toolbar, and every
-page exposes a data-backed plain-language reading. Preserve those verified
-presentation contracts during the clean reproduction.
+page exposes a data-backed plain-language reading. The live forecast request
+also exposes the complete model-eligible January-May origin range through
+separate native date and half-hour controls. Preserve those verified
+presentation and request-validation contracts during the clean reproduction.
 
 ## Read Before Acting
 

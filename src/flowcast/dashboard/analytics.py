@@ -3,10 +3,69 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from datetime import date, datetime, time
 
 import pandas as pd
 
 from flowcast.dashboard.config import CONGESTION_ORDER
+
+
+def eligible_prediction_origins(
+    frame: pd.DataFrame,
+    *,
+    sequence_length: int,
+    cadence_minutes: int,
+) -> pd.DatetimeIndex:
+    """Return full-corridor origins with enough contiguous model history."""
+
+    if sequence_length <= 0 or cadence_minutes <= 0:
+        raise ValueError("Sequence length and cadence must be positive")
+    if frame.empty:
+        return pd.DatetimeIndex([])
+
+    coverage = (
+        frame[["road_id", "timestamp"]]
+        .drop_duplicates()
+        .groupby("timestamp", observed=True)["road_id"]
+        .nunique()
+        .sort_index()
+    )
+    road_count = int(frame["road_id"].nunique())
+    common = pd.DatetimeIndex(coverage.loc[coverage.eq(road_count)].index)
+    cadence = pd.Timedelta(minutes=cadence_minutes)
+    eligible: list[pd.Timestamp] = []
+    run_length = 0
+    previous: pd.Timestamp | None = None
+    for value in common:
+        origin = pd.Timestamp(value)
+        run_length = (
+            run_length + 1
+            if previous is not None and origin - previous == cadence
+            else 1
+        )
+        if run_length >= sequence_length:
+            eligible.append(origin)
+        previous = origin
+    return pd.DatetimeIndex(eligible)
+
+
+def resolve_prediction_origin(
+    origin_date: date,
+    origin_time: time,
+    eligible_origins: pd.DatetimeIndex,
+) -> pd.Timestamp:
+    """Combine date and time controls into one verified model origin."""
+
+    if eligible_origins.empty:
+        raise ValueError("No eligible prediction origins are available")
+    origin = pd.Timestamp(datetime.combine(origin_date, origin_time))
+    if eligible_origins.tz is not None:
+        origin = origin.tz_localize(eligible_origins.tz)
+    if origin not in eligible_origins:
+        raise ValueError(
+            "Choose an eligible 30-minute origin within the displayed range."
+        )
+    return origin
 
 
 def filter_history(

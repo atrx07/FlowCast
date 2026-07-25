@@ -10,7 +10,9 @@ import pytest
 from flowcast.dashboard.analytics import (
     congestion_matrix,
     corridor_snapshot,
+    eligible_prediction_origins,
     feature_importance,
+    resolve_prediction_origin,
     road_summary,
 )
 from flowcast.dashboard.training_service import TrainingService
@@ -64,6 +66,25 @@ def test_dashboard_analytics_use_real_values() -> None:
         "mean_speed": 40.0,
         "max_risk": 0.03,
     }
+
+    origins = eligible_prediction_origins(
+        history,
+        sequence_length=2,
+        cadence_minutes=30,
+    )
+    assert origins.tolist() == timestamps[1:].tolist()
+    resolved = resolve_prediction_origin(
+        timestamps[2].date(),
+        timestamps[2].time(),
+        origins,
+    )
+    assert resolved == timestamps[2]
+    with pytest.raises(ValueError, match="eligible 30-minute origin"):
+        resolve_prediction_origin(
+            timestamps[2].date(),
+            pd.Timestamp("00:15").time(),
+            origins,
+        )
 
 
 def test_feature_importance_selects_task_and_horizon() -> None:

@@ -801,7 +801,12 @@ Deliver the interactive product surface.
   and 1920 x 1080 with no exceptions or horizontal overflow. Settled opener
   height is at most 182.9px at the smallest desktop viewport, status content
   begins at 63.8px, and all pages expose an evidence brief.
-- The complete repository suite passes all 180 tests in 502.71 seconds with
+- The live request derives the complete model-eligible origin set from verified
+  history plus the configured twelve-step, 30-minute sequence contract. A
+  native calendar and 48-choice half-hour time field expose 7,237 origins from
+  1 January 2025 at 05:30 through 31 May 2025 at 23:30; the combined value is
+  revalidated before inference.
+- The complete repository suite passes all 180 tests in 510.45 seconds with
   `FLOWCAST_PYTEST_EXIT=0`; canonical processed/confidence hashes remain
   byte-identical before and after the run.
 

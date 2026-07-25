@@ -1,9 +1,15 @@
 """Live and user-triggered frozen-model forecasts."""
 
+from datetime import timedelta
+
 import pandas as pd
 import streamlit as st
 
-from flowcast.dashboard.analytics import corridor_snapshot
+from flowcast.dashboard.analytics import (
+    corridor_snapshot,
+    eligible_prediction_origins,
+    resolve_prediction_origin,
+)
 from flowcast.dashboard.cache import (
     get_dashboard_bundle,
     get_predictor,
@@ -53,6 +59,14 @@ visible = source.loc[
 ].copy()
 if visible.empty:
     render_empty("No persisted forecast matches the selected roads and horizon.")
+    render_insight_brief(
+        "No persisted forecast matches the current road and horizon filters.",
+        guidance=(
+            "Choose a road and horizon covered by the latest persisted batch, "
+            "or request a new frozen-model forecast below."
+        ),
+        key="live-empty",
+    )
 else:
     snapshot = corridor_snapshot(visible)
     queue = visible.sort_values(
@@ -163,13 +177,14 @@ with st.container(border=True):
         "fit, retune, or switch an active model."
     )
     available_roads = tuple(sorted(bundle.history["road_id"].astype(str).unique()))
-    available_origins = (
-        bundle.history["timestamp"]
-        .drop_duplicates()
-        .sort_values()
-        .tail(336)
-        .tolist()
+    request_config = bundle.context.config["request"]
+    available_origins = eligible_prediction_origins(
+        bundle.history,
+        sequence_length=int(request_config["recurrent_sequence_length"]),
+        cadence_minutes=int(request_config["cadence_minutes"]),
     )
+    first_origin = pd.Timestamp(available_origins[0])
+    latest_origin = pd.Timestamp(available_origins[-1])
     with st.form("prediction-request"):
         request_roads = st.multiselect(
             "Roads",
@@ -185,13 +200,35 @@ with st.container(border=True):
             format_func=HORIZON_LABELS.get,
             width="stretch",
         )
-        request_origin = st.selectbox(
-            "Prediction origin",
-            available_origins,
-            index=len(available_origins) - 1,
-            format_func=lambda value: pd.Timestamp(value).strftime(
-                "%d %b %Y · %H:%M"
-            ),
+        date_column, time_column = st.columns(2, gap="medium")
+        with date_column:
+            request_origin_date = st.date_input(
+                "Prediction date",
+                value=latest_origin.date(),
+                min_value=first_origin.date(),
+                max_value=latest_origin.date(),
+                format="DD/MM/YYYY",
+                key="prediction_origin_date",
+                help="Choose any date with enough verified model history.",
+            )
+        with time_column:
+            request_origin_time = st.time_input(
+                "Prediction time",
+                value=latest_origin.time(),
+                step=timedelta(
+                    minutes=int(request_config["cadence_minutes"])
+                ),
+                key="prediction_origin_time",
+                help=(
+                    "Forecast origins follow the source data's 30-minute "
+                    "cadence."
+                ),
+            )
+        st.caption(
+            "Eligible model origins: "
+            f"{first_origin.strftime('%d %b %Y · %H:%M')} to "
+            f"{latest_origin.strftime('%d %b %Y · %H:%M')} "
+            f"({len(available_origins):,} half-hour slots)."
         )
         submitted = st.form_submit_button(
             "Run prediction",
@@ -203,28 +240,42 @@ with st.container(border=True):
         if not request_roads or not request_horizons:
             st.error("Select at least one road and one horizon.")
         else:
-            with st.status("Running verified CPU inference...", expanded=True):
-                predictor = get_predictor(dashboard_fingerprint())
-                request = predictor.build_request(
-                    road_ids=request_roads,
-                    origin_timestamp=pd.Timestamp(request_origin).isoformat(),
-                    horizons=request_horizons,
+            try:
+                request_origin = resolve_prediction_origin(
+                    request_origin_date,
+                    request_origin_time,
+                    available_origins,
                 )
-                result = predictor.predict(request)
-                paths = persist_prediction_batch(result, bundle.settings)
-                reports = build_prediction_reports(
-                    bundle.settings,
-                    paths.manifest_path,
+            except ValueError as error:
+                st.error(str(error))
+            else:
+                with st.status(
+                    "Running verified CPU inference...",
+                    expanded=True,
+                ):
+                    predictor = get_predictor(dashboard_fingerprint())
+                    request = predictor.build_request(
+                        road_ids=request_roads,
+                        origin_timestamp=request_origin.isoformat(),
+                        horizons=request_horizons,
+                    )
+                    result = predictor.predict(request)
+                    paths = persist_prediction_batch(result, bundle.settings)
+                    reports = build_prediction_reports(
+                        bundle.settings,
+                        paths.manifest_path,
+                    )
+                st.session_state["fc_generated_predictions"] = result.frame
+                st.session_state["fc_generated_manifest"] = str(
+                    paths.manifest_path
                 )
-            st.session_state["fc_generated_predictions"] = result.frame
-            st.session_state["fc_generated_manifest"] = str(paths.manifest_path)
-            st.session_state["fc_generated_report_manifest"] = str(
-                reports.manifest_path
-            )
-            st.toast(
-                f"Generated {len(result.frame)} verified forecast rows",
-                icon=":material/check_circle:",
-            )
-            st.rerun()
+                st.session_state["fc_generated_report_manifest"] = str(
+                    reports.manifest_path
+                )
+                st.toast(
+                    f"Generated {len(result.frame)} verified forecast rows",
+                    icon=":material/check_circle:",
+                )
+                st.rerun()
 
 render_lineage(bundle)

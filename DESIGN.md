@@ -485,6 +485,14 @@ charts it explains.
 - A secondary “How to read” sentence explains marks, direction, uncertainty,
   or comparison semantics without replacing the chart.
 
+**Prediction origin control** — A paired calendar and half-hour time field for
+choosing the verified feature cutoff used by frozen-model inference.
+- Keep date and time in one two-column row on desktop.
+- Constrain the calendar to origins with enough contiguous model history.
+- Use the native 30-minute time menu and show the exact eligible range and slot
+  count beneath the fields.
+- Never represent a multi-month origin range as one long timestamp dropdown.
+
 ### Navigation
 
 **`top-nav`** — Sticky dark bar with the Linear wordmark left, primary nav links centered, and a `button-secondary` ("Sign in") + `button-primary` ("Get started") pair right.

@@ -874,6 +874,12 @@ The tenth page groups support modules and does not replace any required view.
   desktop toolbar, and its reusable evidence-brief component pairs a
   data-derived current reading with chart-reading guidance. Page scripts format
   those briefs only from the same verified frames and aggregates already shown.
+- Live prediction origins are derived from the complete verified processed
+  history and the inference configuration. `analytics.py` offers only
+  full-corridor timestamps with the configured twelve contiguous 30-minute
+  rows; the page presents those 7,237 eligible January-May origins as separate
+  native date and half-hour time controls and revalidates the combined value
+  before inference.
 - `uploads.py` validates an exact traffic/weather/calendar source contract and
   stages accepted content by hash under `artifacts/uploads/`; immutable source
   and raw directories are never write targets.
