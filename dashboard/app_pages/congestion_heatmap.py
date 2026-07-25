@@ -12,6 +12,7 @@ from flowcast.dashboard.config import CONGESTION_ORDER
 from flowcast.dashboard.state import current_filters
 from flowcast.dashboard.ui import (
     render_empty,
+    render_insight_brief,
     render_metric_row,
     render_page_header,
 )
@@ -19,6 +20,12 @@ from flowcast.dashboard.ui import (
 
 bundle = get_dashboard_bundle()
 filters = current_filters(bundle)
+render_page_header(
+    "Congestion, compressed into one operational field.",
+    "Every cell is an observed road-window severity using the same ordered "
+    "mapping carried through training, evaluation, and live forecasts.",
+    context="Corridor heatmap · Free-flow to Severe",
+)
 all_roads = tuple(sorted(bundle.history["road_id"].astype(str).unique()))
 scope = st.segmented_control(
     "Heatmap scope",
@@ -31,12 +38,6 @@ history = filter_history(
     roads,
     filters.start_date,
     filters.end_date,
-)
-render_page_header(
-    "Congestion, compressed into one operational field.",
-    "Every cell is an observed road-window severity using the same ordered "
-    "mapping carried through training, evaluation, and live forecasts.",
-    context="Corridor heatmap · Free-flow to Severe",
 )
 if history.empty:
     render_empty("No congestion observations match the selected scope.")
@@ -53,6 +54,30 @@ else:
         ]
     )
     matrix = congestion_matrix(history)
+    recent = history.loc[history["timestamp"].isin(matrix.columns)].copy()
+    recent_shares = recent["congestion_level"].value_counts(normalize=True)
+    dominant = str(recent_shares.idxmax())
+    pressure = (
+        recent.assign(
+            high=recent["congestion_level"].isin(["Heavy", "Severe"])
+        )
+        .groupby("road_id", observed=True)["high"]
+        .mean()
+        .sort_values(ascending=False, kind="mergesort")
+    )
+    pressure_road = str(pressure.index[0])
+    render_insight_brief(
+        f"Across the **{matrix.shape[1]} half-hour windows shown**, "
+        f"**{dominant}** is the most common state "
+        f"({recent_shares[dominant]:.1%}). **{pressure_road}** has the "
+        f"largest Heavy-or-Severe share at {pressure.iloc[0]:.1%}.",
+        guidance=(
+            "Read each row left to right through time; warmer cells represent "
+            "higher severity, and comparisons are meaningful only within the "
+            "selected date and road scope."
+        ),
+        key="heatmap",
+    )
     with st.container(border=True):
         st.caption(
             "Showing the most recent 96 half-hour timestamps within the "

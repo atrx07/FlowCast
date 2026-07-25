@@ -14,6 +14,7 @@ from flowcast.dashboard.data import dashboard_fingerprint
 from flowcast.dashboard.state import current_filters
 from flowcast.dashboard.ui import (
     render_empty,
+    render_insight_brief,
     render_lineage,
     render_metric_row,
     render_page_header,
@@ -33,10 +34,16 @@ render_page_header(
 
 generated = st.session_state.get("fc_generated_predictions")
 source = generated if isinstance(generated, pd.DataFrame) else bundle.predictions
+available_horizons = tuple(
+    value
+    for value in filters.horizons
+    if value in set(source["horizon_windows"].astype(int))
+)
+display_horizons = available_horizons or filters.horizons
 horizon = st.segmented_control(
     "Displayed horizon",
-    filters.horizons,
-    default=filters.horizons[0],
+    display_horizons,
+    default=display_horizons[0],
     format_func=HORIZON_LABELS.get,
     key="live_horizon",
 )
@@ -48,6 +55,16 @@ if visible.empty:
     render_empty("No persisted forecast matches the selected roads and horizon.")
 else:
     snapshot = corridor_snapshot(visible)
+    queue = visible.sort_values(
+        ["accident_probability", "volume_prediction"],
+        ascending=False,
+        kind="mergesort",
+    )
+    risk_leader = queue.iloc[0]
+    slowest = visible.sort_values(
+        ["speed_prediction", "road_id"],
+        kind="mergesort",
+    ).iloc[0]
     render_metric_row(
         [
             {"label": "Roads in view", "value": f"{snapshot['roads']}"},
@@ -66,6 +83,27 @@ else:
             },
         ]
     )
+    congestion_reading = (
+        "No selected roads are forecast as Heavy or Severe"
+        if snapshot["high_congestion"] == 0
+        else (
+            f"{snapshot['high_congestion']} selected road"
+            f"{'s are' if snapshot['high_congestion'] != 1 else ' is'} "
+            "forecast as Heavy or Severe"
+        )
+    )
+    render_insight_brief(
+        f"At **{HORIZON_LABELS[int(horizon)]}**, {congestion_reading}. "
+        f"**{risk_leader['road_id']}** has the highest modeled accident "
+        f"probability at {risk_leader['accident_probability']:.2%}; "
+        f"**{slowest['road_id']}** has the lowest predicted speed at "
+        f"{slowest['speed_prediction']:.1f} km/h.",
+        guidance=(
+            "The corridor plot locates each road and sizes it by forecast "
+            "volume; the queue ranks the same rows by modeled accident risk."
+        ),
+        key="live",
+    )
     left, right = st.columns([1.55, 1], gap="large")
     with left:
         with st.container(border=True, key="bento-corridor"):
@@ -81,11 +119,6 @@ else:
             height="stretch",
         ):
             st.subheader("Priority queue")
-            queue = visible.sort_values(
-                ["accident_probability", "volume_prediction"],
-                ascending=False,
-                kind="mergesort",
-            )
             st.dataframe(
                 queue[
                     [

@@ -8,6 +8,7 @@ from flowcast.dashboard.charts import comparison_figure
 from flowcast.dashboard.state import current_filters
 from flowcast.dashboard.ui import (
     render_empty,
+    render_insight_brief,
     render_metric_row,
     render_page_header,
 )
@@ -64,6 +65,20 @@ else:
                 "delta_color": "inverse",
             },
         ]
+    )
+    render_insight_brief(
+        f"**{busiest['road_id']}** carries the highest mean volume "
+        f"({busiest['mean_volume']:.0f}) in this like-for-like window. "
+        f"**{most_severe['road_id']}** has the greatest Severe exposure "
+        f"({most_severe['severe_share']:.1%}), while "
+        f"**{fastest['road_id']}** records the highest mean speed "
+        f"({fastest['mean_speed']:.1f} km/h).",
+        guidance=(
+            "Change the metric to reorder the same road summaries; higher "
+            "speed is favorable, while higher travel time or severe share "
+            "signals more operational pressure."
+        ),
+        key="comparison",
     )
     metric = st.segmented_control(
         "Comparison metric",

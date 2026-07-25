@@ -79,6 +79,19 @@ Step 10-16 source artifacts remain unchanged.
 - Added `.streamlit/config.toml` and checked in `DESIGN.md`. The resulting
   dark, editorial interface follows the provided Linear-derived token system
   while retaining native Streamlit controls and accessibility semantics.
+- Reworked the shared desktop opener from marketing-scale hero treatment to a
+  compact operational header. At 1280 x 720 the live opener measures 122.3px
+  instead of 372.0px, a 67.1% reduction, and the status strip now begins below
+  Streamlit's top toolbar.
+- Added reusable data-backed evidence briefs to all ten pages. Each brief states
+  the current filtered reading and explains how to interpret its chart or
+  table; values come from the same verified frame or persisted metric shown on
+  that page, and weather language remains explicitly non-causal.
+- Live predictions now defaults to the first horizon present in the latest
+  verified request, so a legitimate user-generated subset does not open on an
+  unavailable horizon. The dashboard contract test now reconciles the latest
+  batch to its own verified request/coverage manifest instead of assuming the
+  canonical 25-road/four-horizon batch is always newest.
 - All displayed metrics, aggregates, predictions, intervals, probabilities,
   limitations, and lineage come from verified Step 08-17 artifacts. No
   placeholder analytics or fabricated future weather were introduced.
@@ -189,14 +202,15 @@ Verified results:
   `FLOWCAST_PYTEST_EXIT=0`.
 - Affected confidence/recurrent/package/build-safety regression set: 21 passed
   in 22.82 seconds with `FLOWCAST_PYTEST_EXIT=0`.
-- Focused dashboard unit/data-contract/all-page smoke suite: 7 passed in 12.69
-  seconds with `FLOWCAST_PYTEST_EXIT=0`.
+- Focused dashboard unit/data-contract/all-page smoke suite: 7 passed in 12.16
+  seconds with `FLOWCAST_PYTEST_EXIT=0`; the all-page smoke now asserts that
+  every route exposes chart-reading guidance.
 - Affected feature/processed contracts: 10 passed in 7.08 seconds.
 - Isolated classical regression/classification/scratch contracts: 15 passed in
   380.40 seconds without changing the canonical processed-data hash.
 - Isolated confidence plus dashboard contracts: 7 passed in 43.63 seconds
   without changing canonical confidence artifacts.
-- Complete repository suite: 180 passed in 507.06 seconds with
+- Complete repository suite: 180 passed in 502.71 seconds with
   `FLOWCAST_PYTEST_EXIT=0`.
 - Repeated seeded CPU inference returns exactly equal prediction frames.
 - Invalid roads, horizons, cadence, origins, and insufficient sequence history
@@ -211,9 +225,12 @@ Verified results:
   file mutation.
 - Canonical processed and confidence Parquet hashes were identical before and
   after the complete suite.
-- Manual browser QA at a 1280 x 720 laptop viewport loaded all ten routes,
-  exercised Reports, Retraining, and Audit trail tabs, confirmed readable dense
-  layouts and honest warnings, and found zero browser console errors.
+- Browser QA loaded all ten routes at 1280 x 720, 1440 x 900, and
+  1920 x 1080. The final settled 1280 pass found no exceptions, horizontal
+  overflow, top-toolbar overlap, or missing briefs; maximum opener height was
+  182.9px and the status strip began at 63.8px. Representative live,
+  model-performance, confidence, and system-control pages were also visually
+  inspected.
 
 ## 7. Decisions and Constraints
 

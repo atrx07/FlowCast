@@ -793,7 +793,15 @@ Deliver the interactive product surface.
   passes 7 tests with `FLOWCAST_PYTEST_EXIT=0`. A 1280 x 720 browser walkthrough
   verified all ten routes, report/retraining/audit tabs, readable dense layouts,
   and zero console errors.
-- The complete repository suite passes all 180 tests in 507.06 seconds with
+- A follow-up desktop-density pass reduced the 1280 x 720 live-page opener from
+  372.0px to 122.3px (67.1%), moved the verified status strip below the
+  Streamlit toolbar, and added compact data-derived readings plus “How to read”
+  guidance across all ten pages.
+- Final browser geometry checks cover every route at 1280 x 720, 1440 x 900,
+  and 1920 x 1080 with no exceptions or horizontal overflow. Settled opener
+  height is at most 182.9px at the smallest desktop viewport, status content
+  begins at 63.8px, and all pages expose an evidence brief.
+- The complete repository suite passes all 180 tests in 502.71 seconds with
   `FLOWCAST_PYTEST_EXIT=0`; canonical processed/confidence hashes remain
   byte-identical before and after the run.
 

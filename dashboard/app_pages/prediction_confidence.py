@@ -7,7 +7,11 @@ from flowcast.dashboard.cache import get_dashboard_bundle
 from flowcast.dashboard.charts import reliability_figure
 from flowcast.dashboard.config import HORIZON_LABELS
 from flowcast.dashboard.state import current_filters
-from flowcast.dashboard.ui import render_metric_row, render_page_header
+from flowcast.dashboard.ui import (
+    render_insight_brief,
+    render_metric_row,
+    render_page_header,
+)
 
 
 bundle = get_dashboard_bundle()
@@ -57,6 +61,24 @@ target = st.segmented_control(
     }.get,
 )
 target_coverage = coverage.loc[coverage["target"].eq(target)].copy()
+lowest_coverage = target_coverage.sort_values(
+    ["interval_coverage", "horizon_windows"],
+    kind="mergesort",
+).iloc[0]
+render_insight_brief(
+    f"For **{target.replace('_', ' ')}**, observed test coverage spans "
+    f"**{target_coverage['interval_coverage'].min():.1%} to "
+    f"{target_coverage['interval_coverage'].max():.1%}** across the selected "
+    f"horizons. The lowest group is "
+    f"{int(lowest_coverage['horizon_minutes'])} minutes at "
+    f"{lowest_coverage['interval_coverage']:.1%}.",
+    guidance=(
+        "Bars close to the dotted 90% line indicate calibrated intervals; "
+        "higher is not automatically better because overly wide intervals can "
+        "cover more while being less useful."
+    ),
+    key="coverage",
+)
 figure = px.bar(
     target_coverage,
     x="horizon_minutes",
@@ -95,6 +117,38 @@ reliability = bundle.classification_reliability.loc[
         filters.horizons
     )
 ].copy()
+summary = (
+    reliability.groupby(
+        ["horizon_windows", "horizon_minutes"],
+        observed=True,
+    )
+    .agg(
+        expected_calibration_error=(
+            "expected_calibration_error",
+            "first",
+        ),
+        supported_bins=("rows", lambda values: int(values.gt(0).sum())),
+    )
+    .reset_index()
+)
+worst_ece = summary.sort_values(
+    ["expected_calibration_error", "horizon_windows"],
+    ascending=[False, True],
+    kind="mergesort",
+).iloc[0]
+render_insight_brief(
+    f"For **{task}**, the largest expected calibration error is "
+    f"**{worst_ece['expected_calibration_error']:.4f}** at "
+    f"{int(worst_ece['horizon_minutes'])} minutes, with "
+    f"{int(worst_ece['supported_bins'])} populated probability bins.",
+    guidance=(
+        "Reliability points closer to the diagonal are better calibrated; "
+        "bin counts matter because sparse accident evidence makes apparent "
+        "gaps less stable."
+    ),
+    title="Classifier reading",
+    key="reliability",
+)
 left, right = st.columns([1.45, 1], gap="large")
 with left:
     with st.container(border=True):
@@ -105,20 +159,6 @@ with left:
 with right:
     with st.container(border=True, height="stretch"):
         st.subheader("Reliability evidence")
-        summary = (
-            reliability.groupby(
-                ["horizon_windows", "horizon_minutes"],
-                observed=True,
-            )
-            .agg(
-                expected_calibration_error=(
-                    "expected_calibration_error",
-                    "first",
-                ),
-                supported_bins=("rows", lambda values: int(values.gt(0).sum())),
-            )
-            .reset_index()
-        )
         st.dataframe(
             summary,
             hide_index=True,

@@ -14,6 +14,7 @@ from flowcast.dashboard.charts import (
 from flowcast.dashboard.state import current_filters
 from flowcast.dashboard.ui import (
     render_empty,
+    render_insight_brief,
     render_metric_row,
     render_page_header,
 )
@@ -52,6 +53,25 @@ else:
                 "value": f"{history['is_peak'].astype(bool).mean():.1%}",
             },
         ]
+    )
+    peak = history.loc[history["traffic_volume"].idxmax()]
+    road_speeds = (
+        history.groupby("road_id", observed=True)["avg_speed"]
+        .mean()
+        .sort_values(kind="mergesort")
+    )
+    render_insight_brief(
+        f"The largest observed window is **{peak['road_id']}** at "
+        f"{peak['timestamp'].strftime('%d %b, %H:%M')} with "
+        f"{peak['traffic_volume']:,.0f} vehicles. Across the selected period, "
+        f"**{road_speeds.index[0]}** has the lowest mean speed at "
+        f"{road_speeds.iloc[0]:.1f} km/h.",
+        guidance=(
+            "Use the timeline to locate unusual windows, then compare the two "
+            "half-hour profiles to see whether recurring volume peaks coincide "
+            "with lower speeds."
+        ),
+        key="history",
     )
     metric = st.segmented_control(
         "Timeline metric",

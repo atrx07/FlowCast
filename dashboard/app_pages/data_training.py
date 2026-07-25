@@ -10,7 +10,11 @@ from flowcast.dashboard.training_service import (
     CONFIRMATION,
     TrainingService,
 )
-from flowcast.dashboard.ui import render_metric_row, render_page_header
+from flowcast.dashboard.ui import (
+    render_insight_brief,
+    render_metric_row,
+    render_page_header,
+)
 from flowcast.dashboard.uploads import stage_upload, validate_upload
 from flowcast.reports import verify_prediction_reports
 
@@ -41,6 +45,19 @@ render_metric_row(
             "value": bundle.batch.paths.request_id,
         },
     ]
+)
+render_insight_brief(
+    f"The active dashboard is reading **{len(bundle.history):,} verified "
+    f"processed rows** and **{len(bundle.context.registry['entries'])} frozen "
+    "registry entries**. Opening this page or changing tabs does not train a "
+    "model or alter active routing.",
+    guidance=(
+        "Use Validate upload before staging new data, Reports for recursively "
+        "verified exports, Retraining only with the exact confirmation, and "
+        "Audit trail for local lineage evidence."
+    ),
+    title="System brief",
+    key="system",
 )
 
 upload_tab, report_tab, training_tab, audit_tab = st.tabs(

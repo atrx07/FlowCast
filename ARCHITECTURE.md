@@ -870,7 +870,10 @@ The tenth page groups support modules and does not replace any required view.
 - `analytics.py` and `charts.py` contain deterministic real-data aggregation and
   Plotly rendering. `state.py` owns session-local shared road/date/horizon
   filters. `ui.py` owns the scoped design layer and reusable status/metric/error
-  components.
+  components. Its compact page opener keeps the status strip below Streamlit's
+  desktop toolbar, and its reusable evidence-brief component pairs a
+  data-derived current reading with chart-reading guidance. Page scripts format
+  those briefs only from the same verified frames and aggregates already shown.
 - `uploads.py` validates an exact traffic/weather/calendar source contract and
   stages accepted content by hash under `artifacts/uploads/`; immutable source
   and raw directories are never write targets.
@@ -886,6 +889,11 @@ The tenth page groups support modules and does not replace any required view.
 - `.streamlit/config.toml` is the runtime theme source. `DESIGN.md` is the
   checked-in visual contract adapted to Streamlit without adding React,
   FastAPI, a database, or another deployment surface.
+- Desktop visual acceptance covers all ten routes at 1280 x 720, 1440 x 900,
+  and 1920 x 1080. The status strip must clear the top toolbar, the page opener
+  must stay below 190px after layout settles, every page must expose at least
+  one plain-language evidence brief, and the document must not overflow
+  horizontally.
 
 ## 14. Training-Service Boundary
 The dashboard may trigger retraining only through `training_service`:

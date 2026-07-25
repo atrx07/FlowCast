@@ -4,7 +4,11 @@ import streamlit as st
 
 from flowcast.dashboard.cache import get_dashboard_bundle
 from flowcast.dashboard.charts import performance_figure
-from flowcast.dashboard.ui import render_metric_row, render_page_header
+from flowcast.dashboard.ui import (
+    render_insight_brief,
+    render_metric_row,
+    render_page_header,
+)
 
 
 bundle = get_dashboard_bundle()
@@ -54,6 +58,39 @@ if not accident["acceptance_met"].astype(str).str.lower().eq("true").all():
         "Low prevalence and threshold limitations remain operational risks.",
         icon=":material/warning:",
     )
+unmet_targets = []
+if not congestion["acceptance_met"].astype(str).str.lower().eq("true").all():
+    unmet_targets.append("congestion Macro-F1")
+if not accident["acceptance_met"].astype(str).str.lower().eq("true").all():
+    unmet_targets.append("accident-risk ROC-AUC")
+unmet_text = (
+    " and ".join(unmet_targets) + " remain below their formal targets"
+    if unmet_targets
+    else "all formal targets are met"
+)
+deep_wins = int(comparison["deep_beats_classical"].sum())
+remaining_horizons = 4 - deep_wins
+remaining_text = (
+    "the remaining horizon"
+    if remaining_horizons == 1
+    else f"{remaining_horizons} horizons"
+)
+deep_result = (
+    f"wins on {deep_wins} of 4 exact-row test horizons and trails at "
+    f"{remaining_text}"
+    if deep_wins < 4
+    else "wins on all 4 exact-row test horizons"
+)
+render_insight_brief(
+    f"All **{len(volume)} volume models** meet the MAPE goal, while "
+    f"**{unmet_text}**. The recurrent volume model {deep_result}.",
+    guidance=(
+        "In the attainment chart, compare each frozen test metric with its "
+        "target marker; the tables below preserve exact validation, test, and "
+        "deep-versus-classical evidence."
+    ),
+    key="performance",
+)
 with st.container(border=True):
     st.subheader("Formal target attainment")
     st.plotly_chart(

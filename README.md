@@ -80,12 +80,17 @@ frozen-model prediction controls, schema-validated upload staging, verified
 report downloads, audit evidence, and explicit duplicate-safe versioned
 retraining that never changes active routing on a rerun. The supplied
 `DESIGN.md` is implemented as a dark, editorial Streamlit-native design system.
+Every route now uses a compact operational opener and a data-derived
+plain-language reading with chart guidance; no brief invents values or causal
+claims. At 1280 x 720 the live opener is 67.1% shorter than the prior layout,
+and the verified status strip clears Streamlit's top toolbar.
 The complete assurance suite passes all 180 tests, including deterministic
 inference, report/prediction tamper rejection, an isolated notebook smoke, an
 exact-exit pytest runner, and a session guard that restores and rejects
-tracked-file mutation. A 1280 x 720 browser walkthrough verified all ten routes
-and zero console errors. Step 19 clean reproduction, final technical reporting,
-and delivery acceptance remain ahead.
+tracked-file mutation. Browser QA verified all ten routes at 1280 x 720,
+1440 x 900, and 1920 x 1080 with no page exceptions, horizontal overflow, or
+top-chrome overlap. Step 19 clean reproduction, final technical reporting, and
+delivery acceptance remain ahead.
 
 ## Delivery timeline
 
@@ -95,7 +100,7 @@ and delivery acceptance remain ahead.
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
 | Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
 | Week 3 | M6 recurrent deep learning and confidence | Complete - Steps 15-16 verified |
-| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 18 complete; Step 19 next |
+| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 18 plus desktop readability pass complete; Step 19 next |
 
 ## Quick start
 

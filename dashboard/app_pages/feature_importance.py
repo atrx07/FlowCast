@@ -7,7 +7,11 @@ from flowcast.dashboard.cache import get_dashboard_bundle
 from flowcast.dashboard.charts import feature_importance_figure
 from flowcast.dashboard.config import HORIZON_LABELS
 from flowcast.dashboard.state import current_filters
-from flowcast.dashboard.ui import render_empty, render_page_header
+from flowcast.dashboard.ui import (
+    render_empty,
+    render_insight_brief,
+    render_page_header,
+)
 
 
 bundle = get_dashboard_bundle()
@@ -51,6 +55,20 @@ if ranked.empty:
         "The selected model family does not expose compatible feature importance."
     )
 else:
+    leader = ranked.iloc[0]
+    readable_feature = str(leader["feature"]).replace("_", " ")
+    render_insight_brief(
+        f"For the **{target.replace('_', ' ')}** model at "
+        f"**{HORIZON_LABELS[int(horizon)]}**, the leading persisted driver is "
+        f"**{readable_feature}** with importance {leader['importance']:.4f} "
+        f"in the selected {leader['family']} estimator.",
+        guidance=(
+            "Longer bars mean the fitted model relied more on that feature; "
+            "importance explains model behavior and must not be read as a "
+            "causal effect."
+        ),
+        key="importance",
+    )
     left, right = st.columns([1.5, 1], gap="large")
     with left:
         with st.container(border=True):

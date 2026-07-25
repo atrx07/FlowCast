@@ -12,6 +12,7 @@ from flowcast.dashboard.charts import weather_figure
 from flowcast.dashboard.state import current_filters
 from flowcast.dashboard.ui import (
     render_empty,
+    render_insight_brief,
     render_metric_row,
     render_page_header,
 )
@@ -50,6 +51,35 @@ else:
                 "value": f"{history['weather_condition'].nunique()}",
             },
         ]
+    )
+    slowest_condition = summary.sort_values(
+        ["mean_speed", "weather_condition"],
+        kind="mergesort",
+    ).iloc[0]
+    if rain.any() and (~rain).any():
+        rain_speed = float(history.loc[rain, "avg_speed"].mean())
+        dry_speed = float(history.loc[~rain, "avg_speed"].mean())
+        rain_direction = "lower" if rain_speed < dry_speed else "higher"
+        rain_reading = (
+            f"Rain windows average {rain_speed:.1f} km/h, "
+            f"**{abs(rain_speed - dry_speed):.1f} km/h {rain_direction}** than "
+            "dry windows in the selected data."
+        )
+    else:
+        rain_reading = (
+            "The selected window does not contain both rain and dry observations, "
+            "so a direct speed contrast is not available."
+        )
+    render_insight_brief(
+        f"**{slowest_condition['weather_condition']}** has the lowest observed "
+        f"mean speed at {slowest_condition['mean_speed']:.1f} km/h. "
+        f"{rain_reading}",
+        guidance=(
+            "Condition bars summarize observed groups; the scatterplots show "
+            "spread and overlap. These are associations, not proof that "
+            "weather caused the traffic outcome."
+        ),
+        key="weather",
     )
     with st.container(border=True):
         st.plotly_chart(weather_figure(summary), key="weather-condition-impact")

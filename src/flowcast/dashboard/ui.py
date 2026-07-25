@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from html import escape
 from typing import Any
 
 import streamlit as st
@@ -21,30 +22,76 @@ def apply_design_system() -> None:
 .stApp { overflow-x: hidden; }
 [data-testid="stMainBlockContainer"] {
   max-width: 1380px;
-  padding-top: 2rem;
+  padding-top: 4.25rem;
   padding-bottom: 5rem;
 }
 .st-key-page-hero {
   border: 1px solid var(--fc-line);
-  border-radius: 16px;
-  padding: clamp(1.5rem, 4vw, 3.5rem);
+  border-radius: 12px;
+  padding: .8rem clamp(1rem, 2vw, 1.5rem) .9rem;
   background: #0f1011;
   overflow: hidden;
   animation: fc-rise .55s cubic-bezier(.2,.8,.2,1) both;
 }
+.st-key-page-hero [data-testid="stVerticalBlock"] { gap: .3rem; }
 .st-key-page-hero h1 {
-  max-width: 1180px;
-  font-size: clamp(2.7rem, 5vw, 5rem);
-  letter-spacing: -0.055em;
-  line-height: 1.02;
-  margin-bottom: .75rem;
+  max-width: 1120px;
+  font-size: clamp(1.9rem, 3.1vw, 2.6rem);
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+  margin: 0;
 }
-.st-key-page-hero p { max-width: 820px; color: #d0d6e0; font-size: 1.08rem; }
+.st-key-page-hero p {
+  max-width: 860px;
+  color: #d0d6e0;
+  font-size: .94rem;
+  line-height: 1.42;
+  margin: 0;
+}
+.st-key-page-hero [data-testid="stCaptionContainer"] p {
+  color: #8a8f98;
+  font-size: .76rem;
+  letter-spacing: .02em;
+}
 .st-key-page-hero code { color: #828fff; background: transparent; }
 .st-key-status-strip {
   border-top: 1px solid var(--fc-line);
   border-bottom: 1px solid var(--fc-line);
-  padding: .6rem 0;
+  min-height: 2.5rem;
+  padding: .35rem 0;
+  margin-bottom: .2rem;
+}
+.st-key-status-strip [data-testid="stCaptionContainer"] {
+  margin: 0;
+}
+.st-key-page-brief, [class*="st-key-page-brief-"] {
+  border: 1px solid var(--fc-line);
+  border-left: 3px solid var(--fc-accent);
+  border-radius: 10px;
+  padding: .7rem .9rem .75rem;
+  background: #0f1011;
+}
+.st-key-page-brief [data-testid="stVerticalBlock"],
+[class*="st-key-page-brief-"] [data-testid="stVerticalBlock"] {
+  gap: .2rem;
+}
+.st-key-page-brief p, [class*="st-key-page-brief-"] p {
+  max-width: 1060px;
+  margin: 0;
+  line-height: 1.45;
+}
+.fc-brief-label {
+  color: #828fff;
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.st-key-page-brief [data-testid="stCaptionContainer"] p,
+[class*="st-key-page-brief-"] [data-testid="stCaptionContainer"] p {
+  color: #a8adb6;
+  font-size: .8rem;
+  letter-spacing: 0;
 }
 .st-key-bento-corridor, .st-key-bento-queue {
   transition: transform .35s ease, border-color .35s ease, background .35s ease;
@@ -127,6 +174,21 @@ def render_metric_row(metrics: Iterable[dict[str, Any]]) -> None:
                 border=True,
                 help=item.get("help"),
             )
+
+
+def render_insight_brief(
+    summary: str,
+    *,
+    guidance: str,
+    title: str = "Current reading",
+    key: str = "summary",
+) -> None:
+    """Explain verified page evidence in compact, plain language."""
+
+    with st.container(key=f"page-brief-{key}"):
+        st.html(f'<p class="fc-brief-label">{escape(title)}</p>')
+        st.markdown(summary)
+        st.caption(f"How to read · {guidance}")
 
 
 def render_empty(message: str) -> None:

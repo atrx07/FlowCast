@@ -467,6 +467,24 @@ Linear's depth is carried by surface ladder + hairline borders. The brand resist
 **`status-badge`** — Small status pill.
 - Background `{colors.surface-2}`, text `{colors.ink-muted}`, type `{typography.caption}`, rounded `{rounded.pill}`, padding 2px 8px.
 
+### FlowCast Dashboard Additions
+
+**Compact page opener** — The in-product dashboard uses the same surface,
+hairline, typography, and accent tokens at operational density rather than the
+marketing display scale.
+- Desktop title: fluid 30–42px, weight 600, line height 1.04.
+- Context and description remain visible, but total opener height stays below
+  190px at the 1280px desktop breakpoint.
+- Interior padding is 13–24px and the opener uses `{rounded.lg}`.
+
+**Evidence brief** — A compact plain-language interpretation placed beside the
+charts it explains.
+- Uses `{colors.surface-1}` with a 3px `{colors.primary}` left rule.
+- The reading is calculated from the same verified rows shown on the page;
+  placeholder, invented, or causal language is prohibited.
+- A secondary “How to read” sentence explains marks, direction, uncertainty,
+  or comparison semantics without replacing the chart.
+
 ### Navigation
 
 **`top-nav`** — Sticky dark bar with the Linear wordmark left, primary nav links centered, and a `button-secondary` ("Sign in") + `button-primary` ("Get started") pair right.

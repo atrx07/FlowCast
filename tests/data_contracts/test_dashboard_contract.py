@@ -9,9 +9,12 @@ def test_dashboard_bundle_reconciles_verified_inputs() -> None:
     bundle = load_dashboard_bundle()
     assert len(bundle.history) == 181_200
     assert bundle.history["road_id"].nunique() == 25
-    assert len(bundle.predictions) == 100
-    assert bundle.predictions["road_id"].nunique() == 25
-    assert set(bundle.predictions["horizon_windows"]) == {1, 2, 3, 4}
+    request = bundle.batch.manifest["request"]
+    coverage = bundle.batch.manifest["coverage"]
+    assert len(bundle.predictions) == coverage["row_count"]
+    assert bundle.predictions["road_id"].nunique() == coverage["road_count"]
+    assert set(bundle.predictions["horizon_windows"]) == set(request["horizons"])
+    assert set(bundle.predictions["road_id"]) == set(request["road_ids"])
     assert len(bundle.registry_scoreboard) == 20
     assert len(bundle.recurrent_comparison) == 4
     assert set(bundle.confidence.regression["split"]) == {"validation", "test"}

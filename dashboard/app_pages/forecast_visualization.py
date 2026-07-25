@@ -8,6 +8,7 @@ from flowcast.dashboard.config import HORIZON_LABELS
 from flowcast.dashboard.state import current_filters
 from flowcast.dashboard.ui import (
     render_empty,
+    render_insight_brief,
     render_metric_row,
     render_page_header,
 )
@@ -49,6 +50,9 @@ else:
     classical_rmse = (
         (window["prediction_classical"] - window["actual"]).pow(2).mean() ** 0.5
     )
+    winner = "Recurrent" if deep_rmse < classical_rmse else "Classical"
+    rmse_gap = abs(float(deep_rmse - classical_rmse))
+    displayed_model = "recurrent" if model == "deep" else "classical"
     render_metric_row(
         [
             {"label": "Road", "value": filters.focus_road},
@@ -56,6 +60,18 @@ else:
             {"label": "Recurrent RMSE", "value": f"{deep_rmse:.2f}"},
             {"label": "Classical RMSE", "value": f"{classical_rmse:.2f}"},
         ]
+    )
+    render_insight_brief(
+        f"For **{filters.focus_road}** at **{HORIZON_LABELS[int(horizon)]}**, "
+        f"the **{winner}** forecast has the lower RMSE over the latest "
+        f"{len(window):,} held-out rows, by {rmse_gap:.2f} volume units. "
+        f"The chart is currently showing the **{displayed_model}** route.",
+        guidance=(
+            "The observed line is the benchmark; smaller prediction-to-actual "
+            "gaps are better, while the shaded interval shows the model's "
+            "validation-calibrated 90% uncertainty range."
+        ),
+        key="forecast",
     )
     with st.container(border=True):
         st.plotly_chart(

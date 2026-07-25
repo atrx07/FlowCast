@@ -29,3 +29,7 @@ def test_streamlit_shell_and_all_pages_render() -> None:
         app.switch_page(f"app_pages/{page}").run(timeout=90)
         assert not app.exception, page
         assert app.title, page
+        assert any(
+            caption.value.startswith("How to read")
+            for caption in app.caption
+        ), page

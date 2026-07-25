@@ -11,6 +11,11 @@ recurrent architecture, confidence widths, active routing, evaluation
 partitions, source predictions, or reported metrics merely to improve an
 acceptance result. Record every limitation honestly.
 
+The Step 18 follow-up density/readability pass is complete: all ten routes use
+compact headers, the status strip clears Streamlit's desktop toolbar, and every
+page exposes a data-backed plain-language reading. Preserve those verified
+presentation contracts during the clean reproduction.
+
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
