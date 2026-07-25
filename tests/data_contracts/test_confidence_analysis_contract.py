@@ -115,8 +115,17 @@ def test_slices_reconcile_and_unsupported_metrics_are_visible(
 
 
 @pytest.mark.data_contract
-def test_confidence_outputs_are_deterministic(confidence_artifacts) -> None:
-    settings, paths, _ = confidence_artifacts
+def test_confidence_outputs_are_deterministic(
+    confidence_artifacts,
+    tmp_path,
+) -> None:
+    settings, _, _ = confidence_artifacts
+    output_root = tmp_path / "artifacts"
+    first = run_confidence_analysis(
+        settings,
+        output_artifacts_dir=output_root,
+    )
+    paths = first.paths
     tracked = (
         paths.summary_path,
         paths.report_path,
@@ -127,9 +136,15 @@ def test_confidence_outputs_are_deterministic(confidence_artifacts) -> None:
         paths.error_slices_path,
         paths.confusions_path,
         paths.paired_slices_path,
+        paths.regression_predictions_path,
+        paths.classification_predictions_path,
+        paths.paired_predictions_path,
     )
     before = {path.name: path.read_bytes() for path in tracked}
-    run_confidence_analysis(settings)
+    run_confidence_analysis(
+        settings,
+        output_artifacts_dir=output_root,
+    )
     after = {path.name: path.read_bytes() for path in tracked}
 
     assert after == before

@@ -25,6 +25,7 @@ def scratch_run(tmp_path_factory):
     root = tmp_path_factory.mktemp("scratch-linear-contract")
     base = load_settings()
     artifacts = root / "artifacts"
+    processed = root / "processed"
     source = (
         base.artifacts_dir
         / "features"
@@ -36,7 +37,61 @@ def scratch_run(tmp_path_factory):
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
-    settings = replace(base, artifacts_dir=artifacts)
+    for source, destination in (
+        (
+            base.processed_dir
+            / base.processed_version
+            / "dataset.parquet",
+            processed / base.processed_version / "dataset.parquet",
+        ),
+        (
+            base.artifacts_dir
+            / "quality"
+            / base.processed_version
+            / "summary.json",
+            artifacts
+            / "quality"
+            / base.processed_version
+            / "summary.json",
+        ),
+        (
+            base.artifacts_dir
+            / "features"
+            / base.processed_version
+            / "manifest.json",
+            artifacts
+            / "features"
+            / base.processed_version
+            / "manifest.json",
+        ),
+        (
+            base.artifacts_dir
+            / "quality"
+            / base.feature_version
+            / "summary.json",
+            artifacts
+            / "quality"
+            / base.feature_version
+            / "summary.json",
+        ),
+        (
+            base.artifacts_dir
+            / "features"
+            / base.feature_version
+            / "manifest.json",
+            artifacts
+            / "features"
+            / base.feature_version
+            / "manifest.json",
+        ),
+    ):
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+    settings = replace(
+        base,
+        artifacts_dir=artifacts,
+        processed_dir=processed,
+    )
     return run_scratch_linear(settings), settings
 
 

@@ -4,10 +4,10 @@
 
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-25
-- **Current milestone:** M7 - Dashboard and service layer (in progress)
-- **Current step:** Steps 00-17 complete; Step 18 next
-- **Overall state:** Frozen-model inference and reporting services are verified;
-  the Streamlit dashboard is the next gate
+- **Current milestone:** M8 - Reproducibility and delivery (in progress)
+- **Current step:** Steps 00-18 complete; Step 19 next
+- **Overall state:** The complete frozen-model pipeline and ten-page Streamlit
+  product surface are verified; clean reproduction and final delivery remain
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
@@ -18,7 +18,8 @@ targets, EDA, frozen chronological evaluation, training-only preprocessing,
 NumPy regression proof, complete classical regression/classification, a
 combined classical registry, a from-scratch recurrent volume forecaster,
 validation-calibrated confidence/error analysis, and frozen-model
-inference/reporting.
+inference/reporting. Step 18 adds the complete Streamlit product surface over
+those verified artifacts without changing their frozen decisions.
 
 Step 17 loads only verified Step 08/10/14/15/16 artifacts. It does not fit a
 preprocessor, model, calibrator, threshold, or confidence width. The recurrent
@@ -57,7 +58,32 @@ Step 10-16 source artifacts remain unchanged.
 - Added `flowcast predict` and `flowcast build-reports`. Normal prediction and
   report generation contain no training path.
 
-## 3. Canonical Inference and Report Evidence
+## 3. Step 18 Dashboard Implementation
+
+- Added `dashboard/app.py` with native grouped `st.navigation`, shared
+  road/date/horizon filters, verified artifact status, and directly addressable
+  routes.
+- Implemented all nine required views: live predictions, historical trends,
+  congestion heatmap, road comparison, model performance, feature importance,
+  forecast visualization, prediction confidence, and weather versus traffic.
+- Added the tenth Data and training page for exact-schema upload validation,
+  isolated staging, verified CSV/HTML report downloads, audit evidence, and
+  explicit versioned retraining.
+- Added `src/flowcast/dashboard/` service boundaries for recursively verified
+  loading, metadata-aware caching, CPU predictor reuse, deterministic
+  analytics, Plotly figures, shared state, upload staging, design components,
+  and duplicate-safe retraining.
+- Retraining requires the exact `RETRAIN` confirmation, writes a new versioned
+  run/log manifest, prevents concurrent dashboard runs, and records that active
+  routing was not switched. Ordinary reruns have no training path.
+- Added `.streamlit/config.toml` and checked in `DESIGN.md`. The resulting
+  dark, editorial interface follows the provided Linear-derived token system
+  while retaining native Streamlit controls and accessibility semantics.
+- All displayed metrics, aggregates, predictions, intervals, probabilities,
+  limitations, and lineage come from verified Step 08-17 artifacts. No
+  placeholder analytics or fabricated future weather were introduced.
+
+## 4. Canonical Inference and Report Evidence
 
 Canonical CPU requests used the latest common origin
 `2025-05-31T23:30:00+05:30`.
@@ -86,7 +112,7 @@ Canonical CPU requests used the latest common origin
 The RTX 5070 Laptop GPU/VRAM and Intel NPU were not used. Step 17 ran on the
 Intel Core Ultra 9 CPU.
 
-## 4. Produced Artifacts
+## 5. Produced Artifacts
 
 ```text
 config/inference.yaml
@@ -125,7 +151,20 @@ Canonical complete-batch sizes:
 | Report CSV | 83,628 |
 | Self-contained HTML | 3,211 |
 
-## 5. Validation and Assurance Evidence
+Step 18 source surface:
+
+```text
+.streamlit/config.toml
+DESIGN.md
+dashboard/app.py
+dashboard/app_pages/                 # ten directly addressable page scripts
+src/flowcast/dashboard/              # verified services and presentation layer
+tests/unit/test_dashboard.py
+tests/data_contracts/test_dashboard_contract.py
+tests/smoke/test_dashboard_app.py
+```
+
+## 6. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
@@ -139,6 +178,7 @@ Executed with project-local CPython 3.11.9:
 .venv/Scripts/python.exe -m compileall -q src tests scripts
 .venv/Scripts/python.exe -m flowcast.cli predict --help
 .venv/Scripts/python.exe -m flowcast.cli build-reports --help
+.venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_dashboard.py tests/data_contracts/test_dashboard_contract.py tests/smoke/test_dashboard_app.py
 .venv/Scripts/python.exe -m pip check
 git diff --check
 ```
@@ -149,7 +189,14 @@ Verified results:
   `FLOWCAST_PYTEST_EXIT=0`.
 - Affected confidence/recurrent/package/build-safety regression set: 21 passed
   in 22.82 seconds with `FLOWCAST_PYTEST_EXIT=0`.
-- Complete repository suite: 173 passed in 504.65 seconds with
+- Focused dashboard unit/data-contract/all-page smoke suite: 7 passed in 12.69
+  seconds with `FLOWCAST_PYTEST_EXIT=0`.
+- Affected feature/processed contracts: 10 passed in 7.08 seconds.
+- Isolated classical regression/classification/scratch contracts: 15 passed in
+  380.40 seconds without changing the canonical processed-data hash.
+- Isolated confidence plus dashboard contracts: 7 passed in 43.63 seconds
+  without changing canonical confidence artifacts.
+- Complete repository suite: 180 passed in 507.06 seconds with
   `FLOWCAST_PYTEST_EXIT=0`.
 - Repeated seeded CPU inference returns exactly equal prediction frames.
 - Invalid roads, horizons, cadence, origins, and insufficient sequence history
@@ -162,8 +209,13 @@ Verified results:
 - Every source file remains below 400 physical lines.
 - The full test session completed its repository comparison without a tracked
   file mutation.
+- Canonical processed and confidence Parquet hashes were identical before and
+  after the complete suite.
+- Manual browser QA at a 1280 x 720 laptop viewport loaded all ten routes,
+  exercised Reports, Retraining, and Audit trail tabs, confirmed readable dense
+  layouts and honest warnings, and found zero browser console errors.
 
-## 6. Decisions and Constraints
+## 7. Decisions and Constraints
 
 - Recurrent volume is active at all horizons because validation RMSE is lower
   at all four; the 120-minute test deficit remains reported and cannot alter
@@ -174,8 +226,15 @@ Verified results:
 - Report insights are deterministic aggregates over persisted prediction rows.
 - Runtime evidence records both service initialization and prediction time.
 - CPU is the default and required reproduction path.
+- Streamlit `1.59.2` requires PyArrow below 25, so the approved direct pin is
+  PyArrow `24.0.0`. Existing frozen artifacts retain their original verified
+  PyArrow 25 bytes; tests now stage every writable processed/model/confidence
+  path under temporary roots and never mix byte identities across versions.
+- The provided `gpt-taste` visual direction was adapted to the mandatory
+  single-app Streamlit architecture. React, GSAP, FastAPI, a database, and a
+  second frontend were not added.
 
-## 7. Risks and Unresolved Work
+## 8. Risks and Unresolved Work
 
 - Congestion Macro-F1 and accident ROC-AUC formal targets remain unmet and are
   included in exported report evidence.
@@ -183,14 +242,39 @@ Verified results:
   groups uncertain.
 - The recurrent model still trails classical volume slightly at the
   120-minute test horizon, especially in late-night slices.
-- The Streamlit views, upload validation, explicit retraining control, and
-  final clean reproduction remain.
+- Final clean reproduction, cross-platform reviewer verification, the final
+  technical report, and delivery packaging remain.
+- Step 19 must rebuild one internally consistent artifact lineage under the
+  pinned PyArrow 24 environment; it must not combine newly serialized Parquet
+  files with frozen PyArrow 25 manifests.
 - Generated models, predictions, and reports are ignored by Git and must be
   rebuilt through documented CLI commands after a clean clone.
 - The Matplotlib default Windows cache path is sandbox-restricted on this
   workstation; commands/tests use a writable `MPLCONFIGDIR` when needed.
 
-## 8. Next Gate
+## 9. Next Gate
 
-Proceed only to **Step 18 - Build the Streamlit Dashboard**. The bounded action
+Proceed only to **Step 19 - Reproducibility, Documentation, and Final
+Acceptance**. The bounded action
 and evidence gate are maintained in `NEXT_STEP.md`.
+
+## 10. Step 18 Environment and Build Evidence
+
+- Installed the pinned dashboard stack: Streamlit `1.59.2`, Plotly `6.9.0`,
+  Seaborn `0.13.2`, and their transitive dependencies.
+- Streamlit `1.59.2` requires PyArrow below version 25, so the direct PyArrow
+  pin was changed from `25.0.0` to `24.0.0`, the highest compatible release.
+  The Parquet artifact format and project interfaces are unchanged.
+- Installed Streamlit's official `developing-with-streamlit` agent skill with
+  `streamlit skills --yes`. Windows project symlinks were unavailable, so the
+  command used its supported global fallback under
+  `~/.agents/skills/developing-with-streamlit`.
+- Verified Python `3.11.9`, Streamlit `1.59.2`, Plotly `6.9.0`, Seaborn
+  `0.13.2`, Matplotlib `3.11.1`, and PyArrow `24.0.0` imports.
+- `python -m pip check` reports no broken requirements, a temporary
+  pandas/PyArrow Parquet write/read round-trip passed, and Streamlit's CLI
+  reports version `1.59.2`.
+- Focused package/build-safety validation passed 7 tests in 0.83 seconds with
+  `FLOWCAST_PYTEST_EXIT=0`; the repository guard reported no tracked mutation.
+- The dashboard and all assurance work ran on the Intel Core Ultra 9 CPU. The
+  NVIDIA GeForce RTX 5070 Laptop GPU/VRAM and Intel NPU were not used.

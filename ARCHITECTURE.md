@@ -853,6 +853,40 @@ hash. CSV/HTML reports load only through this verified boundary.
 
 The tenth page groups support modules and does not replace any required view.
 
+### Implemented dashboard boundary
+
+- `dashboard/app.py` is the only Streamlit entry point. It owns page config,
+  grouped `st.navigation`, shared filters, and the verified status strip.
+- `dashboard/app_pages/` contains ten thin page scripts. Required analytics do
+  not live in those scripts; they call the package-level dashboard services.
+- `src/flowcast/dashboard/data.py` recursively verifies processed data,
+  registry, recurrent comparison, confidence/error artifacts, the latest
+  prediction batch, and its report before exposing a read-only
+  `DashboardBundle`.
+- `src/flowcast/dashboard/cache.py` uses `st.cache_resource` for the verified
+  bundle and CPU predictor. The cache fingerprint covers data, registry,
+  confidence, inference configuration, latest prediction, and report manifest
+  metadata so new persisted output invalidates stale UI state.
+- `analytics.py` and `charts.py` contain deterministic real-data aggregation and
+  Plotly rendering. `state.py` owns session-local shared road/date/horizon
+  filters. `ui.py` owns the scoped design layer and reusable status/metric/error
+  components.
+- `uploads.py` validates an exact traffic/weather/calendar source contract and
+  stages accepted content by hash under `artifacts/uploads/`; immutable source
+  and raw directories are never write targets.
+- `training_service.py` is synchronous and explicit for v1. It requires
+  `RETRAIN`, prevents concurrent dashboard runs, passes a new version to an
+  approved CLI training command, persists log/manifest evidence, and never
+  changes active routing.
+- Confidence regeneration accepts an optional test-owned output artifact root.
+  Contract tests use it for two deterministic writes while continuing to read
+  verified canonical inputs; model-training fixtures likewise copy the complete
+  processed contract into temporary roots. No test may rewrite canonical
+  ignored Parquet artifacts.
+- `.streamlit/config.toml` is the runtime theme source. `DESIGN.md` is the
+  checked-in visual contract adapted to Streamlit without adding React,
+  FastAPI, a database, or another deployment surface.
+
 ## 14. Training-Service Boundary
 The dashboard may trigger retraining only through `training_service`:
 

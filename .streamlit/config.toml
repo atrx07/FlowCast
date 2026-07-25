@@ -1,0 +1,48 @@
+[server]
+headless = true
+runOnSave = true
+maxUploadSize = 200
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "dark"
+primaryColor = "#5e6ad2"
+backgroundColor = "#010102"
+secondaryBackgroundColor = "#0f1011"
+textColor = "#f7f8f8"
+linkColor = "#828fff"
+codeTextColor = "#d0d6e0"
+codeBackgroundColor = "#141516"
+borderColor = "#23252a"
+dataframeBorderColor = "#23252a"
+dataframeHeaderBackgroundColor = "#141516"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "8px"
+buttonRadius = "8px"
+baseFontSize = 15
+baseFontWeight = 400
+headingFontSizes = ["48px", "34px", "27px", "22px", "18px", "15px"]
+headingFontWeights = [600, 600, 600, 500, 500, 500]
+font = "Geist:https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap"
+headingFont = "Geist:https://fonts.googleapis.com/css2?family=Geist:wght@500;600&display=swap"
+codeFont = "'Geist Mono':https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap"
+linkUnderline = false
+chartCategoricalColors = ["#5e6ad2", "#828fff", "#d0d6e0", "#8a8f98", "#62666d", "#34343a"]
+chartSequentialColors = ["#0f1011", "#18191a", "#252638", "#34385a", "#454b7c", "#5e6ad2", "#737ee6", "#8f9af0", "#b3baff", "#e3e5ff"]
+redColor = "#ef6461"
+orangeColor = "#d99a48"
+yellowColor = "#c6b458"
+greenColor = "#27a644"
+blueColor = "#5e6ad2"
+violetColor = "#828fff"
+grayColor = "#8a8f98"
+
+[theme.sidebar]
+backgroundColor = "#080809"
+secondaryBackgroundColor = "#141516"
+textColor = "#d0d6e0"
+borderColor = "#23252a"
+primaryColor = "#828fff"

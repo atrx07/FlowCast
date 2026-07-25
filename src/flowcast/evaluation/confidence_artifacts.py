@@ -57,11 +57,17 @@ class VerifiedConfidenceCalibration:
     interval_calibration: pd.DataFrame
 
 
-def confidence_paths(settings: Settings, version: str) -> ConfidencePaths:
+def confidence_paths(
+    settings: Settings,
+    version: str,
+    *,
+    artifacts_dir: Path | None = None,
+) -> ConfidencePaths:
     """Return Step 16 paths without creating directories."""
 
-    metrics = settings.artifacts_dir / "metrics" / version
-    predictions = settings.artifacts_dir / "predictions" / version
+    root = artifacts_dir or settings.artifacts_dir
+    metrics = root / "metrics" / version
+    predictions = root / "predictions" / version
     return ConfidencePaths(
         version=version,
         metrics_dir=metrics,

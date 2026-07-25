@@ -766,10 +766,42 @@ Deliver the interactive product surface.
 9. Add graceful empty/error states without fake values.
 10. Add import and page smoke tests.
 
+### Proven implementation (verified 2026-07-25)
+
+- `dashboard/app.py` uses native `st.navigation` with ten directly addressable
+  pages grouped into Operations, Analysis, Models, and System. Shared
+  road/date/horizon filters, artifact lineage, and status evidence render once
+  in the app shell.
+- `src/flowcast/dashboard/` separates verified artifact loading, version-aware
+  caching, analytics, Plotly figures, session state, upload validation,
+  interface styling, and the explicit training boundary from page scripts.
+- All nine required views read only real Step 08-17 data, predictions, metrics,
+  confidence tables, feature importance, and model lineage. The support page
+  adds validated upload staging, verified CSV/HTML report downloads, audit
+  evidence, and explicit versioned retraining.
+- Ordinary reruns cannot train. Retraining requires the exact `RETRAIN`
+  confirmation, uses a duplicate-run lock, writes a new versioned run/log
+  manifest, and records that active model routing was not changed.
+- Uploads are schema-detected and passed through the existing validation
+  contracts before staging under `artifacts/uploads/<content-hash>/`; they
+  never modify `FlowCast-project_file/` or `data/raw/`.
+- `.streamlit/config.toml` and `DESIGN.md` define the dark, lavender-accented
+  interface system. Page CSS remains scoped to presentation; controls,
+  navigation, forms, tabs, data tables, and accessibility semantics stay
+  Streamlit-native.
+- Focused dashboard unit, data-contract, and all-page AppTest smoke coverage
+  passes 7 tests with `FLOWCAST_PYTEST_EXIT=0`. A 1280 x 720 browser walkthrough
+  verified all ten routes, report/retraining/audit tabs, readable dense layouts,
+  and zero console errors.
+- The complete repository suite passes all 180 tests in 507.06 seconds with
+  `FLOWCAST_PYTEST_EXIT=0`; canonical processed/confidence hashes remain
+  byte-identical before and after the run.
+
 ### Exit gate
 - All nine views use real outputs.
 - No training occurs on ordinary reruns.
 - Navigation and core actions pass manual walkthrough.
+- Verified 2026-07-25: all three conditions pass.
 ---
 ## Step 19 - Reproducibility, Documentation, and Final Acceptance
 ### Goal

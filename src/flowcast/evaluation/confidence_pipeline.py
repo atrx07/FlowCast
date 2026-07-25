@@ -76,6 +76,7 @@ def run_confidence_analysis(
     settings: Settings,
     *,
     version: str | None = None,
+    output_artifacts_dir: Path | None = None,
 ) -> ConfidenceResult:
     """Build the complete, immutable-model Step 16 evidence package."""
 
@@ -83,7 +84,11 @@ def run_confidence_analysis(
     selected_version = validate_artifact_version(
         version or str(config["version"])
     )
-    paths = confidence_paths(settings, selected_version)
+    paths = confidence_paths(
+        settings,
+        selected_version,
+        artifacts_dir=output_artifacts_dir,
+    )
     inputs = load_verified_confidence_inputs(settings, config, load_frames=True)
     regression_source, classification_source, recurrent_source = _required_frames(
         inputs

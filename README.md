@@ -12,8 +12,8 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 25 July 2026. Milestones M0-M6 are complete and M7 is in
-progress. Steps 00-17 now
+Last verified on 25 July 2026. Milestones M0-M7 are complete and M8 is in
+progress. Steps 00-18 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -74,11 +74,18 @@ one-horizon CPU request completes in 2.350 seconds cold against the 30-second
 target; the complete four-horizon request produces 100 validated rows in 4.222
 seconds cold. Request-scoped Parquet/JSON batches, verified reload, real-data
 insights, full CSV, and self-contained HTML reports are available through the
-CLI. The complete assurance suite passes all 173 tests, including deterministic
+CLI. Step 18 adds the complete ten-route Streamlit product surface: all nine
+required real-output views, shared corridor filters, verified lineage,
+frozen-model prediction controls, schema-validated upload staging, verified
+report downloads, audit evidence, and explicit duplicate-safe versioned
+retraining that never changes active routing on a rerun. The supplied
+`DESIGN.md` is implemented as a dark, editorial Streamlit-native design system.
+The complete assurance suite passes all 180 tests, including deterministic
 inference, report/prediction tamper rejection, an isolated notebook smoke, an
 exact-exit pytest runner, and a session guard that restores and rejects
-tracked-file mutation. Step 18 Streamlit implementation is the immediate gate;
-final reproduction remains ahead.
+tracked-file mutation. A 1280 x 720 browser walkthrough verified all ten routes
+and zero console errors. Step 19 clean reproduction, final technical reporting,
+and delivery acceptance remain ahead.
 
 ## Delivery timeline
 
@@ -88,7 +95,7 @@ final reproduction remains ahead.
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
 | Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
 | Week 3 | M6 recurrent deep learning and confidence | Complete - Steps 15-16 verified |
-| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 17 complete; Step 18 next |
+| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 18 complete; Step 19 next |
 
 ## Quick start
 
@@ -97,7 +104,7 @@ Python 3.11 is required.
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -e ".[classical,deep,eda,test]"
+.\.venv\Scripts\python.exe -m pip install -e ".[classical,deep,eda,dashboard,test]"
 .\.venv\Scripts\python.exe -m flowcast.cli audit
 .\.venv\Scripts\python.exe -m flowcast.cli validate
 .\.venv\Scripts\python.exe -m flowcast.cli clean-context
@@ -115,6 +122,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m flowcast.cli analyze-confidence
 .\.venv\Scripts\python.exe -m flowcast.cli predict --horizons 1 2 3 4 --export-reports
 .\.venv\Scripts\python.exe scripts\run_tests.py -q
+.\.venv\Scripts\python.exe -m streamlit run dashboard\app.py
 ```
 
 To rebuild reports from an existing verified prediction batch:

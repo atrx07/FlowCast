@@ -43,7 +43,7 @@ here.
 |---|---:|---|
 | NumPy | `2.3.3` | Numerical operations and later from-scratch regression |
 | Pandas | `3.0.3` | Ingestion, auditing, cleaning, merging, and features |
-| PyArrow | `25.0.0` | Parquet read/write engine |
+| PyArrow | `24.0.0` | Parquet read/write engine; highest release compatible with Streamlit `1.59.2` |
 | PyYAML | `6.0.3` | Versioned YAML configuration |
 | tzdata | `2026.2` | Cross-platform IANA timezone data, including Windows |
 | pytest | `9.0.2` | Automated unit, contract, integration, and smoke tests |
@@ -92,6 +92,13 @@ editing application code.
 Transitive packages are resolved by `pip` from these exact direct pins. A complete
 environment snapshot must be recorded after each verified milestone and before final
 delivery. Pre-releases and yanked releases are prohibited.
+
+PyArrow is part of the byte-level artifact identity. Frozen Step 08-17 artifacts
+created under PyArrow 25 remain readable and retain their recorded hashes, but a
+new PyArrow 24 write has a different Parquet footer and must begin a complete,
+internally consistent versioned lineage. Tests that regenerate Parquet always
+write to temporary roots and may not replace a canonical artifact or pair new
+bytes with an older manifest.
 
 ## 4. Standard Library Choices
 

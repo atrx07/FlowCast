@@ -2,92 +2,86 @@
 
 ## Immediate Objective
 
-Execute **Step 18 - Build the Streamlit Dashboard**. Build the single
-user-facing Streamlit surface over the verified Step 08-17 datasets, metrics,
-predictions, models, confidence tables, and inference/reporting services.
+Execute **Step 19 - Reproducibility, Documentation, and Final Acceptance**.
+Prove that a fresh reviewer can rebuild, audit, launch, and use the complete
+FlowCast v1.0 pipeline and its verified ten-page Streamlit product surface.
 
-Do not change the Step 10-17 model selections, thresholds, calibrators,
+Do not change frozen Step 10-18 model choices, thresholds, calibrators,
 recurrent architecture, confidence widths, active routing, evaluation
-partitions, source predictions, or reported metrics. Ordinary Streamlit reruns
-must never train a model.
+partitions, source predictions, or reported metrics merely to improve an
+acceptance result. Record every limitation honestly.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 18 plus the proven Steps 09 and 14-17 procedures.
-3. Dashboard, inference, reporting, upload, retraining, lineage, navigation,
-   and performance boundaries in `PROJECT.md`, `ROADMAP.md`, and
-   `ARCHITECTURE.md`.
-4. The original PRD dashboard views, supporting modules, roles, usability,
-   transparency, and real-output requirements.
-5. The Step 17 prediction/report manifests and public verified loaders.
+2. `STEPS.md` - Step 19 and every proven command needed by the clean rebuild.
+3. Reproduction, deployment, lineage, artifact, and acceptance boundaries in
+   `PROJECT.md`, `ROADMAP.md`, and `ARCHITECTURE.md`.
+4. The original PRD delivery, reporting, dashboard, usability, and performance
+   requirements.
+5. All versioned configs, model cards, metric summaries, prediction/report
+   manifests, and the Step 18 dashboard acceptance evidence.
 6. The build-safety contract in `AGENTS.md` section 14.1.
 
 ## Hardware Notice Before Acting
 
 Before execution, obey the workstation-resource disclosure rule in
-`AGENTS.md`. Dashboard implementation, import tests, and ordinary page
-rendering should use the Intel Core Ultra 9 CPU at low-to-moderate intensity,
-moderate system RAM, and light disk I/O. The RTX 5070 Laptop GPU/VRAM and Intel
-NPU should remain idle. Browser-based visual QA may briefly use normal desktop
-graphics, but model CUDA execution is unnecessary. Give a separate notice
-before any later full-suite or explicit retraining command.
+`AGENTS.md`. Documentation and artifact inventory use the Intel Core Ultra 9
+CPU lightly. A clean pipeline reproduction will use substantial CPU, system
+RAM, and disk I/O for tabular processing and classical training. Full recurrent
+training should use the verified NVIDIA GeForce RTX 5070 Laptop GPU only after
+checking CUDA availability, device name, runtime, driver compatibility, and
+VRAM; CPU fallback must remain valid. The Intel NPU is not part of v1. Give a
+fresh, phase-specific notice before the clean rebuild, full training, or any
+other heavy command.
 
 ## Single Best Next Action
 
-Build and verify the complete Streamlit product surface:
+Perform one isolated clean-environment reproduction and final acceptance audit:
 
-1. Add `dashboard/app.py`, modular page/service boundaries, shared filters,
-   version/status headers, severity colours, and hash/version-aware caching.
-2. Implement all nine required real-data views:
-   live predictions, historical trends, congestion heatmap, road comparison,
-   model performance, feature importance, forecast visualisation, prediction
-   confidence, and weather versus traffic.
-3. Add the tenth support page for data upload/validation, explicit retraining,
-   audit links, and report export without replacing a required view.
-4. Route interactive forecasts through `Predictor`; load persisted batches and
-   reports through the Step 17 verified loaders.
-5. Keep every displayed value tied to a persisted real aggregate, metric, or
-   prediction. Add no placeholders or fabricated analytics.
-6. Keep every required view reachable within three clicks and use one
-   congestion severity mapping everywhere.
-7. Validate uploads before trusted use. Keep uploaded data separate from
-   immutable source/reference files.
-8. Add a `training_service` boundary with explicit confirmation, duplicate-run
-   protection, new versioned outputs, and no automatic active-model switch.
-   Ordinary page reruns must not invoke it.
-9. Expose CSV/HTML report download from verified Step 17 output.
-10. Add Streamlit import/page smoke tests, service tests, empty/error-state
-    checks, and a manual visual/navigation walkthrough.
-11. Run tests only through `scripts/run_tests.py`; writers and upload tests must
-    use temporary roots and leave tracked files byte-identical.
+1. Verify pinned installation from the documented setup command on Python 3.11.
+2. Redirect every generated output to a fresh test-owned reproduction root;
+   never overwrite canonical or pre-existing user artifacts.
+3. Run the full pipeline in the proven order from immutable delivered inputs.
+4. Reconcile produced row counts, hashes, model cards, metrics, predictions,
+   confidence tables, and reports to their documented contracts.
+5. Measure runtime and resource-sensitive stages, including CPU fallback and
+   the approved CUDA recurrent-training path when available.
+6. Launch the Streamlit app against the reproduced artifacts and repeat the
+   full navigation, prediction, upload-validation, report-export, lineage, and
+   retraining-safety walkthrough.
+7. Run the complete test suite through `scripts/run_tests.py`, plus dependency,
+   compilation, whitespace, source-size, and repository-mutation checks.
+8. Write the final technical report covering data quality, mathematics,
+   classical and recurrent models, confidence, error slices, acceptance
+   targets, limitations, and recommendations.
+9. Finish the README command reference and cross-platform setup/deployment
+   notes.
+10. Update every dynamic Markdown file with measured evidence before the final
+    verified commit and push.
 
 ## Acceptance Gate
 
-Step 18 is complete only when:
+Step 19 is complete only when:
 
-- All nine required views render with real persisted data/model outputs.
-- The support page provides validated upload, explicit retraining, prediction,
-  and report-export controls without weakening source immutability.
-- No model trains during an ordinary app launch, page change, filter change, or
-  rerun.
-- Shared road/time/horizon filters behave consistently and every view is
-  reachable within three clicks.
-- Live forecasts show all five targets, four horizons, confidence/risk, active
-  and fallback volume lineage, and exact data/model versions.
-- Model-performance and confidence views preserve the known unmet targets and
-  120-minute recurrent limitation.
-- Empty, missing, stale, and tampered artifact states fail clearly without
-  fake values.
-- Streamlit imports and every page pass smoke tests.
-- A manual browser walkthrough verifies layout, navigation, readability, and
-  report download.
-- Focused tests, the full suite, dependency check, compilation, whitespace,
-  source-size checks, and repository-mutation guard pass.
-- Required documentation and README progress are current before commit/push.
+- A clean reviewer path installs with one documented command.
+- One documented pipeline command or exact documented command sequence rebuilds
+  all required artifacts from immutable sources.
+- Reproduced artifacts load without hidden CUDA or workstation dependencies.
+- The reported metrics reconcile to the frozen chronological hold-out.
+- Every selected model has a model card, feature schema, preprocessing lineage,
+  environment record, and portable load test.
+- The ten-page dashboard launches with one command and all nine required views
+  use real reproduced outputs.
+- Upload validation, prediction, verified report export, audit evidence, and
+  explicit versioned retraining controls pass acceptance.
+- Formal targets are compared explicitly and unmet classifier/deep-model
+  limitations remain visible.
+- The final report, README, tests, dependency check, compilation, source-size
+  check, and repository guard all pass.
 
 ## Current Blockers
 
-None. The verified Step 17 batch/report service is ready for dashboard
-integration. The unmet classifier targets and recurrent 120-minute test
-deficit remain visible product limitations, not authorization to retune.
+None. Step 18 is verified and M7 is complete. Step 19 is intentionally a clean,
+resource-intensive reproduction and final delivery gate; it has not yet been
+executed.
