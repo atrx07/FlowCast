@@ -434,3 +434,40 @@ unless that check exposes a reproducible portability defect.
   `FLOWCAST_PYTEST_EXIT=0`; the repository guard reported no tracked mutation.
 - The dashboard and all assurance work ran on the Intel Core Ultra 9 CPU. The
   NVIDIA GeForce RTX 5070 Laptop GPU/VRAM and Intel NPU were not used.
+
+## 12. README Release Entry Point
+
+- Replaced the milestone-status narrative in `README.md` with a durable
+  project landing page for users, reviewers, and new-machine operators.
+- Added the product purpose, five outputs and four horizons, dashboard
+  capabilities, architecture flow, verified data contract, chronological
+  evaluation policy, model-family coverage, persisted-weight locations,
+  registry contract, and artifact lineage.
+- Published every selected classical regression and classification hold-out
+  result, the NumPy proof, the exact-origin LSTM versus Random Forest
+  comparison, formal acceptance outcomes, confidence coverage, and inference
+  latency. Unmet classifier and recurrent goals remain explicit.
+- Documented the clean-clone boundary: delivered sources, scoreboards, and
+  model cards are tracked, while generated model weights, processed Parquet,
+  predictions, reports, and reproduction roots must be rebuilt locally.
+- Added complete Python 3.11 installation, CPU `run-all`, permanent
+  verification, test, Streamlit launch, prediction/report, and optional CUDA
+  instructions for Windows PowerShell and macOS/Linux shells.
+- Added measured resource guidance, all known product and modelling
+  constraints, the repository map, and links to authoritative project
+  documents and complete machine-readable metric directories.
+- The documentation work changes no runtime interface, model decision,
+  architecture, artifact, metric, dependency, or project scope.
+
+Validation evidence:
+
+- All 11 local Markdown links resolve.
+- Streamlit reports version `1.59.2`; `pip check` reports no broken
+  requirements; `flowcast run-all --help` matches the documented command
+  boundary.
+- Focused package, reproduction, build-safety, and all-page Streamlit coverage
+  passed 19 tests in 9.76 seconds with `FLOWCAST_PYTEST_EXIT=0` (10.51 seconds
+  runner elapsed).
+- Final README structure validation found 15 valid table-of-contents anchors,
+  11 resolving local links, balanced Markdown fences, and no missing targets.
+- Final `git diff --check` passed.

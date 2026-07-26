@@ -4,12 +4,15 @@
 
 Perform one independent cross-platform portability confirmation of the
 completed FlowCast v1.0 release. The implementation roadmap is complete; this
-is a release-confidence follow-up, not another modelling or UI step.
+is a release-confidence follow-up, not another modelling or UI step. The
+release README now contains the canonical clean-clone installation,
+reproduction, verification, dashboard, CLI, and resource instructions.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. The setup and reproduction commands in `README.md`.
+2. The requirements, clean-clone setup, reproduction, verification, testing,
+   Streamlit, and known-constraints sections in `README.md`.
 3. The final acceptance findings and limitations in `FINAL_REPORT.md`.
 4. Step 19 in `STEPS.md` and the reproduction boundary in `ARCHITECTURE.md`.
 
@@ -33,7 +36,8 @@ On a clean macOS or Linux Python 3.11 workstation:
 5. Launch Streamlit with `FLOWCAST_OUTPUT_ROOT` set to the reproduced root and
    smoke the live-prediction, model-performance, and data/training pages.
 6. Record platform, Python/package versions, stage runtimes, verifier result,
-   test exit marker, and any reproducible variance in `STATUS.md`.
+   test exit marker, any reproducible variance, and any required README
+   correction in `STATUS.md`.
 
 ## Exit Gate
 
@@ -50,6 +54,8 @@ The portability follow-up passes when:
 ## Current Blockers
 
 None. FlowCast v1.0, M0-M8, and Steps 00-19 are complete on the verified
-Windows workstation. No further implementation is required unless the
+Windows workstation. The clone-first README is complete and its local links,
+CLI boundary, dependency health, build-safety coverage, and Streamlit page
+imports are verified. No further implementation is required unless the
 independent portability run exposes a reproducible defect or the user expands
 scope.
