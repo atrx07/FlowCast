@@ -36,11 +36,16 @@ def test_streamlit_shell_and_all_pages_render() -> None:
         if page == "live_predictions.py":
             assert (
                 app.date_input(key="prediction_origin_date").label
-                == "Prediction date"
+                == "Forecast origin date"
             )
             assert (
                 app.time_input(key="prediction_origin_time").label
-                == "Prediction time"
+                == "Forecast origin time"
+            )
+            assert any(
+                caption.value.startswith("Predicting ")
+                and "last observed window" in caption.value
+                for caption in app.caption
             )
             operational_headings = [
                 heading.value

@@ -18,6 +18,9 @@ route is fixed to the operational hierarchy of header, displayed horizon,
 KPIs, request controls, current reading, and aligned Corridor Signal/Priority
 Queue outputs. Its complete road/date/time/horizon workflow fits above the fold
 at 1280 x 720 and exposes the full model-eligible January-May origin range.
+The date/time fields are explicitly labelled as the last observed forecast
+origin, and the request shows the exact future target timestamps implied by
+the selected horizons, including targets beyond the historical data boundary.
 Preserve those presentation, widget, and request-validation contracts during
 the clean reproduction.
 

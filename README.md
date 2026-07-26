@@ -89,7 +89,10 @@ preceding compact version and 83.9% shorter than the original hero; all
 road/date/time/horizon controls plus Run prediction fit above the fold. The
 verified status strip clears Streamlit's top toolbar. The request still uses a
 calendar plus a 30-minute time field for all 7,237 model-eligible origins from
-1 January through 31 May instead of a seven-day timestamp dropdown.
+1 January through 31 May instead of a seven-day timestamp dropdown. Those
+fields are explicitly labelled as the last observed forecast origin, and the
+request shows the exact future timestamps produced by the chosen 30–120 minute
+horizons, including the rollover beyond the historical data boundary.
 The complete assurance suite passes all 180 tests, including deterministic
 inference, report/prediction tamper rejection, an isolated notebook smoke, an
 exact-exit pytest runner, and a session guard that restores and rejects

@@ -1,6 +1,6 @@
 """Live and user-triggered frozen-model forecasts."""
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import pandas as pd
 import streamlit as st
@@ -103,7 +103,8 @@ latest_origin = pd.Timestamp(available_origins[-1])
 with st.container(border=True, key="prediction-workflow"):
     st.subheader("Request a frozen-model forecast")
     st.caption(
-        "Frozen artifacts only · eligible origins "
+        "Choose the last observed traffic window. FlowCast predicts the "
+        "selected 30–120 minute horizons after it. Eligible origins "
         f"{first_origin.strftime('%d %b %Y · %H:%M')} to "
         f"{latest_origin.strftime('%d %b %Y · %H:%M')} · "
         f"{len(available_origins):,} half-hour slots."
@@ -123,17 +124,20 @@ with st.container(border=True, key="prediction-workflow"):
             )
         with date_column:
             request_origin_date = st.date_input(
-                "Prediction date",
+                "Forecast origin date",
                 value=latest_origin.date(),
                 min_value=first_origin.date(),
                 max_value=latest_origin.date(),
                 format="DD/MM/YYYY",
                 key="prediction_origin_date",
-                help="Choose any date with enough verified model history.",
+                help=(
+                    "This is the last observed date available to the model, "
+                    "not the future target date."
+                ),
             )
         with time_column:
             request_origin_time = st.time_input(
-                "Prediction time",
+                "Forecast origin time",
                 value=latest_origin.time(),
                 step=timedelta(
                     minutes=int(request_config["cadence_minutes"])
@@ -158,6 +162,41 @@ with st.container(border=True, key="prediction-workflow"):
                 format_func=HORIZON_LABELS.get,
                 width="stretch",
             )
+            selected_targets = [
+                pd.Timestamp(
+                    datetime.combine(
+                        request_origin_date,
+                        request_origin_time,
+                    )
+                )
+                + pd.Timedelta(
+                    minutes=int(request_config["cadence_minutes"]) * horizon
+                )
+                for horizon in sorted(request_horizons or ())
+            ]
+            if selected_targets:
+                target_dates = {target.date() for target in selected_targets}
+                if len(target_dates) == 1:
+                    target_preview = (
+                        f"{selected_targets[0].strftime('%d %b %Y')} · "
+                        + ", ".join(
+                            target.strftime("%H:%M")
+                            for target in selected_targets
+                        )
+                    )
+                else:
+                    target_preview = ", ".join(
+                        target.strftime("%d %b %Y · %H:%M")
+                        for target in selected_targets
+                    )
+                st.caption(
+                    f"Predicting {target_preview}. "
+                    "The origin is the last observed window."
+                )
+            else:
+                st.caption(
+                    "Select at least one horizon to preview forecast targets."
+                )
         with action_column:
             submitted = st.form_submit_button(
                 "Run prediction",

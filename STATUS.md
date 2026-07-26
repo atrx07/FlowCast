@@ -111,6 +111,12 @@ Step 10-16 source artifacts remain unchanged.
   selector derives 7,237 full-corridor origins from the configured twelve-step,
   30-minute recurrent contract, covering 1 January 2025 at 05:30 through
   31 May 2025 at 23:30, and revalidates the combined value before inference.
+- Clarified the forecast request semantics without changing its form or
+  inference path: the controls are now labelled `Forecast origin date` and
+  `Forecast origin time`, describe the origin as the last observed window, and
+  show the exact future timestamps implied by the selected horizons. At the
+  latest eligible origin, the preview correctly crosses the dataset boundary
+  into 1 June 2025.
 - A real empty-state interpretation now preserves the live page's evidence-brief
   contract when the latest persisted batch does not match session filters.
 - All displayed metrics, aggregates, predictions, intervals, probabilities,
@@ -227,6 +233,10 @@ Verified results:
   `FLOWCAST_PYTEST_EXIT=0`. The all-page Streamlit smoke passed in 9.06 seconds
   and now also locks the operational heading order: forecast request before
   Corridor Signal before Priority Queue.
+- Focused forecast-origin cleanup coverage: dashboard unit, all-page Streamlit
+  smoke, and build-safety checks passed 11 tests in 8.20 seconds with
+  `FLOWCAST_PYTEST_EXIT=0` (8.82 seconds runner elapsed). The smoke contract
+  verifies both origin labels and the future-target explanation.
 - Affected feature/processed contracts: 10 passed in 7.08 seconds.
 - Isolated classical regression/classification/scratch contracts: 15 passed in
   380.40 seconds without changing the canonical processed-data hash.
