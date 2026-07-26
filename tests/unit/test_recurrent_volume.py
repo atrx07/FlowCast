@@ -16,6 +16,7 @@ from flowcast.modelling.recurrent_config import (
 from flowcast.modelling.recurrent_finalize import _device_record
 from flowcast.modelling.recurrent_model import RecurrentVolumeForecaster
 from flowcast.modelling.recurrent_outputs import compare_with_classical
+from flowcast.modelling.recurrent import run_recurrent_volume
 from flowcast.modelling.recurrent_training import seed_torch, select_device
 from flowcast.modelling.sequence_data import (
     PreparedPartition,
@@ -186,6 +187,11 @@ def test_device_policy_preserves_explicit_cpu_fallback(
     assert select_device("auto").type == "cpu"
     with pytest.raises(RuntimeError, match="not available"):
         select_device("cuda")
+
+
+def test_recurrent_training_rejects_unknown_device_override() -> None:
+    with pytest.raises(ValueError, match="Unsupported recurrent device override"):
+        run_recurrent_volume(load_settings(), device="npu")
 
 
 def test_cpu_device_evidence_is_portable() -> None:

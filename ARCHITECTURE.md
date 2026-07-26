@@ -38,9 +38,10 @@ Delivered CSV files + reference documents
 
 ## 3. Runtime Surfaces
 ### 3.1 CLI
-The canonical automation surface. It must support individual stages and an end-to-end run.
+The canonical automation surface supports individual stages, an isolated
+end-to-end run, and permanent reproduction verification.
 
-Proposed commands:
+Implemented commands:
 
 ```bash
 python -m flowcast.cli audit
@@ -60,10 +61,43 @@ python -m flowcast.cli train-recurrent-volume
 python -m flowcast.cli analyze-confidence
 python -m flowcast.cli predict --horizons 1 2 3 4
 python -m flowcast.cli build-reports
-python -m flowcast.cli run-all
+python -m flowcast.cli run-all --output-root artifacts/reproductions/<run-id> --recurrent-device cpu
+python -m flowcast.cli verify-reproduction --output-root artifacts/reproductions/<run-id>
 ```
 
-Command names may be refined during implementation, but one stable `run-all` equivalent is mandatory.
+`run-all` is the stable end-to-end entry point.
+
+#### 3.1.1 Reproduction boundary
+
+`load_settings` accepts an explicit `output_root` or
+`FLOWCAST_OUTPUT_ROOT`. The root must resolve to a non-canonical child beneath
+`artifacts/reproductions`; broad roots, existing non-empty roots, and paths
+outside that boundary fail closed. The resolved settings retain canonical
+read-only source/config/reference locations and remap all writable raw,
+interim, processed, quarantine, artifact, and log paths beneath the isolated
+root.
+
+`flowcast.reproduction` runs the 16 required stages synchronously and records:
+
+- runtime and environment identity;
+- immutable source hashes;
+- stage result, primary evidence path, hash, and elapsed seconds;
+- processed/model-card/registry/prediction/report coverage;
+- selected recurrent device and checkpoint portability;
+- final manifest and generated Markdown summary.
+
+`flowcast.reproduction_verify` is independent of the orchestrator. It verifies
+the completed manifest, every stage evidence hash, source hashes, prediction
+and report lineage, and the frozen regression, classification, registry,
+recurrent, and confidence evidence. Runtime-only timing fields are excluded
+from semantic metric comparison; numeric evidence uses a `1e-12` tolerance.
+The verifier writes `verification.json` and is called both by `run-all` and by
+the standalone `verify-reproduction` command.
+
+Canonical release metrics use explicit CPU recurrent training. `auto` and
+guarded `cuda` remain available for separately versioned diagnostics, but a
+device-dependent validation winner cannot silently replace the CPU-frozen
+release identity.
 
 ### 3.2 Streamlit
 ```bash

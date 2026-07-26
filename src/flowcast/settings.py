@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+import os
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,7 @@ import yaml
 
 
 DEFAULT_CONFIG = Path("config/base.yaml")
+OUTPUT_ROOT_ENV = "FLOWCAST_OUTPUT_ROOT"
 
 
 @dataclass(frozen=True)
@@ -57,7 +59,44 @@ def _resolve(root: Path, configured_path: str) -> Path:
     return path if path.is_absolute() else root / path
 
 
-def load_settings(config_path: Path | str | None = None) -> Settings:
+def _validated_output_root(root: Path, output_root: Path | str) -> Path:
+    """Resolve one isolated reproduction root inside the approved artifact tree."""
+
+    selected = Path(output_root)
+    selected = selected if selected.is_absolute() else root / selected
+    selected = selected.resolve()
+    approved = (root / "artifacts" / "reproductions").resolve()
+    try:
+        relative = selected.relative_to(approved)
+    except ValueError as exc:
+        raise ValueError(
+            "Output root must be inside artifacts/reproductions"
+        ) from exc
+    if not relative.parts:
+        raise ValueError("Output root must name a run below artifacts/reproductions")
+    return selected
+
+
+def with_output_root(settings: Settings, output_root: Path | str) -> Settings:
+    """Redirect every writable pipeline path to an isolated reproduction root."""
+
+    selected = _validated_output_root(settings.root, output_root)
+    return replace(
+        settings,
+        raw_dir=selected / "data" / "raw",
+        interim_dir=selected / "data" / "interim",
+        processed_dir=selected / "data" / "processed",
+        quarantine_dir=selected / "data" / "quarantine",
+        artifacts_dir=selected / "artifacts",
+        logs_dir=selected / "logs",
+    )
+
+
+def load_settings(
+    config_path: Path | str | None = None,
+    *,
+    output_root: Path | str | None = None,
+) -> Settings:
     """Load YAML settings and resolve all configured paths from the repo root."""
 
     root = repository_root()
@@ -77,7 +116,7 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
     processed = config["processed"]
     eda = config["eda"]
     modelling = config["modelling"]
-    return Settings(
+    settings = Settings(
         root=root,
         config_path=selected,
         name=str(project["name"]),
@@ -106,4 +145,10 @@ def load_settings(config_path: Path | str | None = None) -> Settings:
         eda_version=str(eda["version"]),
         modelling_version=str(modelling["version"]),
         hash_chunk_size=int(audit["chunk_size_bytes"]),
+    )
+    selected_output = output_root or os.environ.get(OUTPUT_ROOT_ENV)
+    return (
+        with_output_root(settings, selected_output)
+        if selected_output
+        else settings
     )

@@ -74,7 +74,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Complete - Step 14 verified 20 entries and 1,078,957 indexed predictions |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Complete - Steps 15-16 verified with confidence/error artifacts |
 | M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Complete - Step 18 verified all ten routes, safety controls, compact operational hierarchy, data-backed briefs, above-fold full-range forecast controls, and aligned outputs at three desktop sizes |
-| M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | In progress - Step 19 next |
+| M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | Complete - Step 19 clean CPU reproduction, verifier, 192-test suite, and dashboard acceptance passed |
 
 ## 5. Week 1 - Data Engineering and EDA
 
@@ -242,7 +242,7 @@ A proposed change must be classified before implementation:
 
 ## 13. Current Roadmap Position
 
-Milestones M0 through M7 are complete and M8 is in progress. Step 10 froze the
+Milestones M0 through M8 are complete. Step 10 froze the
 shared chronological evaluation and preprocessing contract, and Step 11
 verified the required NumPy regression mathematics. Step 12 now provides 12
 direct volume/speed/travel-time models across horizons 1-4, complete
@@ -290,7 +290,14 @@ model-eligible January-May origins through a calendar plus a 30-minute time
 field instead of an arbitrary seven-day timestamp dropdown. Its road, date,
 time, horizon, and submit controls now sit immediately after the displayed
 horizon and KPI cards, finish above the 1280 x 720 fold, and precede the current
-reading plus aligned Corridor Signal/Priority Queue output row. Step 19 clean
-reproduction, final technical reporting, and delivery acceptance are next. The
-complete 180-test assurance suite passes without canonical artifact mutation.
-See `STATUS.md` and `NEXT_STEP.md` for the live state.
+reading plus aligned Corridor Signal/Priority Queue output row. Step 19 adds a
+guarded isolated output root, the stable 16-stage `run-all` command, and an
+independent verifier for source hashes, stage evidence, frozen metrics,
+prediction/report lineage, and recurrent checkpoint portability. The clean
+Python 3.11.9 CPU run completed in 520.287 seconds; all metric evidence
+reconciled within `1e-12`, the complete 192-test suite passed without tracked
+mutation, and reproduced-artifact browser acceptance passed all ten routes plus
+prediction, upload staging, report export, and retraining rejection. The final
+report preserves the unmet classifier goals and the recurrent 120-minute
+deficit. See `STATUS.md` and `NEXT_STEP.md` for the live state and independent
+post-v1 portability follow-up.

@@ -20,6 +20,8 @@ from flowcast.data.traffic_pipeline import run_traffic_cleaning
 from flowcast.features.pipeline import run_feature_engineering
 from flowcast.features.processed_pipeline import run_processed_data
 from flowcast.logging_config import configure_logging
+from flowcast.reproduction import run_full_reproduction
+from flowcast.reproduction_verify import verify_completed_reproduction
 from flowcast.settings import load_settings
 
 
@@ -115,6 +117,38 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Versioned EDA artifact directory (default: eda_v1).",
     )
+    run_all = subparsers.add_parser(
+        "run-all",
+        help="Rebuild the complete pipeline in an isolated reproduction root.",
+    )
+    run_all.add_argument(
+        "--output-root",
+        type=Path,
+        required=True,
+        help=(
+            "Empty run directory below artifacts/reproductions; canonical "
+            "data and artifacts are never write targets."
+        ),
+    )
+    run_all.add_argument(
+        "--recurrent-device",
+        choices=("cpu", "cuda", "auto"),
+        default="cpu",
+        help=(
+            "Recurrent training device (default: cpu for frozen-metric "
+            "reproduction)."
+        ),
+    )
+    verify_reproduction = subparsers.add_parser(
+        "verify-reproduction",
+        help="Verify one completed isolated reproduction and frozen metrics.",
+    )
+    verify_reproduction.add_argument(
+        "--output-root",
+        type=Path,
+        required=True,
+        help="Completed run directory below artifacts/reproductions.",
+    )
     register_model_parsers(subparsers)
     register_service_parsers(subparsers)
     return parser
@@ -124,7 +158,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Run a FlowCast command and return its process exit code."""
 
     args = build_parser().parse_args(argv)
-    settings = load_settings(args.config)
+    settings = load_settings(
+        args.config,
+        output_root=getattr(args, "output_root", None),
+    )
+    if args.command == "run-all":
+        result = run_full_reproduction(
+            settings,
+            recurrent_device=args.recurrent_device,
+        )
+        logger = configure_logging(settings.logs_dir, settings.log_level)
+        logger.info("Full reproduction complete: %s", result.manifest_path)
+        logger.info("Generated reproduction report: %s", result.summary_path)
+        logger.info(
+            "stages=%s rows=%s total=%.3fs",
+            len(result.manifest["stages"]),
+            result.manifest["coverage"]["processed_rows"],
+            result.manifest["runtime"]["total_seconds"],
+        )
+        print("FLOWCAST_RUN_ALL_EXIT=0")
+        return 0
+    if args.command == "verify-reproduction":
+        result = verify_completed_reproduction(settings)
+        logger = configure_logging(settings.logs_dir, settings.log_level)
+        logger.info(
+            "Reproduction verification passed: stages=%s max_metric_delta=%s",
+            result["stage_record_count"],
+            result["reported_metrics"]["maximum_numeric_delta"],
+        )
+        print("FLOWCAST_REPRODUCTION_VERIFY_EXIT=0")
+        return 0
     logger = configure_logging(settings.logs_dir, settings.log_level)
     if args.command == "audit":
         result = run_raw_audit(settings, version=args.version)

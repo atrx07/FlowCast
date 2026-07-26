@@ -75,11 +75,17 @@ def run_recurrent_volume(
     settings: Settings,
     *,
     version: str | None = None,
+    device: str | None = None,
 ) -> RecurrentVolumeResult:
     """Tune, freeze, test, compare, persist, and verify the recurrent model."""
 
     started = time.perf_counter()
     config, candidates, config_path = load_recurrent_config(settings)
+    if device is not None:
+        normalized_device = str(device).lower()
+        if normalized_device not in {"auto", "cpu", "cuda"}:
+            raise ValueError(f"Unsupported recurrent device override: {device}")
+        config["device"]["policy"] = normalized_device
     selected_version = validate_artifact_version(version or str(config["version"]))
     paths = recurrent_paths(settings, selected_version)
     write_environment_snapshot(paths.environment_path)

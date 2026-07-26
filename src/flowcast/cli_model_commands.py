@@ -71,6 +71,15 @@ def register_model_parsers(subparsers: Any) -> None:
     for name, help_text, version_help in definitions:
         command = subparsers.add_parser(name, help=help_text)
         _version_argument(command, version_help)
+        if name == "train-recurrent-volume":
+            command.add_argument(
+                "--device",
+                choices=("auto", "cpu", "cuda"),
+                default=None,
+                help=(
+                    "Training device override (default: recurrent.yaml policy)."
+                ),
+            )
 
 
 def run_model_command(
@@ -163,7 +172,11 @@ def run_model_command(
         )
         return 0
     if args.command == "train-recurrent-volume":
-        result = run_recurrent_volume(settings, version=args.version)
+        result = run_recurrent_volume(
+            settings,
+            version=args.version,
+            device=args.device,
+        )
         logger.info(
             "Recurrent volume model complete: %s", result.paths.summary_path
         )

@@ -841,11 +841,44 @@ Prove that another reviewer can reproduce and audit FlowCast.
 11. Update all dynamic Markdown files to final state.
 
 ### Final checks
-```bash
+```powershell
+python -m flowcast.cli run-all `
+  --output-root artifacts/reproductions/flowcast_v1 `
+  --recurrent-device cpu
+python -m flowcast.cli verify-reproduction `
+  --output-root artifacts/reproductions/flowcast_v1
 python scripts/run_tests.py -q
-python -m flowcast.cli run-all
-streamlit run dashboard/app.py
+$env:FLOWCAST_OUTPUT_ROOT = "artifacts/reproductions/flowcast_v1"
+python -m streamlit run dashboard/app.py
 ```
 
 ### Definition of done
 A fresh reviewer can reproduce the pipeline, metrics, persisted models, predictions, reports, and nine-view dashboard from the delivered raw files through documented commands.
+
+### Verified 2026-07-26
+
+- Added a guarded output-root boundary that accepts only a fresh child beneath
+  `artifacts/reproductions` and remaps every writable pipeline directory while
+  retaining canonical read-only config and source paths.
+- Added `run-all`, which executes the 16 required stages in order, records
+  environment/source/stage/runtime evidence, creates a 25-road/four-horizon
+  prediction and verified reports, and writes a final manifest and summary.
+- Added `verify-reproduction`, which recursively verifies stage-evidence
+  hashes, source hashes, prediction/report lineage, and frozen classical,
+  recurrent, registry, and confidence evidence with a `1e-12` numeric
+  tolerance.
+- A fresh Python 3.11.9 CPU environment completed the pipeline in 520.287
+  seconds. The verifier passed all 16 stages with maximum metric delta
+  `1.0842021724855044e-17`.
+- The final run produced 181,200 processed rows, 20 registry entries, 21 JSON
+  model cards, 100 prediction rows, verified CSV/HTML reports, and portable
+  CPU recurrent state-dictionary loading.
+- The complete isolated suite passed 192 tests with
+  `FLOWCAST_PYTEST_EXIT=0`; dependency, byte-compilation, whitespace,
+  source-size, source-hash, and repository-mutation checks also passed.
+- The dashboard loaded all ten routes from the reproduced root. Prediction,
+  valid upload staging, HTML report download, lineage, audit evidence, and
+  rejection of an incorrect retraining confirmation passed without browser
+  console errors.
+- The final technical report compares every acceptance target and keeps the
+  classifier gaps and 120-minute recurrent deficit explicit.

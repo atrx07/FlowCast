@@ -16,6 +16,7 @@ artifacts/predictions/
 artifacts/reports/*
 !artifacts/reports/eda_v1/
 !artifacts/reports/eda_v1/**
+artifacts/reproductions/
 artifacts/figures/*
 !artifacts/figures/eda_v1/
 !artifacts/figures/eda_v1/**

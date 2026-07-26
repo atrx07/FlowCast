@@ -2,99 +2,54 @@
 
 ## Immediate Objective
 
-Execute **Step 19 - Reproducibility, Documentation, and Final Acceptance**.
-Prove that a fresh reviewer can rebuild, audit, launch, and use the complete
-FlowCast v1.0 pipeline and its verified ten-page Streamlit product surface.
-
-Do not change frozen Step 10-18 model choices, thresholds, calibrators,
-recurrent architecture, confidence widths, active routing, evaluation
-partitions, source predictions, or reported metrics merely to improve an
-acceptance result. Record every limitation honestly.
-
-The Step 18 follow-up density/readability pass is complete: all ten routes use
-compact operational banners, the status strip clears Streamlit's desktop
-toolbar, and every page exposes a data-backed plain-language reading. The live
-route is fixed to the operational hierarchy of header, displayed horizon,
-KPIs, request controls, current reading, and aligned Corridor Signal/Priority
-Queue outputs. Its complete road/date/time/horizon workflow fits above the fold
-at 1280 x 720 and exposes the full model-eligible January-May origin range.
-The date/time fields are explicitly labelled as the last observed forecast
-origin, and the request shows the exact future target timestamps implied by
-the selected horizons, including targets beyond the historical data boundary.
-Preserve those presentation, widget, and request-validation contracts during
-the clean reproduction.
+Perform one independent cross-platform portability confirmation of the
+completed FlowCast v1.0 release. The implementation roadmap is complete; this
+is a release-confidence follow-up, not another modelling or UI step.
 
 ## Read Before Acting
 
 1. `AGENTS.md`, `TECH_STACK.md`, `STATUS.md`, and this file.
-2. `STEPS.md` - Step 19 and every proven command needed by the clean rebuild.
-3. Reproduction, deployment, lineage, artifact, and acceptance boundaries in
-   `PROJECT.md`, `ROADMAP.md`, and `ARCHITECTURE.md`.
-4. The original PRD delivery, reporting, dashboard, usability, and performance
-   requirements.
-5. All versioned configs, model cards, metric summaries, prediction/report
-   manifests, and the Step 18 dashboard acceptance evidence.
-6. The build-safety contract in `AGENTS.md` section 14.1.
+2. The setup and reproduction commands in `README.md`.
+3. The final acceptance findings and limitations in `FINAL_REPORT.md`.
+4. Step 19 in `STEPS.md` and the reproduction boundary in `ARCHITECTURE.md`.
 
 ## Hardware Notice Before Acting
 
-Before execution, obey the workstation-resource disclosure rule in
-`AGENTS.md`. Documentation and artifact inventory use the Intel Core Ultra 9
-CPU lightly. A clean pipeline reproduction will use substantial CPU, system
-RAM, and disk I/O for tabular processing and classical training. Full recurrent
-training should use the verified NVIDIA GeForce RTX 5070 Laptop GPU only after
-checking CUDA availability, device name, runtime, driver compatibility, and
-VRAM; CPU fallback must remain valid. The Intel NPU is not part of v1. Give a
-fresh, phase-specific notice before the clean rebuild, full training, or any
-other heavy command.
+Use CPU as the portability identity. Expect sustained CPU, RAM, and disk use
+for approximately nine minutes based on the measured Windows run, though
+another platform may differ. GPU, VRAM, and NPU resources are not required and
+must not become hidden dependencies.
 
 ## Single Best Next Action
 
-Perform one isolated clean-environment reproduction and final acceptance audit:
+On a clean macOS or Linux Python 3.11 workstation:
 
-1. Verify pinned installation from the documented setup command on Python 3.11.
-2. Redirect every generated output to a fresh test-owned reproduction root;
-   never overwrite canonical or pre-existing user artifacts.
-3. Run the full pipeline in the proven order from immutable delivered inputs.
-4. Reconcile produced row counts, hashes, model cards, metrics, predictions,
-   confidence tables, and reports to their documented contracts.
-5. Measure runtime and resource-sensitive stages, including CPU fallback and
-   the approved CUDA recurrent-training path when available.
-6. Launch the Streamlit app against the reproduced artifacts and repeat the
-   full navigation, prediction, upload-validation, report-export, lineage, and
-   retraining-safety walkthrough.
-7. Run the complete test suite through `scripts/run_tests.py`, plus dependency,
-   compilation, whitespace, source-size, and repository-mutation checks.
-8. Write the final technical report covering data quality, mathematics,
-   classical and recurrent models, confidence, error slices, acceptance
-   targets, limitations, and recommendations.
-9. Finish the README command reference and cross-platform setup/deployment
-   notes.
-10. Update every dynamic Markdown file with measured evidence before the final
-    verified commit and push.
+1. Install `.[classical,deep,eda,dashboard,test]` in a new virtual
+   environment and require `pip check` to pass.
+2. Run `flowcast.cli run-all` with a fresh child beneath
+   `artifacts/reproductions` and `--recurrent-device cpu`.
+3. Run `flowcast.cli verify-reproduction` against that root.
+4. Run the complete suite through `python scripts/run_tests.py -q`.
+5. Launch Streamlit with `FLOWCAST_OUTPUT_ROOT` set to the reproduced root and
+   smoke the live-prediction, model-performance, and data/training pages.
+6. Record platform, Python/package versions, stage runtimes, verifier result,
+   test exit marker, and any reproducible variance in `STATUS.md`.
 
-## Acceptance Gate
+## Exit Gate
 
-Step 19 is complete only when:
+The portability follow-up passes when:
 
-- A clean reviewer path installs with one documented command.
-- One documented pipeline command or exact documented command sequence rebuilds
-  all required artifacts from immutable sources.
-- Reproduced artifacts load without hidden CUDA or workstation dependencies.
-- The reported metrics reconcile to the frozen chronological hold-out.
-- Every selected model has a model card, feature schema, preprocessing lineage,
-  environment record, and portable load test.
-- The ten-page dashboard launches with one command and all nine required views
-  use real reproduced outputs.
-- Upload validation, prediction, verified report export, audit evidence, and
-  explicit versioned retraining controls pass acceptance.
-- Formal targets are compared explicitly and unmet classifier/deep-model
-  limitations remain visible.
-- The final report, README, tests, dependency check, compilation, source-size
-  check, and repository guard all pass.
+- all 16 stages complete from unchanged delivered sources;
+- the permanent verifier reports `passed: true`;
+- frozen metric differences remain within `1e-12`;
+- the suite prints `FLOWCAST_PYTEST_EXIT=0`;
+- portable model loading and CPU inference pass;
+- Streamlit reads the reproduced artifacts without a platform-specific path,
+  CUDA, or binary dependency failure.
 
 ## Current Blockers
 
-None. Step 18 is verified and M7 is complete. Step 19 is intentionally a clean,
-resource-intensive reproduction and final delivery gate; it has not yet been
-executed.
+None. FlowCast v1.0, M0-M8, and Steps 00-19 are complete on the verified
+Windows workstation. No further implementation is required unless the
+independent portability run exposes a reproducible defect or the user expands
+scope.

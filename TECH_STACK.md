@@ -133,6 +133,11 @@ bytes with an older manifest.
 
 - One local Streamlit process calls the `flowcast` Python package directly.
 - The CLI is the canonical automation and end-to-end reproduction surface.
+- A clean reproduction must use `flowcast.cli run-all` with a fresh guarded
+  child beneath `artifacts/reproductions`, followed by
+  `verify-reproduction`. The output-root contract remaps every writable
+  pipeline path and keeps `FlowCast-project_file/` and versioned configuration
+  read-only.
 - The default target is a workstation with 16 GB RAM and roughly 10 GB free space.
 - Windows, macOS, and Linux are supported through Python 3.11 and pinned packages.
 - Full recurrent/deep candidate training should use a verified CUDA device when
@@ -142,6 +147,10 @@ bytes with an older manifest.
 - Runtime device selection is configuration-driven with `auto`, `cpu`, and
   guarded `cuda` modes. `auto` may choose the verified RTX 5070 for material
   deep-learning work; `cpu` is the required fallback and portability gate.
+- Canonical release metrics use an explicit CPU recurrent run. CUDA is an
+  approved local diagnostic/acceleration variant, but its floating-point
+  training trajectory and validation winner receive a separate artifact
+  identity and may not silently replace the CPU-frozen release evidence.
 - CUDA batch sizes must stay bounded for the current 8,151 MiB VRAM capacity;
   CPU thread counts and DataLoader workers remain configurable.
 - Dashboard pages read persisted artifacts and never retrain on an ordinary rerun.

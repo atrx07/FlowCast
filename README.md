@@ -1,19 +1,19 @@
 # FlowCast
 
 FlowCast is an end-to-end traffic forecasting and congestion-intelligence
-project for the 25-segment Northline Corridor. It is being built as a
+project for the 25-segment Northline Corridor. It is delivered as a
 reproducible Python 3.11 pipeline with a Streamlit dashboard.
 
-For each road segment, FlowCast will forecast the next 30, 60, 90, and 120
+For each road segment, FlowCast forecasts the next 30, 60, 90, and 120
 minutes of traffic volume, average speed, congestion class, travel time, and
-accident risk, together with prediction confidence. The finished system will
-combine validated traffic, weather, and calendar data with classical machine
+accident risk, together with prediction confidence. The system combines
+validated traffic, weather, and calendar data with classical machine
 learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 26 July 2026. Milestones M0-M7 are complete and M8 is in
-progress. Steps 00-18 now
+Last verified on 26 July 2026. Milestones M0-M8 and Steps 00-19 are complete.
+The delivered system now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
 merged table, 62 leakage-safe explanatory features, and a versioned processed
@@ -93,13 +93,20 @@ calendar plus a 30-minute time field for all 7,237 model-eligible origins from
 fields are explicitly labelled as the last observed forecast origin, and the
 request shows the exact future timestamps produced by the chosen 30–120 minute
 horizons, including the rollover beyond the historical data boundary.
-The complete assurance suite passes all 180 tests, including deterministic
+The final clean CPU reproduction rebuilt all 16 stages under an isolated
+output root in 520.287 seconds. Its verifier reconciled source hashes, stage
+evidence, model selections, frozen metrics, prediction lineage, and reports
+with a maximum numeric delta of `1.0842021724855044e-17` against a `1e-12`
+tolerance. The complete assurance suite passes all 192 tests, including
+guarded output-root and reproduction-verification contracts, deterministic
 inference, report/prediction tamper rejection, an isolated notebook smoke, an
 exact-exit pytest runner, and a session guard that restores and rejects
 tracked-file mutation. Browser QA verified all ten routes at 1280 x 720,
 1440 x 900, and 1920 x 1080 with no page exceptions, horizontal overflow, or
-top-chrome overlap. Step 19 clean reproduction, final technical reporting, and
-delivery acceptance remain ahead.
+top-chrome overlap. Final acceptance against the clean artifact root also
+verified prediction, upload validation and versioned staging, HTML report
+download, lineage, and rejection of an incorrect retraining confirmation.
+See [FINAL_REPORT.md](FINAL_REPORT.md) for complete evidence and limitations.
 
 ## Delivery timeline
 
@@ -109,35 +116,33 @@ delivery acceptance remain ahead.
 | Week 1 | M1 ingestion, M2 cleaning/merge, M3 features/targets, M4 EDA | Complete - Steps 01-09 verified |
 | Week 2 | M5 classical machine learning | Complete - Steps 10-14 verified |
 | Week 3 | M6 recurrent deep learning and confidence | Complete - Steps 15-16 verified |
-| Week 4 | M7 dashboard, M8 reproducibility and delivery | In progress - Step 18 plus desktop readability pass complete; Step 19 next |
+| Week 4 | M7 dashboard, M8 reproducibility and delivery | Complete - Steps 17-19 verified |
 
 ## Quick start
 
 Python 3.11 is required.
 
 ```powershell
-py -3.11 -m venv .venv
+python --version
+python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -e ".[classical,deep,eda,dashboard,test]"
-.\.venv\Scripts\python.exe -m flowcast.cli audit
-.\.venv\Scripts\python.exe -m flowcast.cli validate
-.\.venv\Scripts\python.exe -m flowcast.cli clean-context
-.\.venv\Scripts\python.exe -m flowcast.cli clean-traffic
-.\.venv\Scripts\python.exe -m flowcast.cli merge-sources
-.\.venv\Scripts\python.exe -m flowcast.cli engineer-features
-.\.venv\Scripts\python.exe -m flowcast.cli prepare-data
-.\.venv\Scripts\python.exe -m flowcast.cli eda
-.\.venv\Scripts\python.exe -m flowcast.cli prepare-modeling
-.\.venv\Scripts\python.exe -m flowcast.cli train-scratch-linear
-.\.venv\Scripts\python.exe -m flowcast.cli train-classical-regression
-.\.venv\Scripts\python.exe -m flowcast.cli train-classical-classification
-.\.venv\Scripts\python.exe -m flowcast.cli build-classical-registry
-.\.venv\Scripts\python.exe -m flowcast.cli train-recurrent-volume
-.\.venv\Scripts\python.exe -m flowcast.cli analyze-confidence
-.\.venv\Scripts\python.exe -m flowcast.cli predict --horizons 1 2 3 4 --export-reports
+.\.venv\Scripts\python.exe -m flowcast.cli run-all `
+  --output-root artifacts\reproductions\flowcast_v1 `
+  --recurrent-device cpu
+.\.venv\Scripts\python.exe -m flowcast.cli verify-reproduction `
+  --output-root artifacts\reproductions\flowcast_v1
 .\.venv\Scripts\python.exe scripts\run_tests.py -q
+$env:FLOWCAST_OUTPUT_ROOT = "artifacts\reproductions\flowcast_v1"
 .\.venv\Scripts\python.exe -m streamlit run dashboard\app.py
 ```
+
+The first line must report Python 3.11. If the Windows `py -3.11` launcher is
+configured, it may be used in place of `python`. `run-all` accepts only an
+empty child directory beneath `artifacts/reproductions`; this prevents a clean
+acceptance run from overwriting canonical or user-owned artifacts. It prints
+`FLOWCAST_RUN_ALL_EXIT=0` only after all stages and the permanent verifier
+pass.
 
 To rebuild reports from an existing verified prediction batch:
 
@@ -159,13 +164,27 @@ CUDA wheel after the portable environment:
 .\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
 ```
 
-FlowCast selects devices through configuration. Use CUDA for material recurrent
-training when available; CPU remains supported for training, tests, inference,
-small jobs, and machines without an NVIDIA GPU. A separate system-wide CUDA
-Toolkit is not required by the approved wheel.
+FlowCast selects devices through configuration. The documented reproduction
+uses explicit CPU training so its frozen metric identity is portable. CUDA is
+an optional, separately evidenced recurrent-training acceleration path; it may
+select a different validation winner because floating-point training
+trajectories are device-dependent. A separate system-wide CUDA Toolkit is not
+required by the approved wheel.
 
-On macOS or Linux, use `.venv/bin/python` in place of the Windows interpreter
-path.
+On macOS or Linux, use:
+
+```bash
+python3.11 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -e ".[classical,deep,eda,dashboard,test]"
+.venv/bin/python -m flowcast.cli run-all \
+  --output-root artifacts/reproductions/flowcast_v1 \
+  --recurrent-device cpu
+.venv/bin/python -m flowcast.cli verify-reproduction \
+  --output-root artifacts/reproductions/flowcast_v1
+FLOWCAST_OUTPUT_ROOT=artifacts/reproductions/flowcast_v1 \
+  .venv/bin/python -m streamlit run dashboard/app.py
+```
 
 The source documents and delivered CSV files remain read-only in
 `FlowCast-project_file/`. Byte-identical working copies belong in `data/raw/`;
@@ -173,5 +192,6 @@ versioned validated data and issue records are written beneath `data/interim/`
 and `data/quarantine/`.
 
 See `PROJECT.md` for the product contract, `ARCHITECTURE.md` for the system
-design, `TECH_STACK.md` for approved technologies, and `STATUS.md` /
-`NEXT_STEP.md` for verified progress and the immediate build step.
+design, `TECH_STACK.md` for approved technologies, `FINAL_REPORT.md` for final
+acceptance evidence, and `STATUS.md` / `NEXT_STEP.md` for verified state and
+the post-v1 follow-up.

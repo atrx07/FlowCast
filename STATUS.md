@@ -4,22 +4,25 @@
 
 - **Project:** FlowCast v1.0
 - **Last updated:** 2026-07-26
-- **Current milestone:** M8 - Reproducibility and delivery (in progress)
-- **Current step:** Steps 00-18 complete; Step 19 next
-- **Overall state:** The complete frozen-model pipeline and ten-page Streamlit
-  product surface are verified; clean reproduction and final delivery remain
+- **Current milestone:** M8 - Reproducibility and delivery (complete)
+- **Current step:** Steps 00-19 complete
+- **Overall state:** FlowCast v1.0 is delivered with a clean CPU reproduction,
+  permanent metric/lineage verification, final report, and accepted ten-route
+  Streamlit product surface
 - **Primary blocker:** None
 
 ## 1. Verified Current Position
 
-FlowCast has a reproducible Python 3.11 pipeline from immutable raw inputs
+FlowCast has a verified reproducible Python 3.11 pipeline from immutable raw inputs
 through validation, cleaning, merge, leakage-safe features, four-horizon
 targets, EDA, frozen chronological evaluation, training-only preprocessing,
 NumPy regression proof, complete classical regression/classification, a
 combined classical registry, a from-scratch recurrent volume forecaster,
 validation-calibrated confidence/error analysis, and frozen-model
 inference/reporting. Step 18 adds the complete Streamlit product surface over
-those verified artifacts without changing their frozen decisions.
+those verified artifacts without changing their frozen decisions. Step 19
+proves the full delivery in a fresh isolated Python 3.11.9 CPU environment and
+records final acceptance in `FINAL_REPORT.md`.
 
 Step 17 loads only verified Step 08/10/14/15/16 artifacts. It does not fit a
 preprocessor, model, calibrator, threshold, or confidence width. The recurrent
@@ -28,7 +31,8 @@ classical volume model remains an explicit comparator. Speed, travel time,
 congestion, and accident risk resolve through the frozen Step 14 registry.
 
 `FlowCast-project_file/`, `data/raw/`, the delivered CSV/DOCX sources, and all
-Step 10-16 source artifacts remain unchanged.
+Step 10-16 source artifacts remain unchanged. Step 19 did not edit the
+reference directory.
 
 ## 2. Step 17 Implementation
 
@@ -123,7 +127,73 @@ Step 10-16 source artifacts remain unchanged.
   limitations, and lineage come from verified Step 08-17 artifacts. No
   placeholder analytics or fabricated future weather were introduced.
 
-## 4. Canonical Inference and Report Evidence
+## 4. Step 19 Reproduction and Delivery
+
+- Added `FLOWCAST_OUTPUT_ROOT` and a guarded `with_output_root` settings
+  boundary. It accepts only a fresh child beneath `artifacts/reproductions`,
+  retains canonical source/config paths, and redirects every writable
+  raw/interim/processed/quarantine/artifact/log path.
+- Added `flowcast.cli run-all --output-root ... --recurrent-device ...`.
+  The command executes audit, validation, cleaning, merge, features, targets,
+  EDA, modelling preparation, scratch linear, classical regression,
+  classification, registry, recurrent training, confidence analysis, and
+  prediction/report generation as one 16-stage run.
+- Added `flowcast.cli verify-reproduction --output-root ...`. The permanent
+  verifier checks source bytes, every primary stage-evidence hash, final
+  prediction/report lineage, and semantic reconciliation of classical,
+  recurrent, registry, and confidence evidence.
+- Added explicit `cpu`, `cuda`, and `auto` recurrent-device overrides while
+  preserving configuration-driven default behavior for existing callers.
+- Added unit coverage for guarded roots, CLI defaults, CUDA diagnostic
+  selection, invalid overrides, and semantic metric reconciliation.
+- Added `FINAL_REPORT.md` with mathematics, data quality, model evidence,
+  confidence, error slices, target comparison, limitations, and
+  recommendations.
+
+### Clean CPU reproduction
+
+- Environment: fresh CPython 3.11.9 virtual environment with NumPy 2.3.3,
+  pandas 3.0.3, PyArrow 24.0.0, scikit-learn 1.9.0, XGBoost 3.2.0, PyTorch
+  2.13.0 CPU, and Streamlit 1.59.2.
+- Output root: `artifacts/reproductions/flowcast_v1_final_cpu`.
+- Result: 16 stages completed in 520.287 seconds with
+  `FLOWCAST_RUN_ALL_EXIT=0`.
+- Primary runtime contributors: classical regression 157.721 seconds,
+  classification 216.221 seconds, recurrent CPU training 90.497 seconds,
+  confidence analysis 15.441 seconds, prediction/report 6.485 seconds.
+- Coverage: 181,200 processed rows, 20 registry entries, 21 JSON model cards,
+  100 final prediction rows, verified CSV/HTML reports, and portable recurrent
+  state-dictionary loading.
+- Permanent verification passed all 16 stage records, unchanged source hashes,
+  prediction/report lineage, and all frozen metric groups. Maximum numeric
+  delta was `1.0842021724855044e-17` against tolerance `1e-12`.
+- Cold full-corridor/four-horizon CPU prediction completed in 3.309 seconds.
+
+### Accelerator diagnostic
+
+- The approved NVIDIA GeForce RTX 5070 Laptop GPU was verified with PyTorch
+  2.13.0+cu130, CUDA 13.0, cuDNN 9.2, driver 610.74, and 8,151 MiB VRAM.
+- A bounded CUDA full reproduction completed successfully and confirmed the
+  acceleration path and portable checkpoint contract.
+- CUDA selected a different recurrent validation candidate because training
+  numerics are device-dependent. The diagnostic did not overwrite, replace,
+  or publish the CPU-frozen release evidence. Canonical release metrics use the
+  explicit CPU run.
+- The Intel NPU was not used.
+
+### Reproduced dashboard acceptance
+
+- All ten routes loaded the clean CPU artifacts without page exceptions or
+  browser-console errors.
+- A fresh prediction completed through the verified CPU route.
+- Upload validation recognized 178,468 traffic rows, accounted for 176,701
+  valid and 1,767 rejected duplicates, and staged only a versioned artifact.
+- Verified HTML report export emitted a browser download event.
+- Incorrect retraining confirmation was rejected; no model trained and active
+  routing did not change.
+- `FlowCast-project_file/` remained byte-identical and read-only.
+
+## 5. Canonical Inference and Report Evidence
 
 Canonical CPU requests used the latest common origin
 `2025-05-31T23:30:00+05:30`.
@@ -152,7 +222,7 @@ Canonical CPU requests used the latest common origin
 The RTX 5070 Laptop GPU/VRAM and Intel NPU were not used. Step 17 ran on the
 Intel Core Ultra 9 CPU.
 
-## 5. Produced Artifacts
+## 6. Produced Artifacts
 
 ```text
 config/inference.yaml
@@ -204,7 +274,21 @@ tests/data_contracts/test_dashboard_contract.py
 tests/smoke/test_dashboard_app.py
 ```
 
-## 6. Validation and Assurance Evidence
+Step 19 delivery surface:
+
+```text
+FINAL_REPORT.md
+src/flowcast/reproduction.py
+src/flowcast/reproduction_verify.py
+tests/unit/test_reproduction.py
+
+artifacts/reproductions/flowcast_v1_final_cpu/  # ignored, clean acceptance run
+  artifacts/reproduction/manifest.json
+  artifacts/reproduction/summary.md
+  artifacts/reproduction/verification.json
+```
+
+## 7. Validation and Assurance Evidence
 
 Executed with project-local CPython 3.11.9:
 
@@ -221,6 +305,8 @@ Executed with project-local CPython 3.11.9:
 .venv/Scripts/python.exe scripts/run_tests.py -q tests/unit/test_dashboard.py tests/data_contracts/test_dashboard_contract.py tests/smoke/test_dashboard_app.py
 .venv/Scripts/python.exe -m pip check
 git diff --check
+.runtime/step19_venv/Scripts/python.exe -m flowcast.cli run-all --output-root artifacts/reproductions/flowcast_v1_final_cpu --recurrent-device cpu
+.runtime/step19_venv/Scripts/python.exe -m flowcast.cli verify-reproduction --output-root artifacts/reproductions/flowcast_v1_final_cpu
 ```
 
 Verified results:
@@ -242,8 +328,14 @@ Verified results:
   380.40 seconds without changing the canonical processed-data hash.
 - Isolated confidence plus dashboard contracts: 7 passed in 43.63 seconds
   without changing canonical confidence artifacts.
-- Complete repository suite: 180 passed in 525.47 seconds with
+- Complete fresh CPU repository suite: 192 passed in 524.70 seconds with
+  `FLOWCAST_PYTEST_EXIT=0` (525.72 seconds runner elapsed).
+- Focused reproduction/recurrent coverage: 27 passed with
   `FLOWCAST_PYTEST_EXIT=0`.
+- Reproduced-root dashboard unit, contract, and smoke coverage: 7 passed in
+  12.80 seconds with `FLOWCAST_PYTEST_EXIT=0`.
+- Clean `run-all` and standalone verification returned explicit zero exit
+  markers; the verifier reconciled all eight frozen metric groups.
 - Repeated seeded CPU inference returns exactly equal prediction frames.
 - Invalid roads, horizons, cadence, origins, and insufficient sequence history
   fail clearly.
@@ -273,8 +365,12 @@ Verified results:
   Corridor Signal/Priority Queue alignment at 1440 x 900. The longest
   forecast-visualization banner was also checked at 1280 and 1440 without text
   clipping; secondary context hides only at the narrower breakpoint.
+- Final clean-root browser acceptance loaded all ten routes, generated a
+  forecast, validated and staged the reference traffic upload without touching
+  its source, exported verified HTML, and rejected an incorrect retraining
+  confirmation. Browser logs contained no warnings or errors.
 
-## 7. Decisions and Constraints
+## 8. Decisions and Constraints
 
 - Recurrent volume is active at all horizons because validation RMSE is lower
   at all four; the 120-minute test deficit remains reported and cannot alter
@@ -296,7 +392,7 @@ Verified results:
   single-app Streamlit architecture. React, GSAP, FastAPI, a database, and a
   second frontend were not added.
 
-## 8. Risks and Unresolved Work
+## 9. Risks and Unresolved Work
 
 - Congestion Macro-F1 and accident ROC-AUC formal targets remain unmet and are
   included in exported report evidence.
@@ -304,23 +400,21 @@ Verified results:
   groups uncertain.
 - The recurrent model still trails classical volume slightly at the
   120-minute test horizon, especially in late-night slices.
-- Final clean reproduction, cross-platform reviewer verification, the final
-  technical report, and delivery packaging remain.
-- Step 19 must rebuild one internally consistent artifact lineage under the
-  pinned PyArrow 24 environment; it must not combine newly serialized Parquet
-  files with frozen PyArrow 25 manifests.
+- Independent full-run execution on macOS and Linux remains a release
+  portability follow-up; the complete measured acceptance run was on Windows.
 - Generated models, predictions, and reports are ignored by Git and must be
   rebuilt through documented CLI commands after a clean clone.
 - The Matplotlib default Windows cache path is sandbox-restricted on this
   workstation; commands/tests use a writable `MPLCONFIGDIR` when needed.
 
-## 9. Next Gate
+## 10. Next Gate
 
-Proceed only to **Step 19 - Reproducibility, Documentation, and Final
-Acceptance**. The bounded action
-and evidence gate are maintained in `NEXT_STEP.md`.
+The v1.0 implementation roadmap is complete. The single best follow-up is an
+independent CPU `run-all` plus `verify-reproduction` execution on macOS or
+Linux using the README commands. Do not change frozen v1 metrics or routing
+unless that check exposes a reproducible portability defect.
 
-## 10. Step 18 Environment and Build Evidence
+## 11. Step 18 Environment and Build Evidence
 
 - Installed the pinned dashboard stack: Streamlit `1.59.2`, Plotly `6.9.0`,
   Seaborn `0.13.2`, and their transitive dependencies.
