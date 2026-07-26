@@ -3,7 +3,7 @@
 ## Status Metadata
 
 - **Project:** FlowCast v1.0
-- **Last updated:** 2026-07-25
+- **Last updated:** 2026-07-26
 - **Current milestone:** M8 - Reproducibility and delivery (in progress)
 - **Current step:** Steps 00-18 complete; Step 19 next
 - **Overall state:** The complete frozen-model pipeline and ten-page Streamlit
@@ -80,9 +80,23 @@ Step 10-16 source artifacts remain unchanged.
   dark, editorial interface follows the provided Linear-derived token system
   while retaining native Streamlit controls and accessibility semantics.
 - Reworked the shared desktop opener from marketing-scale hero treatment to a
-  compact operational header. At 1280 x 720 the live opener measures 122.3px
-  instead of 372.0px, a 67.1% reduction, and the status strip now begins below
-  Streamlit's top toolbar.
+  compact operational banner. At 1280 x 720 the final live banner measures
+  60.0px instead of the preceding 122.3px layout, a further 50.9% reduction
+  and an 83.9% reduction from the original 372.0px hero. Title and subtitle
+  remain visible; secondary context collapses below 1400px to protect long
+  page titles, and the status strip remains below Streamlit's top toolbar.
+- Reordered the live operations page to header, displayed horizon, KPI cards,
+  frozen-model request controls, current reading, and the aligned Corridor
+  Signal/Priority Queue output row. The exact existing road, date, time,
+  horizon, submit, inference, persistence, report, and rerun contracts remain
+  unchanged; only their Streamlit containers and presentation order changed.
+- Compacted the request into two desktop control rows. At 1280 x 720 the full
+  request panel ends at 650.8px and every input plus the Run prediction action
+  ends by 638.2px, so the complete workflow is available without scrolling.
+- Added a plain-language Corridor Signal caption, widened the dashboard plotting
+  surface through responsive main padding, increased the corridor plot height
+  to 500px, and kept Corridor Signal and Priority Queue cards on identical
+  top/bottom geometry.
 - Added reusable data-backed evidence briefs to all ten pages. Each brief states
   the current filtered reading and explains how to interpret its chart or
   table; values come from the same verified frame or persisted metric shown on
@@ -209,16 +223,16 @@ Verified results:
   `FLOWCAST_PYTEST_EXIT=0`.
 - Affected confidence/recurrent/package/build-safety regression set: 21 passed
   in 22.82 seconds with `FLOWCAST_PYTEST_EXIT=0`.
-- Focused dashboard unit/data-contract/all-page smoke suite: 7 passed in 12.29
-  seconds with `FLOWCAST_PYTEST_EXIT=0`; it verifies the 7,237 eligible origin
-  contract, native date/time widgets, and chart-reading guidance on every
-  route.
+- Focused dashboard unit/data-contract coverage: 6 passed in 8.18 seconds with
+  `FLOWCAST_PYTEST_EXIT=0`. The all-page Streamlit smoke passed in 9.06 seconds
+  and now also locks the operational heading order: forecast request before
+  Corridor Signal before Priority Queue.
 - Affected feature/processed contracts: 10 passed in 7.08 seconds.
 - Isolated classical regression/classification/scratch contracts: 15 passed in
   380.40 seconds without changing the canonical processed-data hash.
 - Isolated confidence plus dashboard contracts: 7 passed in 43.63 seconds
   without changing canonical confidence artifacts.
-- Complete repository suite: 180 passed in 510.45 seconds with
+- Complete repository suite: 180 passed in 525.47 seconds with
   `FLOWCAST_PYTEST_EXIT=0`.
 - Repeated seeded CPU inference returns exactly equal prediction frames.
 - Invalid roads, horizons, cadence, origins, and insufficient sequence history
@@ -243,6 +257,12 @@ Verified results:
   menu, visible January-May eligibility range, side-by-side desktop geometry,
   and zero horizontal overflow at 1280 x 720, 1440 x 900, and 1920 x 1080;
   the browser console reported no errors.
+- Final presentation-only browser QA verified the compact 60.0px live banner,
+  fully visible title/subtitle, complete above-fold request controls at
+  1280 x 720, no horizontal overflow at all three desktop sizes, and exact
+  Corridor Signal/Priority Queue alignment at 1440 x 900. The longest
+  forecast-visualization banner was also checked at 1280 and 1440 without text
+  clipping; secondary context hides only at the narrower breakpoint.
 
 ## 7. Decisions and Constraints
 

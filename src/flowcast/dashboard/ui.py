@@ -24,34 +24,47 @@ def apply_design_system() -> None:
   max-width: 1380px;
   padding-top: 4.25rem;
   padding-bottom: 5rem;
+  padding-left: clamp(1rem, 3vw, 3rem);
+  padding-right: clamp(1rem, 3vw, 3rem);
 }
 .st-key-page-hero {
   border: 1px solid var(--fc-line);
   border-radius: 12px;
-  padding: .8rem clamp(1rem, 2vw, 1.5rem) .9rem;
+  min-height: 4rem;
+  padding: .55rem clamp(.85rem, 1.8vw, 1.25rem);
   background: #0f1011;
   overflow: hidden;
   animation: fc-rise .55s cubic-bezier(.2,.8,.2,1) both;
+  gap: .08rem !important;
 }
-.st-key-page-hero [data-testid="stVerticalBlock"] { gap: .3rem; }
+.st-key-page-hero [data-testid="stHorizontalBlock"] {
+  align-items: center;
+}
+.st-key-page-hero [data-testid="stVerticalBlock"] {
+  gap: .08rem;
+}
 .st-key-page-hero h1 {
   max-width: 1120px;
-  font-size: clamp(1.9rem, 3.1vw, 2.6rem);
-  letter-spacing: -0.045em;
-  line-height: 1.04;
+  font-size: clamp(1.55rem, 2.25vw, 1.95rem);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
   margin: 0;
+  padding: 0;
 }
 .st-key-page-hero p {
   max-width: 860px;
   color: #d0d6e0;
-  font-size: .94rem;
-  line-height: 1.42;
+  font-size: .82rem;
+  line-height: 1.32;
   margin: 0;
 }
 .st-key-page-hero [data-testid="stCaptionContainer"] p {
   color: #8a8f98;
-  font-size: .76rem;
+  font-size: .7rem;
+  line-height: 1.25;
   letter-spacing: .02em;
+  text-align: right;
+  padding: 0;
 }
 .st-key-page-hero code { color: #828fff; background: transparent; }
 .st-key-status-strip {
@@ -105,6 +118,41 @@ def apply_design_system() -> None:
   transition: transform .3s ease, border-color .3s ease;
 }
 .stMetric:hover { transform: translateY(-2px); border-color: #5e6ad2; }
+.st-key-live-horizon > div > [data-testid="stVerticalBlock"] {
+  gap: .25rem;
+}
+.st-key-live-kpis > div > [data-testid="stVerticalBlock"] {
+  gap: 0;
+}
+.st-key-live-kpis [data-testid="stMetric"] {
+  min-height: 5.25rem;
+  padding: .65rem .75rem;
+}
+.st-key-prediction-workflow {
+  padding: .75rem .9rem .8rem;
+}
+.st-key-prediction-workflow > div > [data-testid="stVerticalBlock"] {
+  gap: .45rem;
+}
+.st-key-prediction-workflow [data-testid="stForm"] {
+  border: 0;
+  padding: 0;
+}
+.st-key-prediction-workflow h3,
+.st-key-bento-corridor h3,
+.st-key-bento-queue h3 {
+  margin-bottom: 0;
+}
+.st-key-prediction-workflow h3 {
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+.st-key-prediction-workflow [data-testid="stCaptionContainer"] p,
+.st-key-bento-corridor [data-testid="stCaptionContainer"] p {
+  color: #a8adb6;
+  font-size: .78rem;
+  line-height: 1.35;
+}
 [data-testid="stPlotlyChart"], [data-testid="stDataFrame"] {
   animation: fc-reveal .55s ease both;
 }
@@ -120,6 +168,16 @@ button[kind="primary"] { font-weight: 600; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+@media (max-width: 900px) {
+  .st-key-page-hero [data-testid="stCaptionContainer"] p {
+    text-align: left;
+  }
+}
+@media (max-width: 1399px) {
+  .st-key-page-hero [data-testid="stCaptionContainer"] {
+    display: none;
+  }
+}
 </style>
         """
     )
@@ -131,11 +189,16 @@ def render_page_header(
     *,
     context: str,
 ) -> None:
-    """Render the wide editorial page opener."""
+    """Render the compact operational page banner."""
 
     with st.container(key="page-hero"):
-        st.caption(context)
-        st.title(title)
+        with st.container(
+            horizontal=True,
+            horizontal_alignment="distribute",
+            vertical_alignment="center",
+        ):
+            st.title(title)
+            st.caption(context)
         st.markdown(description)
 
 

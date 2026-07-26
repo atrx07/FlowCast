@@ -472,10 +472,20 @@ Linear's depth is carried by surface ladder + hairline borders. The brand resist
 **Compact page opener** — The in-product dashboard uses the same surface,
 hairline, typography, and accent tokens at operational density rather than the
 marketing display scale.
-- Desktop title: fluid 30–42px, weight 600, line height 1.04.
-- Context and description remain visible, but total opener height stays below
-  190px at the 1280px desktop breakpoint.
-- Interior padding is 13–24px and the opener uses `{rounded.lg}`.
+- Desktop title: fluid 25–31px, weight 600, line height 1.08.
+- Title and description remain visible. Secondary context sits on the title row
+  from 1400px upward and collapses below that breakpoint to protect long titles.
+- The live opener measures 60px at the 1280px desktop breakpoint, uses compact
+  8–20px interior padding, and retains `{rounded.lg}`.
+
+**Live operations hierarchy** — The first screen is ordered for traffic
+analysts rather than editorial storytelling.
+- Header → displayed horizon → KPI cards → frozen-model request → current
+  reading → aligned Corridor Signal and Priority Queue → remaining evidence.
+- Road, date, time, horizon, and Run prediction controls must all fit above the
+  1280 × 720 fold without changing their native Streamlit behavior.
+- Corridor Signal includes a short encoding caption and uses the wider panel;
+  Priority Queue shares the same row and exact card boundaries.
 
 **Evidence brief** — A compact plain-language interpretation placed beside the
 charts it explains.
@@ -487,10 +497,11 @@ charts it explains.
 
 **Prediction origin control** — A paired calendar and half-hour time field for
 choosing the verified feature cutoff used by frozen-model inference.
-- Keep date and time in one two-column row on desktop.
+- Keep roads, date, and time in one compact desktop row, with horizon and submit
+  directly below.
 - Constrain the calendar to origins with enough contiguous model history.
 - Use the native 30-minute time menu and show the exact eligible range and slot
-  count beneath the fields.
+  count in the workflow caption.
 - Never represent a multi-month origin range as one long timestamp dropdown.
 
 ### Navigation

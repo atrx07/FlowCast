@@ -42,3 +42,18 @@ def test_streamlit_shell_and_all_pages_render() -> None:
                 app.time_input(key="prediction_origin_time").label
                 == "Prediction time"
             )
+            operational_headings = [
+                heading.value
+                for heading in app.subheader
+                if heading.value
+                in {
+                    "Request a frozen-model forecast",
+                    "Corridor signal",
+                    "Priority queue",
+                }
+            ]
+            assert operational_headings == [
+                "Request a frozen-model forecast",
+                "Corridor signal",
+                "Priority queue",
+            ]

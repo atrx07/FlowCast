@@ -12,7 +12,7 @@ learning and a from-scratch recurrent neural network.
 
 ## Current status
 
-Last verified on 25 July 2026. Milestones M0-M7 are complete and M8 is in
+Last verified on 26 July 2026. Milestones M0-M7 are complete and M8 is in
 progress. Steps 00-18 now
 provide immutable raw preservation, executable data contracts,
 reason-preserving quarantine, trusted cleaning, a cardinality-safe 181,200-row
@@ -82,10 +82,14 @@ retraining that never changes active routing on a rerun. The supplied
 `DESIGN.md` is implemented as a dark, editorial Streamlit-native design system.
 Every route now uses a compact operational opener and a data-derived
 plain-language reading with chart guidance; no brief invents values or causal
-claims. At 1280 x 720 the live opener is 67.1% shorter than the prior layout,
-and the verified status strip clears Streamlit's top toolbar. The live request
-uses a calendar plus a 30-minute time field for all 7,237 model-eligible origins
-from 1 January through 31 May instead of a seven-day timestamp dropdown.
+claims. The live route now reads header, displayed horizon, KPI cards,
+frozen-model request, current reading, then aligned Corridor Signal/Priority
+Queue outputs. At 1280 x 720 the final 60px banner is 50.9% shorter than the
+preceding compact version and 83.9% shorter than the original hero; all
+road/date/time/horizon controls plus Run prediction fit above the fold. The
+verified status strip clears Streamlit's top toolbar. The request still uses a
+calendar plus a 30-minute time field for all 7,237 model-eligible origins from
+1 January through 31 May instead of a seven-day timestamp dropdown.
 The complete assurance suite passes all 180 tests, including deterministic
 inference, report/prediction tamper rejection, an isolated notebook smoke, an
 exact-exit pytest runner, and a session guard that restores and rejects

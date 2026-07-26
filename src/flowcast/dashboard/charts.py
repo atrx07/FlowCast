@@ -146,7 +146,7 @@ def corridor_figure(predictions: pd.DataFrame) -> go.Figure:
         },
     )
     figure.update_traces(marker=dict(line=dict(width=1, color="#f7f8f8")))
-    return _finish(figure, height=460)
+    return _finish(figure, height=500)
 
 
 def comparison_figure(

@@ -12,11 +12,14 @@ partitions, source predictions, or reported metrics merely to improve an
 acceptance result. Record every limitation honestly.
 
 The Step 18 follow-up density/readability pass is complete: all ten routes use
-compact headers, the status strip clears Streamlit's desktop toolbar, and every
-page exposes a data-backed plain-language reading. The live forecast request
-also exposes the complete model-eligible January-May origin range through
-separate native date and half-hour controls. Preserve those verified
-presentation and request-validation contracts during the clean reproduction.
+compact operational banners, the status strip clears Streamlit's desktop
+toolbar, and every page exposes a data-backed plain-language reading. The live
+route is fixed to the operational hierarchy of header, displayed horizon,
+KPIs, request controls, current reading, and aligned Corridor Signal/Priority
+Queue outputs. Its complete road/date/time/horizon workflow fits above the fold
+at 1280 x 720 and exposes the full model-eligible January-May origin range.
+Preserve those presentation, widget, and request-validation contracts during
+the clean reproduction.
 
 ## Read Before Acting
 

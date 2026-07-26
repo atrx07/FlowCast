@@ -715,7 +715,7 @@ Create one stable interface between artifacts and the dashboard.
 - Output schema is validated.
 - Full-corridor runtime is measured.
 
-### Proven implementation (verified 2026-07-25)
+### Proven implementation (verified 2026-07-26)
 
 - `config/inference.yaml` independently freezes the Step 17 upstream versions,
   validation-led active recurrent-volume route, explicit classical comparator,
@@ -793,8 +793,9 @@ Deliver the interactive product surface.
   passes 7 tests with `FLOWCAST_PYTEST_EXIT=0`. A 1280 x 720 browser walkthrough
   verified all ten routes, report/retraining/audit tabs, readable dense layouts,
   and zero console errors.
-- A follow-up desktop-density pass reduced the 1280 x 720 live-page opener from
-  372.0px to 122.3px (67.1%), moved the verified status strip below the
+- Follow-up desktop-density passes reduced the 1280 x 720 live-page opener from
+  372.0px to 122.3px and then to a 60.0px operational banner. They moved the
+  verified status strip below the
   Streamlit toolbar, and added compact data-derived readings plus “How to read”
   guidance across all ten pages.
 - Final browser geometry checks cover every route at 1280 x 720, 1440 x 900,
@@ -806,7 +807,13 @@ Deliver the interactive product surface.
   native calendar and 48-choice half-hour time field expose 7,237 origins from
   1 January 2025 at 05:30 through 31 May 2025 at 23:30; the combined value is
   revalidated before inference.
-- The complete repository suite passes all 180 tests in 510.45 seconds with
+- The live page now renders header, displayed horizon, KPI cards, the unchanged
+  frozen-model request form, current reading, and the aligned Corridor
+  Signal/Priority Queue row in that order. At 1280 x 720 all road/date/time/
+  horizon controls and the submit action are visible without scrolling.
+  Corridor Signal includes a plain-language mark encoding caption and a larger
+  500px plot; the queue card uses identical top/bottom geometry.
+- The complete repository suite passes all 180 tests in 525.47 seconds with
   `FLOWCAST_PYTEST_EXIT=0`; canonical processed/confidence hashes remain
   byte-identical before and after the run.
 
@@ -814,7 +821,7 @@ Deliver the interactive product surface.
 - All nine views use real outputs.
 - No training occurs on ordinary reruns.
 - Navigation and core actions pass manual walkthrough.
-- Verified 2026-07-25: all three conditions pass.
+- Verified 2026-07-26: all three conditions pass.
 ---
 ## Step 19 - Reproducibility, Documentation, and Final Acceptance
 ### Goal

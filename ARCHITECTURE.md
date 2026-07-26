@@ -870,10 +870,17 @@ The tenth page groups support modules and does not replace any required view.
 - `analytics.py` and `charts.py` contain deterministic real-data aggregation and
   Plotly rendering. `state.py` owns session-local shared road/date/horizon
   filters. `ui.py` owns the scoped design layer and reusable status/metric/error
-  components. Its compact page opener keeps the status strip below Streamlit's
-  desktop toolbar, and its reusable evidence-brief component pairs a
-  data-derived current reading with chart-reading guidance. Page scripts format
-  those briefs only from the same verified frames and aggregates already shown.
+  components. Its compact page banner keeps the status strip below Streamlit's
+  desktop toolbar, preserves title/subtitle visibility, and responsively hides
+  only secondary context below 1400px. Its reusable evidence-brief component
+  pairs a data-derived current reading with chart-reading guidance. Page
+  scripts format those briefs only from the same verified frames and aggregates
+  already shown.
+- The live page's presentation order is header, displayed horizon, KPI cards,
+  frozen-model request, current reading, then the aligned Corridor
+  Signal/Priority Queue output row. This is a presentation-only boundary: the
+  form retains the same widget values, validation, frozen predictor, batch
+  persistence, report generation, session state, and rerun path.
 - Live prediction origins are derived from the complete verified processed
   history and the inference configuration. `analytics.py` offers only
   full-corridor timestamps with the configured twelve contiguous 30-minute
@@ -899,7 +906,9 @@ The tenth page groups support modules and does not replace any required view.
   and 1920 x 1080. The status strip must clear the top toolbar, the page opener
   must stay below 190px after layout settles, every page must expose at least
   one plain-language evidence brief, and the document must not overflow
-  horizontally.
+  horizontally. On the live route, every forecast-request control must fit
+  above the 1280 x 720 fold and the Corridor Signal/Priority Queue card
+  boundaries must remain aligned.
 
 ## 14. Training-Service Boundary
 The dashboard may trigger retraining only through `training_service`:

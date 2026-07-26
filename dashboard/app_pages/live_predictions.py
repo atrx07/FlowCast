@@ -46,28 +46,20 @@ available_horizons = tuple(
     if value in set(source["horizon_windows"].astype(int))
 )
 display_horizons = available_horizons or filters.horizons
-horizon = st.segmented_control(
-    "Displayed horizon",
-    display_horizons,
-    default=display_horizons[0],
-    format_func=HORIZON_LABELS.get,
-    key="live_horizon",
-)
+with st.container(key="live-horizon"):
+    horizon = st.segmented_control(
+        "Displayed horizon",
+        display_horizons,
+        default=display_horizons[0],
+        format_func=HORIZON_LABELS.get,
+        key="live_horizon",
+    )
 visible = source.loc[
     source["road_id"].isin(filters.roads)
     & source["horizon_windows"].eq(int(horizon))
 ].copy()
-if visible.empty:
-    render_empty("No persisted forecast matches the selected roads and horizon.")
-    render_insight_brief(
-        "No persisted forecast matches the current road and horizon filters.",
-        guidance=(
-            "Choose a road and horizon covered by the latest persisted batch, "
-            "or request a new frozen-model forecast below."
-        ),
-        key="live-empty",
-    )
-else:
+
+if not visible.empty:
     snapshot = corridor_snapshot(visible)
     queue = visible.sort_values(
         ["accident_probability", "volume_prediction"],
@@ -79,128 +71,56 @@ else:
         ["speed_prediction", "road_id"],
         kind="mergesort",
     ).iloc[0]
-    render_metric_row(
-        [
-            {"label": "Roads in view", "value": f"{snapshot['roads']}"},
-            {
-                "label": "Heavy or severe",
-                "value": f"{snapshot['high_congestion']}",
-                "help": "Road-horizon rows classified Heavy or Severe.",
-            },
-            {
-                "label": "Mean speed",
-                "value": f"{snapshot['mean_speed']:.1f} km/h",
-            },
-            {
-                "label": "Highest accident risk",
-                "value": f"{snapshot['max_risk']:.2%}",
-            },
-        ]
-    )
-    congestion_reading = (
-        "No selected roads are forecast as Heavy or Severe"
-        if snapshot["high_congestion"] == 0
-        else (
-            f"{snapshot['high_congestion']} selected road"
-            f"{'s are' if snapshot['high_congestion'] != 1 else ' is'} "
-            "forecast as Heavy or Severe"
-        )
-    )
-    render_insight_brief(
-        f"At **{HORIZON_LABELS[int(horizon)]}**, {congestion_reading}. "
-        f"**{risk_leader['road_id']}** has the highest modeled accident "
-        f"probability at {risk_leader['accident_probability']:.2%}; "
-        f"**{slowest['road_id']}** has the lowest predicted speed at "
-        f"{slowest['speed_prediction']:.1f} km/h.",
-        guidance=(
-            "The corridor plot locates each road and sizes it by forecast "
-            "volume; the queue ranks the same rows by modeled accident risk."
-        ),
-        key="live",
-    )
-    left, right = st.columns([1.55, 1], gap="large")
-    with left:
-        with st.container(border=True, key="bento-corridor"):
-            st.subheader("Corridor signal")
-            st.plotly_chart(
-                corridor_figure(visible),
-                key=f"live-corridor-{horizon}",
-            )
-    with right:
-        with st.container(
-            border=True,
-            key="bento-queue",
-            height="stretch",
-        ):
-            st.subheader("Priority queue")
-            st.dataframe(
-                queue[
-                    [
-                        "road_id",
-                        "congestion_prediction",
-                        "volume_prediction",
-                        "speed_prediction",
-                        "accident_probability",
-                        "accident_risk_band",
-                    ]
-                ],
-                hide_index=True,
-                column_config={
-                    "road_id": st.column_config.TextColumn("Road", pinned=True),
-                    "congestion_prediction": "Congestion",
-                    "volume_prediction": st.column_config.NumberColumn(
-                        "Volume",
-                        format="%.0f",
-                    ),
-                    "speed_prediction": st.column_config.NumberColumn(
-                        "Speed",
-                        format="%.1f km/h",
-                    ),
-                    "accident_probability": st.column_config.ProgressColumn(
-                        "Risk probability",
-                        min_value=0.0,
-                        max_value=max(
-                            0.05,
-                            float(queue["accident_probability"].max()),
-                        ),
-                        format="%.3f",
-                    ),
-                    "accident_risk_band": "Risk band",
+    with st.container(key="live-kpis"):
+        render_metric_row(
+            [
+                {"label": "Roads in view", "value": f"{snapshot['roads']}"},
+                {
+                    "label": "Heavy or severe",
+                    "value": f"{snapshot['high_congestion']}",
+                    "help": "Road-horizon rows classified Heavy or Severe.",
                 },
-            )
+                {
+                    "label": "Mean speed",
+                    "value": f"{snapshot['mean_speed']:.1f} km/h",
+                },
+                {
+                    "label": "Highest accident risk",
+                    "value": f"{snapshot['max_risk']:.2%}",
+                },
+            ]
+        )
 
-st.space("large")
-with st.container(border=True):
+available_roads = tuple(sorted(bundle.history["road_id"].astype(str).unique()))
+request_config = bundle.context.config["request"]
+available_origins = eligible_prediction_origins(
+    bundle.history,
+    sequence_length=int(request_config["recurrent_sequence_length"]),
+    cadence_minutes=int(request_config["cadence_minutes"]),
+)
+first_origin = pd.Timestamp(available_origins[0])
+latest_origin = pd.Timestamp(available_origins[-1])
+with st.container(border=True, key="prediction-workflow"):
     st.subheader("Request a frozen-model forecast")
     st.caption(
-        "This control loads persisted models and calibration only. It cannot "
-        "fit, retune, or switch an active model."
+        "Frozen artifacts only · eligible origins "
+        f"{first_origin.strftime('%d %b %Y · %H:%M')} to "
+        f"{latest_origin.strftime('%d %b %Y · %H:%M')} · "
+        f"{len(available_origins):,} half-hour slots."
     )
-    available_roads = tuple(sorted(bundle.history["road_id"].astype(str).unique()))
-    request_config = bundle.context.config["request"]
-    available_origins = eligible_prediction_origins(
-        bundle.history,
-        sequence_length=int(request_config["recurrent_sequence_length"]),
-        cadence_minutes=int(request_config["cadence_minutes"]),
-    )
-    first_origin = pd.Timestamp(available_origins[0])
-    latest_origin = pd.Timestamp(available_origins[-1])
-    with st.form("prediction-request"):
-        request_roads = st.multiselect(
-            "Roads",
-            available_roads,
-            default=list(filters.roads),
-            max_selections=25,
+    with st.form("prediction-request", border=False):
+        roads_column, date_column, time_column = st.columns(
+            [1.6, 0.8, 0.7],
+            gap="small",
+            vertical_alignment="bottom",
         )
-        request_horizons = st.pills(
-            "Horizons",
-            tuple(HORIZON_LABELS),
-            default=list(filters.horizons),
-            selection_mode="multi",
-            format_func=HORIZON_LABELS.get,
-            width="stretch",
-        )
-        date_column, time_column = st.columns(2, gap="medium")
+        with roads_column:
+            request_roads = st.multiselect(
+                "Roads",
+                available_roads,
+                default=list(filters.roads),
+                max_selections=25,
+            )
         with date_column:
             request_origin_date = st.date_input(
                 "Prediction date",
@@ -224,17 +144,27 @@ with st.container(border=True):
                     "cadence."
                 ),
             )
-        st.caption(
-            "Eligible model origins: "
-            f"{first_origin.strftime('%d %b %Y · %H:%M')} to "
-            f"{latest_origin.strftime('%d %b %Y · %H:%M')} "
-            f"({len(available_origins):,} half-hour slots)."
+        horizon_column, action_column = st.columns(
+            [3.15, 0.85],
+            gap="small",
+            vertical_alignment="bottom",
         )
-        submitted = st.form_submit_button(
-            "Run prediction",
-            type="primary",
-            icon=":material/play_arrow:",
-        )
+        with horizon_column:
+            request_horizons = st.pills(
+                "Horizons",
+                tuple(HORIZON_LABELS),
+                default=list(filters.horizons),
+                selection_mode="multi",
+                format_func=HORIZON_LABELS.get,
+                width="stretch",
+            )
+        with action_column:
+            submitted = st.form_submit_button(
+                "Run prediction",
+                type="primary",
+                icon=":material/play_arrow:",
+                width="stretch",
+            )
 
     if submitted:
         if not request_roads or not request_horizons:
@@ -277,5 +207,97 @@ with st.container(border=True):
                     icon=":material/check_circle:",
                 )
                 st.rerun()
+
+if visible.empty:
+    render_empty("No persisted forecast matches the selected roads and horizon.")
+    render_insight_brief(
+        "No persisted forecast matches the current road and horizon filters.",
+        guidance=(
+            "Choose a road and horizon covered by the latest persisted batch, "
+            "or request a new frozen-model forecast above."
+        ),
+        key="live-empty",
+    )
+else:
+    congestion_reading = (
+        "No selected roads are forecast as Heavy or Severe"
+        if snapshot["high_congestion"] == 0
+        else (
+            f"{snapshot['high_congestion']} selected road"
+            f"{'s are' if snapshot['high_congestion'] != 1 else ' is'} "
+            "forecast as Heavy or Severe"
+        )
+    )
+    render_insight_brief(
+        f"At **{HORIZON_LABELS[int(horizon)]}**, {congestion_reading}. "
+        f"**{risk_leader['road_id']}** has the highest modeled accident "
+        f"probability at {risk_leader['accident_probability']:.2%}; "
+        f"**{slowest['road_id']}** has the lowest predicted speed at "
+        f"{slowest['speed_prediction']:.1f} km/h.",
+        guidance=(
+            "The corridor plot locates each road and sizes it by forecast "
+            "volume; the queue ranks the same rows by modeled accident risk."
+        ),
+        key="live",
+    )
+    left, right = st.columns([1.6, 1], gap="medium")
+    with left:
+        with st.container(border=True, key="bento-corridor"):
+            st.subheader("Corridor signal")
+            st.caption(
+                "Each marker is a road at the selected horizon. Position uses "
+                "verified corridor coordinates, size shows predicted volume, "
+                "and color shows predicted congestion."
+            )
+            st.plotly_chart(
+                corridor_figure(visible),
+                key=f"live-corridor-{horizon}",
+            )
+    with right:
+        with st.container(
+            border=True,
+            key="bento-queue",
+            height="stretch",
+        ):
+            st.subheader("Priority queue")
+            st.caption(
+                "Highest modeled accident probability first for the same road "
+                "and horizon selection."
+            )
+            st.dataframe(
+                queue[
+                    [
+                        "road_id",
+                        "congestion_prediction",
+                        "volume_prediction",
+                        "speed_prediction",
+                        "accident_probability",
+                        "accident_risk_band",
+                    ]
+                ],
+                hide_index=True,
+                column_config={
+                    "road_id": st.column_config.TextColumn("Road", pinned=True),
+                    "congestion_prediction": "Congestion",
+                    "volume_prediction": st.column_config.NumberColumn(
+                        "Volume",
+                        format="%.0f",
+                    ),
+                    "speed_prediction": st.column_config.NumberColumn(
+                        "Speed",
+                        format="%.1f km/h",
+                    ),
+                    "accident_probability": st.column_config.ProgressColumn(
+                        "Risk probability",
+                        min_value=0.0,
+                        max_value=max(
+                            0.05,
+                            float(queue["accident_probability"].max()),
+                        ),
+                        format="%.3f",
+                    ),
+                    "accident_risk_band": "Risk band",
+                },
+            )
 
 render_lineage(bundle)

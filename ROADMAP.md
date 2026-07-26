@@ -73,7 +73,7 @@ Deliver FlowCast v1.0 as a reproducible Streamlit traffic-intelligence web appli
 | M4 - EDA and quality report | Week 1 | EDA notebook, figures, data-quality report | Complete - Step 09 gate passed with nine reconciliations and six figures |
 | M5 - Classical ML | Week 2 | Scoreboard, selected models, model cards | Complete - Step 14 verified 20 entries and 1,078,957 indexed predictions |
 | M6 - Deep learning | Week 3 | Sequence model, curves, benchmark | Complete - Steps 15-16 verified with confidence/error artifacts |
-| M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Complete - Step 18 verified all ten routes, safety controls, compact headers, data-backed briefs, and full-range origin controls at three desktop sizes |
+| M7 - Dashboard | Week 4 | Nine-view Streamlit app and support controls | Complete - Step 18 verified all ten routes, safety controls, compact operational hierarchy, data-backed briefs, above-fold full-range forecast controls, and aligned outputs at three desktop sizes |
 | M8 - Reproducibility and delivery | Week 4 | Clean rerun, final report, README, acceptance evidence | In progress - Step 19 next |
 
 ## 5. Week 1 - Data Engineering and EDA
@@ -287,7 +287,10 @@ three-resolution, all-route browser walkthrough pass; compact headers clear
 Streamlit's toolbar and every page now pairs visual evidence with a
 plain-language reading. The live forecast request now exposes all 7,237
 model-eligible January-May origins through a calendar plus a 30-minute time
-field instead of an arbitrary seven-day timestamp dropdown. Step 19 clean
+field instead of an arbitrary seven-day timestamp dropdown. Its road, date,
+time, horizon, and submit controls now sit immediately after the displayed
+horizon and KPI cards, finish above the 1280 x 720 fold, and precede the current
+reading plus aligned Corridor Signal/Priority Queue output row. Step 19 clean
 reproduction, final technical reporting, and delivery acceptance are next. The
 complete 180-test assurance suite passes without canonical artifact mutation.
 See `STATUS.md` and `NEXT_STEP.md` for the live state.
