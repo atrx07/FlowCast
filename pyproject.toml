@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flowcast"
-version = "0.1.0"
+version = "1.0.0"
 description = "Reproducible traffic forecasting and congestion intelligence pipeline."
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
+license = "MIT"
 dependencies = [
   "numpy==2.3.3",
   "pandas==3.0.3",
@@ -36,7 +37,10 @@ dashboard = [
   "streamlit==1.59.2",
 ]
 notebooks = ["jupyterlab==4.6.1"]
-test = ["pytest==9.0.2"]
+test = [
+  "pytest==9.0.2",
+  "pytest-cov==7.0.0",
+]
 
 [project.scripts]
 flowcast = "flowcast.cli:main"
